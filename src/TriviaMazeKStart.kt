@@ -1,1 +1,0 @@
-fun main() = println("I am 100% executable.")

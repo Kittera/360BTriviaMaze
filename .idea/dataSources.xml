@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Trivia.sqlite" uuid="d7f2c0c4-9991-4bc9-ada7-b9daa678a86e">
+    <data-source source="LOCAL" name="SQLite Trivia - Trivia.sqlite" uuid="7058d337-e314-4e51-8ded-eeb431302759">
       <driver-ref>300fa6e2-8d7a-4212-ac7b-16b8ce734fac</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:./Trivia.sqlite</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/src/main/resources/Trivia.sqlite</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

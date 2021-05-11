@@ -23,7 +23,7 @@ public class QuestionPanel extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
 
-    public MainMenuPanel() {
+    public MainPanel() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 600, 450);
@@ -33,21 +33,21 @@ public class QuestionPanel extends JFrame {
         contentPane.setLayout(null);
 
 
-        JButton btnPlayGame = new JButton("New Game");
-        btnPlayGame.setBounds(10, 50, 120, 150);
-        contentPane.add(btnPlayGame);
+        JButton playGame = new JButton("New Game");
+        playGame.setBounds(10, 50, 120, 150);
+        contentPane.add(playGame);
 
-        JButton btnLoadGame = new JButton("Load Game");
-        btnLoadGame.setBounds(10, 200, 120, 150);
-        contentPane.add(btnLoadGame);
+        JButton loadGame = new JButton("Load Game");
+        loadGame.setBounds(10, 200, 120, 150);
+        contentPane.add(loadGame);
 
 
 
-        JLabel lblGameTitle = new JLabel("Trivia Maze");
-        lblGameTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        lblGameTitle.setFont(new Font("Comic Sans MS", Font.PLAIN, 40));
-        lblGameTitle.setBounds(187, 10, 225, 40);
-        contentPane.add(lblGameTitle);
+        JLabel GameTitle = new JLabel("Trivia Maze");
+        GameTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        GameTitle.setFont(new Font("Comic Sans MS", Font.PLAIN, 40));
+        GameTitle.setBounds(187, 10, 225, 40);
+        contentPane.add(GameTitle);
 
         btnPlayGame.addActionListener(PlayGameButton);
         btnLoadGame.addActionListener(LoadGameButton);

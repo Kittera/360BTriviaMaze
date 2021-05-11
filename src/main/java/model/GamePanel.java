@@ -1,6 +1,8 @@
 package model;
 
-public GamePanel extends JPanel {
+import javax.swing.*;
+
+public class GamePanel extends JPanel {
 
     //Build Maze panel here
 }

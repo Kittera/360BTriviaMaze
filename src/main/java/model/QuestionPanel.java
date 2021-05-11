@@ -41,17 +41,17 @@ public class QuestionPanel extends JFrame {
 
 
 
-        JLabel GameTitle = new JLabel("Trivia Maze");
-        GameTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        GameTitle.setFont(new Font("Comic Sans MS", Font.PLAIN, 40));
-        GameTitle.setBounds(187, 10, 225, 40);
-        contentPane.add(GameTitle);
+        JLabel gameTitle = new JLabel("Trivia Maze");
+        gameTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        gameTitle.setFont(new Font("Comic Sans MS", Font.PLAIN, 40));
+        gameTitle.setBounds(187, 10, 225, 40);
+        contentPane.add(gameTitle);
 
-        btnPlayGame.addActionListener(PlayGameButton);
-        btnLoadGame.addActionListener(LoadGameButton);
+        btnPlayGame.addActionListener(playGameButton);
+        btnLoadGame.addActionListener(loadGameButton);
     }
 
-    ActionListener PlayGameButton = new ActionListener() {
+    ActionListener playGameButton = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -59,7 +59,7 @@ public class QuestionPanel extends JFrame {
         }
     };
 
-    ActionListener LoadGameButton = new ActionListener() {
+    ActionListener loadGameButton = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent event) {

@@ -10,10 +10,11 @@ import java.util.List;
  */
 public abstract class AbstractQuestion implements Question {
    
+   private final Answer myAnswer;
    /**
     * Stores all Answer objects associated with this question.
     */
-   protected final List<Answer> myChoices;
+   private final List<Answer> myChoices;
    
    /**
     * Stores the question represented by this Question.
@@ -24,6 +25,7 @@ public abstract class AbstractQuestion implements Question {
    protected AbstractQuestion(final String theQuestion,
                               final Answer[] theChoices) {
       myPrompt = theQuestion;
+      myAnswer = theChoices[0];
       myChoices = List.of(theChoices);
    }
    
@@ -42,6 +44,10 @@ public abstract class AbstractQuestion implements Question {
     */
    public String getPrompt() {
       return myPrompt;
+   }
+   
+   protected Answer getCorrectAnswer() {
+      return myAnswer;
    }
    
    

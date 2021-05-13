@@ -31,4 +31,5 @@ public class MainMenu extends JPanel {
     public JMenuBar getBar() {
         return mainMenu;
     }
+
 }

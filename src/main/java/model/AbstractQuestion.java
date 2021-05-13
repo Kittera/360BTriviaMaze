@@ -7,8 +7,16 @@ import java.util.List;
  * @author Kittera Ashleigh McCloud
  * @version 2021.05.11.03.36
  */
-public abstract class AbstractQuestion implements Question {
+public abstract class AbstractQuestion {
    
+   /**
+    * The type of a given instance of a question.
+    */
+   public final QuestionType myType;
+   
+   /**
+    * The correct Answer.
+    */
    private final Answer myAnswer;
    /**
     * Stores all Answer objects associated with this question.
@@ -22,10 +30,12 @@ public abstract class AbstractQuestion implements Question {
    
    
    protected AbstractQuestion(final String theQuestion,
-                              final Answer[] theChoices) {
+                              final Answer[] theChoices,
+                              final QuestionType theType) {
       myPrompt = theQuestion;
       myAnswer = theChoices[0];
       myChoices = List.of(theChoices);
+      myType = theType;
    }
    
    /**
@@ -55,5 +65,7 @@ public abstract class AbstractQuestion implements Question {
     * @param theAnswer Answer that was chosen
     * @return whether the answer is correct
     */
-   public abstract boolean tryAnswer(Answer theAnswer);
+   public boolean tryAnswer(Answer theAnswer) {
+      return theAnswer == myAnswer;
+   }
 }

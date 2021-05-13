@@ -1,11 +1,10 @@
 package model;
 
-public class TrueFalseQuestion extends AbstractQuestion implements Question {
-   
+public class TrueFalseQuestion extends AbstractQuestion {
    
    private TrueFalseQuestion(final String thePrompt,
                              final Answer... theChoices) {
-      super(thePrompt, theChoices);
+      super(thePrompt, theChoices, QuestionType.TRUE_FALSE);
    }
    
    public TrueFalseQuestion(final String thePrompt, boolean theAnswer) {
@@ -19,15 +18,5 @@ public class TrueFalseQuestion extends AbstractQuestion implements Question {
             new TrueFalseAnswer(true),
             new TrueFalseAnswer(false)
       };
-   }
-   
-   @Override
-   public boolean tryAnswer(Answer theAnswer) {
-      return getCorrectAnswer().equals(theAnswer);
-   }
-   
-   @Override
-   public QuestionType getType() {
-      return QuestionType.TRUE_FALSE;
    }
 }

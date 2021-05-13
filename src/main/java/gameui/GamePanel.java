@@ -1,4 +1,4 @@
-package model;
+package gameui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +24,7 @@ public class GamePanel extends JFrame {
         final JButton button1 = new JButton("Click Here");
         button1.setBounds(50, 100, 95, 30);
         button1.setBackground(Color.yellow);
-        MainMenu myMenu = new MainMenu();
+        InGameMenuBar myMenu = new InGameMenuBar();
         // add(button1); //adds button1 to the frame directly
         this.setJMenuBar(myMenu.getBar());
         panel.add(button1); //add button to the panel

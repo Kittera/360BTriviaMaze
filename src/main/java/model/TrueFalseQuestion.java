@@ -1,15 +1,11 @@
 package model;
 
-import java.util.List;
-
 public class TrueFalseQuestion extends AbstractQuestion implements Question {
    
-   private final Answer myAnswer;
    
    private TrueFalseQuestion(final String thePrompt,
                              final Answer... theChoices) {
       super(thePrompt, theChoices);
-      myAnswer = theChoices[0];
    }
    
    public TrueFalseQuestion(final String thePrompt, boolean theAnswer) {
@@ -26,13 +22,8 @@ public class TrueFalseQuestion extends AbstractQuestion implements Question {
    }
    
    @Override
-   public List<Answer> getChoices() {
-      return super.myChoices;
-   }
-   
-   @Override
    public boolean tryAnswer(Answer theAnswer) {
-      return myAnswer.equals(theAnswer);
+      return getCorrectAnswer().equals(theAnswer);
    }
    
    @Override

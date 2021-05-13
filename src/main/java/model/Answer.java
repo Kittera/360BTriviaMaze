@@ -5,19 +5,28 @@ package model;
  */
 public class Answer {
    
-   private final String myString;
+   /**
+    * What type of question this Answer is associated with.
+    */
+   public final QuestionType myType;
    
-   public Answer(final String content) {
+   /**
+    * The Answer's content.
+    */
+   public final String myString;
+   
+   public Answer(final String content, final QuestionType format) {
       myString = content;
+      myType = format;
    }
    
    public Answer(final boolean trueFalse) {
-      this(trueFalse? "True" : "False");
+      this(trueFalse ? "True" : "False", QuestionType.TRUE_FALSE);
    }
    
    /**
     * Provides the String of the answer choice
-    * @return
+    * @return answer choice as string
     */
    public String get() {
       return myString;

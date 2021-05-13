@@ -1,9 +1,13 @@
 package model;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Abstraction of a Question object where common attributes and behaviors are defined.
+ *
  * @author Kittera Ashleigh McCloud
  * @version 2021.05.11.03.36
  */
@@ -34,7 +38,8 @@ public abstract class AbstractQuestion {
                               final QuestionType theType) {
       myPrompt = theQuestion;
       myAnswer = theChoices[0];
-      myChoices = List.of(theChoices);
+      myChoices = Arrays.stream(theChoices, 1, theChoices.length).
+            collect(Collectors.toList());
       myType = theType;
    }
    
@@ -49,19 +54,24 @@ public abstract class AbstractQuestion {
    
    /**
     * Gets the question wrapped in this Question
+    *
     * @return text of the question
     */
    public String getPrompt() {
       return myPrompt;
    }
    
+   /**
+    * Used by subclasses that override tryAnswer() behaviors.
+    * @return the Answer stored in the correct answer field
+    */
    protected Answer getCorrectAnswer() {
       return myAnswer;
    }
    
-   
    /**
     * Determines if the correct answer has been chosen or not.
+    *
     * @param theAnswer Answer that was chosen
     * @return whether the answer is correct
     */

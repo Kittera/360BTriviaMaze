@@ -19,4 +19,10 @@ public class TrueFalseQuestion extends AbstractQuestion {
             new Answer(false)
       };
    }
+   
+   @Override
+   public boolean tryAnswer(Answer theAnswer) {
+      
+      return theAnswer.get().equals(getCorrectAnswer().get());
+   }
 }

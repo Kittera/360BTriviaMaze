@@ -2,8 +2,8 @@ package model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Abstraction of a Question object where common attributes and behaviors are defined.
@@ -11,7 +11,8 @@ import java.util.stream.IntStream;
  * @author Kittera Ashleigh McCloud
  * @version 2021.05.11.03.36
  */
-public abstract class AbstractQuestion {
+@SuppressWarnings("deprecation")
+public abstract class AbstractQuestion extends Observable {
    
    /**
     * The type of a given instance of a question.
@@ -63,6 +64,7 @@ public abstract class AbstractQuestion {
    
    /**
     * Used by subclasses that override tryAnswer() behaviors.
+    *
     * @return the Answer stored in the correct answer field
     */
    protected Answer getCorrectAnswer() {

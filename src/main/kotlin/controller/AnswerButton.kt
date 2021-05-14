@@ -8,9 +8,9 @@ import javax.swing.BorderFactory
 import javax.swing.JButton
 import javax.swing.border.BevelBorder
 
-class AnswerButton(private val myAnswer: Answer): JButton(myAnswer.get()) {
+class AnswerButton(myAnswer: Answer): JButton(myAnswer.get()) {
     init {
-        size = when (myAnswer.myType) {
+        size = when (myAnswer.type) {
             QuestionType.TRUE_FALSE -> Dimension(100, 40)
             QuestionType.MULTI_CHOICE -> Dimension(300, 40)
             QuestionType.SHORT_ANSWER -> Dimension(300, 40)

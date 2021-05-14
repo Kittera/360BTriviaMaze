@@ -8,7 +8,7 @@ public class Answer {
    /**
     * What type of question this Answer is associated with.
     */
-   public final QuestionType myType;
+   public final QuestionType type;
    
    /**
     * The Answer's content.
@@ -17,7 +17,7 @@ public class Answer {
    
    public Answer(final String content, final QuestionType format) {
       myString = content;
-      myType = format;
+      type = format;
    }
    
    public Answer(final boolean trueFalse) {

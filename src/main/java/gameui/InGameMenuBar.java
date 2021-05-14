@@ -1,7 +1,7 @@
 package gameui;
 
 
-import gameui.CloseGamePanel;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,24 +13,30 @@ public class InGameMenuBar extends JPanel {
     @Serial
     private static final long serialVersionUID = 3217891232321L;
 
-    private final JPanel closeGamePanel;
+    private JOptionPane warningPane;
 
     JMenuBar mainMenu;
-    JMenu myMenu, myHints, myOptions, myAbout;
-    JMenuItem mySaveGame, myLoadGame, myCloseGame;
+    JMenu myMenu;
+    JMenuItem mySaveGame, myLoadGame, myCloseGame, myAbout, myOptions;
 
     public InGameMenuBar() {
         mainMenu = new JMenuBar();
-        closeGamePanel = new CloseGamePanel();
-        //mainMenu.addMenuListener(new thisMenuListener());
 
         myMenu = new JMenu("Main Menu");
         myOptions = new JMenu("Game Options");
         myAbout = new JMenu("About");
 
+        myAbout.addActionListener(AboutGame);
+
         mainMenu.add(myMenu);
-        mainMenu.add(myOptions);
-        mainMenu.add(myAbout);
+
+        myOptions = new JMenuItem("Options");
+        myOptions.addActionListener(OptionsMenu);
+        myMenu.add(myOptions);
+
+        myAbout = new JMenuItem("About");
+        myAbout.addActionListener(AboutGame);
+        myMenu.add(myAbout);
 
         mySaveGame = new JMenuItem("Save Game");
         mySaveGame.addActionListener(SaveGame);
@@ -67,19 +73,41 @@ public class InGameMenuBar extends JPanel {
         }
     };
 
+
     ActionListener ExitGame = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent event) {
+            String closeMessage = "Warning: Any game data not saved will be lost on exit.";
+            int reply = warningPane.showConfirmDialog(null, closeMessage,
+                    "warning", JOptionPane.YES_NO_OPTION );
+            if(reply == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } else {
 
-
-
-            System.exit(0);
+            }
         }
     };
 
-    private void closeGame() {
+    ActionListener OptionsMenu = new ActionListener() {
 
-    }
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            //todo Options
+        }
+    };
+
+    ActionListener AboutGame = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            String aboutMessage = "I will make a file loader to load in the whole message, but I am not sure how big this information pane will be";
+            warningPane.showConfirmDialog(null, aboutMessage,
+                    "This", JOptionPane.INFORMATION_MESSAGE );
+        }
+
+
+    };
+
 
 }

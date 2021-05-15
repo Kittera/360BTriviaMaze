@@ -42,7 +42,7 @@ class QuestionPanelFactory {
     /**
      * Specific procedure for building a panel out of a true false question
      */
-    private fun makeTrueFalsePanel(question: AbstractQuestion): JPanel {
+    fun makeTrueFalsePanel(question: AbstractQuestion): JPanel {
         val booleanPanel = AbstractQuestionPanel(2)
         val falseButton = AnswerButton(Answer(false))
         val trueButton = AnswerButton(Answer(true))

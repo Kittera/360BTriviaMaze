@@ -19,8 +19,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
     implementation "org.jetbrains.kotlin:kotlin-test-common"
     implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
@@ -30,5 +30,5 @@ test {
 }
 
 sourceSets.main {
-    java.srcDirs("src/main/myJava", "src/main/myKotlin")
+    java.srcDirs("src/main/java", "src/main/kotlin")
 }

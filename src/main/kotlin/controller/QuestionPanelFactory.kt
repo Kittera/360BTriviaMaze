@@ -1,6 +1,5 @@
 package controller
 
-import DarkLabel
 import model.AbstractQuestion
 import model.Answer
 import model.QuestionType
@@ -19,9 +18,8 @@ class QuestionPanelFactory {
 
         placeholderPanel.title.text = placeholderText
 
-        placeholderPanel.contentPanel.add(JLabel(placeholderText))
+        placeholderPanel.content.text = placeholderText
 
-        placeholderPanel.answerPanel.layout = GridLayout(1, 1)
         placeholderPanel.answerPanel.add(AnswerButton(tAnswer))
 
         return placeholderPanel
@@ -31,7 +29,7 @@ class QuestionPanelFactory {
      * Dynamically creates a display panel for a question
      */
     fun getQuestionPanel(theQuestion: AbstractQuestion) = when (theQuestion.myType) {
-        QuestionType.TRUE_FALSE -> makeTrueFalsePanel(question = theQuestion)
+        QuestionType.TRUE_FALSE   -> makeTrueFalsePanel(question = theQuestion)
         QuestionType.MULTI_CHOICE -> makeMultiChoicePanel(question = theQuestion)
         QuestionType.SHORT_ANSWER -> makeShortAnswerPanel(question = theQuestion)
         else -> makeErrorPanel()
@@ -120,9 +118,13 @@ class QuestionPanelFactory {
             add(answerPanel, BorderLayout.SOUTH)
         }
 
-        val contentPanel = JPanel()
+        val contentPanel = JPanel(GridLayout(1,1))
+        val content = JLabel()
 
         init {
+            content.horizontalAlignment = JLabel.CENTER
+            content.verticalAlignment = JLabel.CENTER
+            contentPanel.add(content)
             contentPanel.background = Color.GREEN
             add(contentPanel, BorderLayout.CENTER)
         }

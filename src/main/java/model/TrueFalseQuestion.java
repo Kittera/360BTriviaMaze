@@ -1,11 +1,10 @@
 package model;
 
-public class TrueFalseQuestion extends AbstractQuestion implements Question {
-   
+public class TrueFalseQuestion extends AbstractQuestion {
    
    private TrueFalseQuestion(final String thePrompt,
                              final Answer... theChoices) {
-      super(thePrompt, theChoices);
+      super(thePrompt, theChoices, QuestionType.TRUE_FALSE);
    }
    
    public TrueFalseQuestion(final String thePrompt, boolean theAnswer) {
@@ -14,20 +13,16 @@ public class TrueFalseQuestion extends AbstractQuestion implements Question {
    
    private static Answer[] createAnswers(boolean theAnswer) {
       //return an array with index 0 being the correct answer, followed by all choices
-      return new TrueFalseAnswer[]{
-            new TrueFalseAnswer(theAnswer),
-            new TrueFalseAnswer(true),
-            new TrueFalseAnswer(false)
+      return new Answer[]{
+            new Answer(theAnswer),
+            new Answer(true),
+            new Answer(false)
       };
    }
    
    @Override
    public boolean tryAnswer(Answer theAnswer) {
-      return getCorrectAnswer().equals(theAnswer);
-   }
-   
-   @Override
-   public QuestionType getType() {
-      return QuestionType.TRUE_FALSE;
+      
+      return theAnswer.get().equals(getCorrectAnswer().get());
    }
 }

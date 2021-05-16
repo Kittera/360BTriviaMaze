@@ -16,14 +16,19 @@ dependencies {
     implementation "org.jetbrains.exposed:exposed-core:0.31.1"
     implementation "org.jetbrains.exposed:exposed-dao:0.31.1"
     implementation "org.jetbrains.exposed:exposed-jdbc:0.31.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
     implementation "org.jetbrains.kotlin:kotlin-test-common"
-    implementation "org.jetbrains.kotlin:kotlin-test-junit"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
 }
 
 test {
     useJUnitPlatform()
+}
+
+sourceSets.main {
+    java.srcDirs("src/main/java", "src/main/kotlin")
 }

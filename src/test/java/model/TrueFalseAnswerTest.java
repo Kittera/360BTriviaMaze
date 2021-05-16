@@ -13,9 +13,9 @@ class TrueFalseAnswerTest {
    
    @BeforeEach
    void setUp() {
-      testAns1 = new TrueFalseAnswer(true);
-      testAns2 = new TrueFalseAnswer(true);
-      testAns3 = new TrueFalseAnswer(false);
+      testAns1 = new Answer(true);
+      testAns2 = new Answer(true);
+      testAns3 = new Answer(false);
    }
    
    @Test

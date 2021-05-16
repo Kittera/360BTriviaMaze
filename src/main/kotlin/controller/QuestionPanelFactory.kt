@@ -5,10 +5,7 @@ import model.AbstractQuestion
 import model.Answer
 import model.QuestionType
 import java.awt.*
-import javax.swing.BorderFactory
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JTextArea
+import javax.swing.*
 
 class QuestionPanelFactory {
 
@@ -18,13 +15,14 @@ class QuestionPanelFactory {
     fun getEmptyQuestionPanel(): JPanel {
         val placeholderText by lazy { "No Question Selected" }
         val placeholderPanel = AbstractQuestionPanel(1)
+        val tAnswer = Answer(placeholderText, QuestionType.MULTI_CHOICE)
 
-        placeholderPanel.titlePanel.add(JLabel(placeholderText))
+        placeholderPanel.title.text = placeholderText
 
         placeholderPanel.contentPanel.add(JLabel(placeholderText))
 
         placeholderPanel.answerPanel.layout = GridLayout(1, 1)
-        placeholderPanel.answerPanel.add(DarkLabel(placeholderText))
+        placeholderPanel.answerPanel.add(AnswerButton(tAnswer))
 
         return placeholderPanel
     }
@@ -103,10 +101,16 @@ class QuestionPanelFactory {
      * Basic template of the Swing panel that
      */
     private class AbstractQuestionPanel(totalChoices: Int) : JPanel() {
+
+        val qPanelHeight = 400
+        val qPanelWidth = 250
+        val tPanelHeight = 50
+
         init {
-            layout = BorderLayout()
-            border = BorderFactory.createEmptyBorder()
             background = Color.GREEN
+            border = BorderFactory.createEmptyBorder()
+            layout = BorderLayout()
+            preferredSize = Dimension(qPanelWidth, qPanelHeight)
         }
 
         val answerPanel = JPanel(GridLayout(totalChoices, 1))
@@ -123,10 +127,15 @@ class QuestionPanelFactory {
             add(contentPanel, BorderLayout.CENTER)
         }
 
-        val titlePanel = JPanel()
+        private val titlePanel = JPanel(GridLayout(1,1))
+        val title = JLabel()
 
         init {
+            title.verticalAlignment = JLabel.CENTER
+            title.horizontalAlignment = JLabel.CENTER
             titlePanel.background = Color.RED
+            titlePanel.preferredSize = Dimension(qPanelWidth, tPanelHeight)
+            titlePanel.add(title)
             add(titlePanel, BorderLayout.NORTH)
         }
     }

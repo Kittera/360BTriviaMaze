@@ -1,8 +1,6 @@
 package gameui;
 
 
-
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,41 +14,43 @@ public class InGameMenuBar extends JPanel {
     private JOptionPane warningPane;
 
     JMenuBar mainMenu;
-    JMenu myMenu;
+    JMenu myFile, myHelp;
     JMenuItem mySaveGame, myLoadGame, myCloseGame, myAbout, myOptions;
 
     public InGameMenuBar() {
         mainMenu = new JMenuBar();
 
-        myMenu = new JMenu("Main Menu");
+        myFile = new JMenu("File");
+        myHelp = new JMenu("Help");
+
         myOptions = new JMenu("Game Options");
         myAbout = new JMenu("About");
-
         myAbout.addActionListener(AboutGame);
 
-        mainMenu.add(myMenu);
+        mainMenu.add(myFile);
+        mainMenu.add(myHelp);
 
         myOptions = new JMenuItem("Options");
         myOptions.addActionListener(OptionsMenu);
-        myMenu.add(myOptions);
+        myHelp.add(myOptions);
 
         myAbout = new JMenuItem("About");
         myAbout.addActionListener(AboutGame);
-        myMenu.add(myAbout);
+        myHelp.add(myAbout);
 
         mySaveGame = new JMenuItem("Save Game");
         mySaveGame.addActionListener(SaveGame);
-        myMenu.add(mySaveGame);
+        myFile.add(mySaveGame);
 
 
         myLoadGame = new JMenuItem("Load Game");
         myLoadGame.addActionListener(LoadGame);
-        myMenu.add(myLoadGame);
+        myFile.add(myLoadGame);
 
 
         myCloseGame = new JMenuItem("Exit Game");
         myCloseGame.addActionListener(ExitGame);
-        myMenu.add(myCloseGame);
+        myFile.add(myCloseGame);
     }
 
     public JMenuBar getBar() {

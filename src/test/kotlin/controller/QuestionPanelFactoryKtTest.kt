@@ -1,10 +1,9 @@
 package controller
 
 import model.TrueFalseQuestion
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
+import kotlin.test.*
 
 import kotlin.test.fail
 

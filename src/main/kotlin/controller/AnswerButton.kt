@@ -17,5 +17,7 @@ class AnswerButton(myAnswer: Answer): JButton(myAnswer.get()) {
             null -> throw IllegalArgumentException("Code 1 AnswerButton")
         }
         border = BorderFactory.createSoftBevelBorder(BevelBorder.RAISED)
+        isFocusable = false
+        preferredSize = Dimension(250, 40)
     }
 }

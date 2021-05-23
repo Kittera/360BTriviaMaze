@@ -12,7 +12,12 @@ import java.util.stream.Collectors;
  * @version 2021.05.11.03.36
  */
 @SuppressWarnings("deprecation")
-public abstract class AbstractQuestion extends Observable {
+public class Question extends Observable {
+   
+   /**
+    * Enumerated question category.
+    */
+   public final Category myCategory;
    
    /**
     * The type of a given instance of a question.
@@ -20,28 +25,39 @@ public abstract class AbstractQuestion extends Observable {
    public final QuestionType myType;
    
    /**
-    * The correct Answer.
+    * Enumerated difficulty category.
     */
-   private final Answer myAnswer;
-   /**
-    * Stores all Answer objects associated with this question.
-    */
-   private final List<Answer> myChoices;
+   public final Difficulty myDifficulty;
    
    /**
     * Stores the question represented by this Question.
     */
    private final String myPrompt;
    
+   /**
+    * The correct Answer.
+    */
+   private final Answer myCorrectAnswer;
    
-   protected AbstractQuestion(final String theQuestion,
-                              final Answer[] theChoices,
-                              final QuestionType theType) {
-      myPrompt = theQuestion;
-      myAnswer = theChoices[0];
-      myChoices = Arrays.stream(theChoices, 1, theChoices.length).
-            collect(Collectors.toList());
+   /**
+    * Stores all Answer objects associated with this question.
+    */
+   private final List<Answer> myIncorrectAnswers;
+   
+   
+   public Question(
+         final Category theCategory,
+         final QuestionType theType,
+         final Difficulty theDifficulty,
+         final String theQuestion,
+         final Answer theCorrectAnswer,
+         final List<Answer> theIncorrectAnswers) {
+      myCategory = theCategory;
       myType = theType;
+      myDifficulty = theDifficulty;
+      myPrompt = theQuestion;
+      myCorrectAnswer = theCorrectAnswer;
+      myIncorrectAnswers = theIncorrectAnswers;
    }
    
    /**
@@ -49,8 +65,8 @@ public abstract class AbstractQuestion extends Observable {
     *
     * @return all answer choices contained within the question
     */
-   public List<Answer> getChoices() {
-      return myChoices;
+   public List<Answer> getIncorrectAnswers() {
+      return myIncorrectAnswers;
    }
    
    /**
@@ -68,7 +84,7 @@ public abstract class AbstractQuestion extends Observable {
     * @return the Answer stored in the correct answer field
     */
    protected Answer getCorrectAnswer() {
-      return myAnswer;
+      return myCorrectAnswer;
    }
    
    /**
@@ -78,6 +94,6 @@ public abstract class AbstractQuestion extends Observable {
     * @return whether the answer is correct
     */
    public boolean tryAnswer(Answer theAnswer) {
-      return theAnswer == myAnswer;
+      return theAnswer == myCorrectAnswer;
    }
 }

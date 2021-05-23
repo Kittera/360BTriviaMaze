@@ -1,6 +1,6 @@
 package controller
 
-import model.AbstractQuestion
+import model.Question
 import model.Answer
 import model.QuestionType
 import java.awt.*
@@ -12,14 +12,12 @@ class QuestionPanelFactory {
      * Creates and returns a static panel
      */
     fun getEmptyQuestionPanel(): JPanel {
-        val placeholderText by lazy { "No Question Selected" }
+        val placeholderText  = "No Question Selected"
         val placeholderPanel = AbstractQuestionPanel(1)
-        val tAnswer = Answer(placeholderText, QuestionType.MULTI_CHOICE)
+        val tAnswer = Answer(placeholderText)
 
         placeholderPanel.title.text = placeholderText
-
         placeholderPanel.content.text = placeholderText
-
         placeholderPanel.answerPanel.add(AnswerButton(tAnswer))
 
         return placeholderPanel
@@ -28,7 +26,7 @@ class QuestionPanelFactory {
     /**
      * Dynamically creates a display panel for a question
      */
-    fun getQuestionPanel(theQuestion: AbstractQuestion) = when (theQuestion.myType) {
+    fun getQuestionPanel(theQuestion: Question) = when (theQuestion.myType) {
         QuestionType.TRUE_FALSE   -> makeTrueFalsePanel(question = theQuestion)
         QuestionType.MULTI_CHOICE -> makeMultiChoicePanel(question = theQuestion)
         QuestionType.SHORT_ANSWER -> makeShortAnswerPanel(question = theQuestion)
@@ -38,10 +36,10 @@ class QuestionPanelFactory {
     /**
      * Specific procedure for building a panel out of a true false question
      */
-    fun makeTrueFalsePanel(question: AbstractQuestion): JPanel {
+    fun makeTrueFalsePanel(question: Question): JPanel {
         val booleanPanel = AbstractQuestionPanel(2)
-        val falseButton = AnswerButton(Answer(false))
-        val trueButton = AnswerButton(Answer(true))
+        val falseButton = AnswerButton(Answer("False"))
+        val trueButton = AnswerButton(Answer("True"))
 
         booleanPanel.contentPanel.add(JTextArea(question.prompt), JLabel.CENTER)
 
@@ -75,10 +73,10 @@ class QuestionPanelFactory {
     /**
      * Question display panel factory method for multiple choice questions.
      */
-    private fun makeMultiChoicePanel(question: AbstractQuestion): JPanel {
-        val multiChoicePanel = AbstractQuestionPanel(question.choices.size)
+    private fun makeMultiChoicePanel(question: Question): JPanel {
+        val multiChoicePanel = AbstractQuestionPanel(question.incorrectAnswers.size)
 
-        val buttons = question.choices
+        val buttons = question.incorrectAnswers
             .map { answer -> AnswerButton(answer) }
 
 
@@ -88,8 +86,8 @@ class QuestionPanelFactory {
     /**
      * Answer display panel for short answer questions
      */
-    private fun makeShortAnswerPanel(question: AbstractQuestion): JPanel {
-        val amtChoices = question.choices.size
+    private fun makeShortAnswerPanel(question: Question): JPanel {
+        val amtChoices = question.incorrectAnswers.size
 
 
         return JPanel()

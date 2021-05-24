@@ -18,7 +18,7 @@ val myCounter = CategoryCountHttp()
 val myFetcher = QuestionFetchHttp()
 val gsonBuilder = GsonBuilder().create()
 
-val token = myTokenGetter.token(client = myClient)
+val token = myTokenGetter.get(client = myClient)
 main()
 
 
@@ -35,7 +35,7 @@ fun main() {
                 }
             }
             //first ping API for the total count
-            var remaining = myCounter.getCount(category = category, client = myClient)
+            var remaining = myCounter.get(category = category, client = myClient)
 
             //loop requests using token until category has fewer than 50 questions left.
             while (remaining > 50) {

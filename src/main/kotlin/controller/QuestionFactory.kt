@@ -4,10 +4,7 @@ import model.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Random
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.sql.Connection
-import java.util.stream.Collectors
 import controller.QuestionDB.*
 
 
@@ -16,7 +13,7 @@ import controller.QuestionDB.*
  */
 class QuestionFactory {
 
-    val pickedList: MutableList<Int>
+    private val pickedList: MutableList<Int>
 
     init {
         pickedList = ArrayList()
@@ -32,23 +29,34 @@ class QuestionFactory {
     ): Question {
 
         Database.connect(PATH, DRIVER)
+
         val resultRow = transaction {
             when (theCategory) {
+                //...is any, don't provide a category filter
                 Category.ANY -> Questions.selectAll()
                     .orderBy(Random())
-                    .filter { !pickedList.contains(it[Questions.id].value) }
                     .first {
-                        it[Questions.difficulty].lowercase() == theDifficulty.difficulty
+                        !pickedList.contains(it[Questions.id].value) &&
+                        it[Questions.difficulty].lowercase() ==
+                                theDifficulty.difficulty.lowercase()
                     }
+
+                //...is anything but "any", we need a specific filter for it
                 else -> Questions.selectAll()
                     .orderBy(Random())
-                    .filter { !pickedList.contains(it[Questions.id].value) }
                     .first {
-                        it[Questions.category].lowercase() == theCategory.name &&
-                                it[Questions.difficulty].lowercase() == theDifficulty.difficulty
+                        !pickedList.contains(it[Questions.id].value)
+                                &&
+                        it[Questions.category].lowercase() == theCategory.name
+                                &&
+                        it[Questions.difficulty].lowercase() == theDifficulty.difficulty
                     }
             }
         }
+        //"it": a Kotlin keyword that shrinks lambdas
+        // similar to Java's static references
+
+        //use this to ensure
         pickedList.add(resultRow[Questions.id].value)
 
         return Question(
@@ -64,14 +72,8 @@ class QuestionFactory {
             //theCorrectAnswer =
             Answer(resultRow[Questions.correct_answer]),
             //theIncorrectAnswers =
-            resultRow[Questions.incorrect_answers].split(",")
-                .stream()
-//                .map { it.replace("[", "") } //remove brackets
-//                .map { it.replace("]", "") } //remove brackets
-                .map { Answer(it) } //now working with stream of newly constructed Answers
-                .collect(Collectors.toList()) //collect stream into a list of Answer
+            resultRow[Questions.incorrect_answers].split(",").map { Answer(it) }
         )
-        //"it": a Kotlin keyword that shrinks lambdas similar to Java's static references
     }
 
 

@@ -1,9 +1,7 @@
 package model;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
-import java.util.stream.Collectors;
 
 /**
  * Abstraction of a Question object where common attributes and behaviors are defined.
@@ -44,7 +42,16 @@ public class Question extends Observable {
     */
    private final List<Answer> myIncorrectAnswers;
    
-   
+   /**
+    * Creates a Question container. By default, all parameters are required to create a
+    * Question.
+    * @param theCategory enumerated category constant
+    * @param theType enumerated format constant
+    * @param theDifficulty enumerated difficulty constant
+    * @param theQuestion string of text, the question
+    * @param theCorrectAnswer Answer containing the correct answer
+    * @param theIncorrectAnswers List of incorrect answers
+    */
    public Question(
          final Category theCategory,
          final QuestionType theType,
@@ -70,12 +77,11 @@ public class Question extends Observable {
    }
    
    /**
-    * Gets the question wrapped in this Question
-    *
-    * @return text of the question
+    * Accessor for enumerated category.
+    * @return enumerated category constant
     */
-   public String getPrompt() {
-      return myPrompt;
+   public Category getCategory() {
+      return myCategory;
    }
    
    /**
@@ -83,8 +89,25 @@ public class Question extends Observable {
     *
     * @return the Answer stored in the correct answer field
     */
-   protected Answer getCorrectAnswer() {
+   public Answer getCorrectAnswer() {
       return myCorrectAnswer;
+   }
+   
+   /**
+    * Accessor for enumerated difficulty category.
+    * @return enumerated difficulty constant
+    */
+   public Difficulty getDifficulty() {
+      return myDifficulty;
+   }
+   
+   /**
+    * Gets the question wrapped in this Question
+    *
+    * @return text of the question
+    */
+   public String getPrompt() {
+      return myPrompt;
    }
    
    /**

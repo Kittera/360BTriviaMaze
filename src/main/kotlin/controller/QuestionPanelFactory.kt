@@ -2,7 +2,7 @@ package controller
 
 import model.Question
 import model.Answer
-import model.QuestionType
+import model.QuestionType.*
 import java.awt.*
 import javax.swing.*
 
@@ -13,7 +13,7 @@ class QuestionPanelFactory {
      */
     fun getEmptyQuestionPanel(): JPanel {
         val placeholderText  = "No Question Selected"
-        val placeholderPanel = AbstractQuestionPanel(1)
+        val placeholderPanel = AbstractQuestionPanel()
         val tAnswer = Answer(placeholderText)
 
         placeholderPanel.title.text = placeholderText
@@ -27,38 +27,35 @@ class QuestionPanelFactory {
      * Dynamically creates a display panel for a question
      */
     fun getQuestionPanel(theQuestion: Question) = when (theQuestion.myType) {
-        QuestionType.TRUE_FALSE   -> makeTrueFalsePanel(question = theQuestion)
-        QuestionType.MULTI_CHOICE -> makeMultiChoicePanel(question = theQuestion)
-        QuestionType.SHORT_ANSWER -> makeShortAnswerPanel(question = theQuestion)
+        TRUE_FALSE, MULTI_CHOICE -> makeMultiChoicePanel(question = theQuestion)
+//        SHORT_ANSWER -> makeShortAnswerPanel(question = theQuestion)
         else -> makeErrorPanel()
     }
 
-    /**
-     * Specific procedure for building a panel out of a true false question
+        /**
+     * Create the lower answer panel for the overall panel here
      */
-    fun makeTrueFalsePanel(question: Question): JPanel {
-        val booleanPanel = AbstractQuestionPanel(2)
-        val falseButton = AnswerButton(Answer("False"))
-        val trueButton = AnswerButton(Answer("True"))
-
-        booleanPanel.contentPanel.add(JTextArea(question.prompt), JLabel.CENTER)
-
-        booleanPanel.answerPanel.add(falseButton)
-        booleanPanel.answerPanel.add(trueButton)
-
-        return booleanPanel
+    private fun makeAnswerPanel(choices: List<Answer>): JPanel {
+        val answerPanel = JPanel(GridLayout(choices.size, 1))
+        for (candidate in choices) {
+            answerPanel.add(AnswerButton(myAnswer = candidate))
+        }
+        return answerPanel
     }
 
-//    /**
-//     * Create the lower answer panel for the overall panel here
-//     */
-//    private fun makeAnswerPanel(choices: List<Answer>): JPanel {
-//        val answerPanel = JPanel(GridLayout(choices.size, 1))
-//        for (candidate in choices) {
-//            answerPanel.add(AnswerButton(myAnswer = candidate))
-//        }
-//        return answerPanel
-//    }
+    /**
+     * Question display panel factory method for multiple choice and true/false questions.
+     */
+    private fun makeMultiChoicePanel(question: Question): JPanel {
+        val multiChoicePanel = AbstractQuestionPanel()
+        val choices = (question.incorrectAnswers + question.correctAnswer).shuffled()
+
+        multiChoicePanel.answerPanel.add(makeAnswerPanel(choices))
+        multiChoicePanel.title.text = question.category.name
+        multiChoicePanel.content.text = question.prompt
+
+        return multiChoicePanel
+    }
 
     /**
      * Default panel to make if something went wrong with question panel generation.
@@ -70,33 +67,20 @@ class QuestionPanelFactory {
         return result
     }
 
-    /**
-     * Question display panel factory method for multiple choice questions.
-     */
-    private fun makeMultiChoicePanel(question: Question): JPanel {
-        val multiChoicePanel = AbstractQuestionPanel(question.incorrectAnswers.size)
-
-        val buttons = question.incorrectAnswers
-            .map { answer -> AnswerButton(answer) }
-
-
-        return JPanel()
-    }
-
-    /**
-     * Answer display panel for short answer questions
-     */
-    private fun makeShortAnswerPanel(question: Question): JPanel {
-        val amtChoices = question.incorrectAnswers.size
-
-
-        return JPanel()
-    }
+//    /**
+//     * Answer display panel for short answer questions
+//     */
+//    private fun makeShortAnswerPanel(question: Question): JPanel {
+//        val amtChoices = question.incorrectAnswers.size
+//
+//
+//        return JPanel()
+//    }
 
     /**
      * Basic template of the Swing panel that
      */
-    private class AbstractQuestionPanel(totalChoices: Int) : JPanel() {
+    private class AbstractQuestionPanel : JPanel() {
 
         val qPanelHeight = 400
         val qPanelWidth = 250
@@ -109,7 +93,7 @@ class QuestionPanelFactory {
             preferredSize = Dimension(qPanelWidth, qPanelHeight)
         }
 
-        val answerPanel = JPanel(GridLayout(totalChoices, 1))
+        val answerPanel = JPanel(GridLayout(1, 1))
 
         init {
             answerPanel.background = Color.BLUE
@@ -117,13 +101,19 @@ class QuestionPanelFactory {
         }
 
         val contentPanel = JPanel(GridLayout(1,1))
-        val content = JLabel()
+        val content = JTextArea()
 
         init {
-            content.horizontalAlignment = JLabel.CENTER
-            content.verticalAlignment = JLabel.CENTER
+            content.alignmentX = JTextArea.CENTER_ALIGNMENT
+            content.alignmentY = JTextArea.CENTER_ALIGNMENT
+            content.isEditable = false
+            content.background = Color.DARK_GRAY
+            content.foreground = Color.WHITE
+            content.lineWrap = true
+            content.font = Font("Consolas", Font.BOLD, 16)
             contentPanel.add(content)
-            contentPanel.background = Color.GREEN
+            contentPanel.background = content.background
+            contentPanel.border = BorderFactory.createEmptyBorder(5, 5, 5, 5)
             add(contentPanel, BorderLayout.CENTER)
         }
 
@@ -133,9 +123,12 @@ class QuestionPanelFactory {
         init {
             title.verticalAlignment = JLabel.CENTER
             title.horizontalAlignment = JLabel.CENTER
-            titlePanel.background = Color.RED
+            title.font = Font("Consolas", Font.BOLD, 16)
+            title.foreground = Color.WHITE
+            titlePanel.background = Color.darkGray
             titlePanel.preferredSize = Dimension(qPanelWidth, tPanelHeight)
             titlePanel.add(title)
+            titlePanel.border = BorderFactory.createEmptyBorder(5, 5, 5, 5)
             add(titlePanel, BorderLayout.NORTH)
         }
     }

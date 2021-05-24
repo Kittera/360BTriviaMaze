@@ -17,7 +17,7 @@ const val DRIVER = "org.sqlite.JDBC"
 class QuestionDB {
 
     /**
-     * Defines the structure of the Questions table.
+     * Defines the structure of the Questions table under the JetBrains Exposed DSL.
      */
     object Questions : IntIdTable() {
         val category = text(name = "Category")
@@ -28,6 +28,7 @@ class QuestionDB {
         val incorrect_answers = text(name = "Incorrect Answers")
     }
 
+    // /** Data access object for an instance of a question, may be needed for accessing  */
 //    class DBQuestion(id: EntityID<Int>) : Entity<Int>(id) {
 //        companion object : EntityClass<Int, DBQuestion>(Questions)
 //

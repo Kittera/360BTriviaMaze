@@ -10,7 +10,7 @@ public interface Door extends Observer {
     * Accessor for the Question a door is holding onto.
     * @return stored Question
     */
-   AbstractQuestion getQuestion();
+   Question getQuestion();
    
    /**
     * Asks the door if it is still locked, but hasn't been jammed by incorrect answers.

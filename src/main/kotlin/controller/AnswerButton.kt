@@ -10,12 +10,7 @@ import javax.swing.border.BevelBorder
 
 class AnswerButton(myAnswer: Answer): JButton(myAnswer.get()) {
     init {
-        size = when (myAnswer.type) {
-            QuestionType.TRUE_FALSE -> Dimension(100, 40)
-            QuestionType.MULTI_CHOICE -> Dimension(300, 40)
-            QuestionType.SHORT_ANSWER -> Dimension(300, 40)
-            null -> throw IllegalArgumentException("Code 1 AnswerButton")
-        }
+        preferredSize = Dimension(300, 40)
         border = BorderFactory.createSoftBevelBorder(BevelBorder.RAISED)
         isFocusable = false
         preferredSize = Dimension(250, 40)

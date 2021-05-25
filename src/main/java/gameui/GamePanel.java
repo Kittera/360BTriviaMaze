@@ -2,6 +2,8 @@ package gameui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class GamePanel extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -13,26 +15,40 @@ public class GamePanel extends JFrame {
     public void start() {
 
         setSize(800, 740);
-
-        final JPanel panel = new JPanel();
-        panel.setBounds(40, 80, 200, 200);
-        panel.setBackground(Color.gray);
-        panel.setLayout(null);
+        //Have basic Window, now we need a
+        final JPanel panel = new JPanel(new FlowLayout());
+        panel.setLocation(0,0);
         add(panel);//add panel to the frame
 
-        // Button1
-        final JButton button1 = new JButton("Click Here");
-        button1.setBounds(50, 100, 95, 30);
-        button1.setBackground(Color.yellow);
-        InGameMenuBar myMenu = new InGameMenuBar();
-        // add(button1); //adds button1 to the frame directly
-        this.setJMenuBar(myMenu.getBar());
-        panel.add(button1); //add button to the panel
 
+        InGameMenuBar myMenu = new InGameMenuBar();
+
+
+
+        this.setJMenuBar(myMenu.getBar());
+        
+        setContentPane((new MainMenu().getMainMenu()));
+        repaint();
         setLocationRelativeTo(null); //centers the frame to windows screen
         setLayout(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        //setContentPane(tempMenu.getMainMenu());
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                String closeMessage = "Warning: Any game data not saved will be lost on exit.";
+                JOptionPane warningPane = null;
+                int reply = warningPane.showConfirmDialog(null, closeMessage,
+                        "warning", JOptionPane.YES_NO_OPTION );
+                if(reply == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                } else {
+
+                }
+            }
+        });
     }
 
     /**

@@ -4,12 +4,9 @@ package gameui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serial;
 
-public class InGameMenuBar extends JPanel {
+public class InGameMenuBar extends JFrame {
 
-    @Serial
-    private static final long serialVersionUID = 3217891232321L;
 
     private JOptionPane warningPane;
 
@@ -108,6 +105,39 @@ public class InGameMenuBar extends JPanel {
 
 
     };
+
+//    static class CustomWindowListener implements WindowListener {
+//        public void windowOpened(WindowEvent e) {
+//        }
+//
+//        public void windowClosing(WindowEvent e) {
+//
+//        }
+//
+//        public void windowClosed(WindowEvent e) {
+//            String closeMessage = "Warning: Any game data not saved will be lost on exit.";
+//            JOptionPane warningPane = null;
+//            int reply = warningPane.showConfirmDialog(null, closeMessage,
+//                    "warning", JOptionPane.YES_NO_OPTION );
+//            if(reply == JOptionPane.YES_OPTION) {
+//                System.exit(0);
+//            } else {
+//
+//            }
+//        }
+//
+//        public void windowIconified(WindowEvent e) {
+//        }
+//
+//        public void windowDeiconified(WindowEvent e) {
+//        }
+//
+//        public void windowActivated(WindowEvent e) {
+//        }
+//
+//        public void windowDeactivated(WindowEvent e) {
+//        }
+//    }
 
 
 }

@@ -57,7 +57,7 @@ class OpenTriviaDBSchema {
                 .execute()
 
             var body: String?
-            totalResponse.use { body = it.body?.string() }
+            totalResponse.use { body = it.body?.string()?: "Oops" }
 
             return GsonBuilder().create()
                 .fromJson(body, CategoryCountResponse::class.java)

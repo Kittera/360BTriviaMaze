@@ -1,6 +1,5 @@
 package resources
 
-import com.google.gson.GsonBuilder
 import org.jetbrains.exposed.sql.*
 import controller.DRIVER
 import controller.QuestionDB
@@ -16,24 +15,23 @@ val myDB = QuestionDB()
 val myTokenGetter = TokenHttp()
 val myCounter = CategoryCountHttp()
 val myFetcher = QuestionFetchHttp()
-val gsonBuilder = GsonBuilder().create()
 
 val token = myTokenGetter.get(client = myClient)
-main()
-
 
 fun main() {
     for /* every */ (category in Category.values()) /* import all questions */ {
         /* but */ if (category == Category.ANY) continue /* because no endpoint for "any" */
         else {
+            //"connect" to database file
             Database.connect(importerPath, DRIVER)
 
-            //create table if it's not made yet
+            //create Questions table if it's not already present
             transaction {
                 if (!Questions.exists()) {
                     SchemaUtils.create(Questions)
                 }
             }
+
             //first ping API for the total count
             var remaining = myCounter.get(category = category, client = myClient)
 
@@ -58,8 +56,4 @@ fun main() {
     }
 }
 
-//get token - CHECK
-//determine category maximum - CHECK
-//make requests 50 at a time until <remaining> is < 50 then <remaining>
-//get json as string
-//send string to importJSON ----- QuestionDB().importFromJSON()
+main()

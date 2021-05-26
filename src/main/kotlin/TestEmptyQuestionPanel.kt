@@ -1,5 +1,5 @@
 import controller.QuestionFactory
-import controller.QuestionPanelFactory
+import view.QuestionPanelFactory
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.FlowLayout

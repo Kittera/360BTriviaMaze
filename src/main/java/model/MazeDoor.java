@@ -5,7 +5,7 @@ import java.util.Observer;
 /**
  * Specifies the contract for interacting with a Door.
  */
-public interface Door extends Observer {
+public interface MazeDoor extends Observer {
    /**
     * Accessor for the Question a door is holding onto.
     * @return stored Question
@@ -31,5 +31,5 @@ public interface Door extends Observer {
     * @return Room behind this Door if this Door is unlocked
     * @throws IllegalStateException if door is not unlocked
     */
-   Room roomBehind();
+   MazeRoom roomBehind();
 }

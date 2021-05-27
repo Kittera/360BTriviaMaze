@@ -14,12 +14,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainMenu extends JFrame implements ActionListener {
-   
+
     private BufferedImage image;
 
     public JFrame Menu(){
         JFrame frame = new JFrame("Title Menu");
-        frame.setLayout(new GridLayout(2, 0));
+        frame.setLayout(new BorderLayout());
         try{
             image = ImageIO.read(new File("Images/post.png"));
         } catch (IOException e) {
@@ -31,6 +31,7 @@ public class MainMenu extends JFrame implements ActionListener {
         JButton setting = new JButton("Settings");
 
         JPanel imagePanel = new JPanel(new GridLayout(0,1));
+        JPanel empty = new JPanel();
         imagePanel.add(pic);
 
         JPanel buttons = new JPanel();
@@ -38,8 +39,9 @@ public class MainMenu extends JFrame implements ActionListener {
         buttons.add(start);
         buttons.add(load);
         buttons.add(setting);
-        frame.add(imagePanel);
-        frame.add(buttons);
+
+        frame.add(imagePanel, BorderLayout.CENTER);
+        frame.add(buttons, BorderLayout.PAGE_END);
 
 
 

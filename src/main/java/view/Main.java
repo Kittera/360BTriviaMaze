@@ -9,9 +9,8 @@ public class Main {
         start.start();
         System.out.println("hello");
         JFrame frame = start.getCurrent();
-        frame.setSize(450,600);
+        frame.setSize(820,820);
         frame.setVisible( true );
-        frame.setDefaultCloseOperation
-                ( JFrame.EXIT_ON_CLOSE );
+        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     }
 }

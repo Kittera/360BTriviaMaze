@@ -17,9 +17,11 @@ import java.net.URL;
 public class MainMenu extends JFrame implements ActionListener {
 
     private BufferedImage image;
+    private JButton start;
+    private JFrame frame;
 
     public JFrame Menu(){
-        JFrame frame = new JFrame("Title Menu");
+        this.frame = new JFrame("Title Menu");
 
         frame.setLayout(new BorderLayout());
         try{
@@ -30,7 +32,8 @@ public class MainMenu extends JFrame implements ActionListener {
         JLabel pic = new JLabel(new ImageIcon(image));
 
 
-        JButton start = new JButton("New Game");
+        start = new JButton("New Game");
+        start.addActionListener(this);
         JButton load = new JButton("Load Game");
         JButton setting = new JButton("Settings");
 
@@ -52,6 +55,15 @@ public class MainMenu extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+    QuestionRoom room = new QuestionRoom();
+    GamePanel panel = new GamePanel();
+    if (e.getSource() == this.start){
+        frame.dispose();
+        panel.setCurrent(room.room());
+        JFrame frame = panel.getCurrent();
+        frame.setSize(820,820);
+        frame.setVisible( true );
+        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
+    }
     }
 }

@@ -1,24 +1,26 @@
 model/Room.java
  model.Room
-model/Question.java
- model.Question
+gameui/MainMenu.java
+ gameui.MainMenu
 model/Answer.java
  model.Answer
-model/AbstractPanelFactory.java
- model.AbstractPanelFactory
-model/AbstractQuestion.java
- model.AbstractQuestion
+model/Door.java
+ model.Door
+gameui/RoomPanel.java
+ gameui.RoomPanel
 model/QuestionType.java
  model.QuestionType
-model/ChoiceAnswer.java
- model.ChoiceAnswer
-model/TrueFalseQuestion.java
- model.TrueFalseQuestion
-model/TrueFalseAnswer.java
- model.TrueFalseAnswer
-gameui/GamePanel.java
- gameui.GamePanel
- gameui.GamePanel$1
+gameui/MainButtonPanel.java
+ gameui.MainButtonPanel
+ gameui.MainButtonPanel$1
+ gameui.MainButtonPanel$2
+ gameui.MainButtonPanel$3
+model/Difficulty.java
+ model.Difficulty
+model/Category.java
+ model.Category
+gameui/InGamePanel.java
+ gameui.InGamePanel
 gameui/InGameMenuBar.java
  gameui.InGameMenuBar
  gameui.InGameMenuBar$1
@@ -26,3 +28,9 @@ gameui/InGameMenuBar.java
  gameui.InGameMenuBar$3
  gameui.InGameMenuBar$4
  gameui.InGameMenuBar$5
+gameui/GamePanel.java
+ gameui.GamePanel
+ gameui.GamePanel$1
+ gameui.GamePanel$2
+model/Question.java
+ model.Question

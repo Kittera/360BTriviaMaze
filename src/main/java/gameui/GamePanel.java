@@ -16,17 +16,13 @@ public class GamePanel extends JFrame {
     }
 
     public void start() {
-        setBounds(100,100,800, 740);
         setContentPane(new MainMenu());
-
 
         InGameMenuBar myMenu = new InGameMenuBar();
         setJMenuBar(myMenu.getBar());
 
-
         pack();
         setLocationRelativeTo(null); //centers the frame to windows screen
-        setLayout(new BorderLayout());
         setVisible(true);
         setSize(800, 740);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

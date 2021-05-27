@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainButtonPanel extends JPanel {
-    private JPanel myButtonPanel;
-    private ButtonGroup theGroup;
     private JButton newGame;
     private JButton loadGame;
     private JButton exitGame;
@@ -18,10 +16,7 @@ public class MainButtonPanel extends JPanel {
     }
     
     private void buildPanel() {
-
-
-        setBounds(200, 350, 100, 100);
-        
+        setLayout(new GridLayout(3, 5, 0, 10));
         //buttons maybe make a button method to build buttons
         loadGame = new JButton("Load Game");
         newGame = new JButton("New Game");
@@ -35,10 +30,7 @@ public class MainButtonPanel extends JPanel {
         add(loadGame);
         add(newGame);
         add(exitGame);
-        
-        loadGame.setVisible(true);
-        newGame.setVisible(true);
-        exitGame.setVisible(true);
+
     }
     
     
@@ -53,7 +45,9 @@ public class MainButtonPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            getRootPane().setContentPane(new InGamePanel());
+
+            getRootPane().setContentPane(new InGamePanel()
+            );
         }
     };
     ActionListener LoadGame = new ActionListener() {
@@ -63,10 +57,6 @@ public class MainButtonPanel extends JPanel {
             //todo load function for serialization
         }
     };
-
-    public Component getButtonGroup() {
-        return myButtonPanel;
-    }
 }
 
 

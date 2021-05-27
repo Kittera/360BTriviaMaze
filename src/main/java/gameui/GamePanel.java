@@ -1,37 +1,34 @@
 package gameui;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class GamePanel extends JFrame {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1321L;
+
 
     public GamePanel() {
         super("360 Trivia Maze");
+        start();
     }
 
     public void start() {
-
-        setSize(800, 740);
-        //Have basic Window, now we need a
-        final JPanel panel = new JPanel(new FlowLayout());
-        panel.setLocation(0,0);
-        add(panel);//add panel to the frame
+        setBounds(100,100,800, 740);
+        setContentPane(new MainMenu());
 
 
         InGameMenuBar myMenu = new InGameMenuBar();
+        setJMenuBar(myMenu.getBar());
 
 
-
-        this.setJMenuBar(myMenu.getBar());
-        
-        setContentPane((new MainMenu().getMainMenu()));
-        repaint();
+        pack();
         setLocationRelativeTo(null); //centers the frame to windows screen
-        setLayout(null);
+        setLayout(new BorderLayout());
         setVisible(true);
+        setSize(800, 740);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         //setContentPane(tempMenu.getMainMenu());
 

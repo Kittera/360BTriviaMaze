@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MainButtonPanel {
+public class MainButtonPanel extends JPanel {
     private JPanel myButtonPanel;
     private ButtonGroup theGroup;
     private JButton newGame;
@@ -13,15 +13,14 @@ public class MainButtonPanel {
     private JButton exitGame;
 
     public MainButtonPanel() {
+
         buildPanel();
     }
     
     private void buildPanel() {
-        theGroup = new ButtonGroup(); //don't need this really was a test for issue
-       
-        myButtonPanel = new JPanel(new FlowLayout()); //layout for button panel
-        
-        myButtonPanel.setBounds(200, 350, 100, 100);
+
+
+        setBounds(200, 350, 100, 100);
         
         //buttons maybe make a button method to build buttons
         loadGame = new JButton("Load Game");
@@ -31,14 +30,11 @@ public class MainButtonPanel {
         exitGame.addActionListener(ExitGame);
         loadGame.addActionListener(LoadGame);
         newGame.addActionListener(NewGame);
-        
-        myButtonPanel.add(loadGame);
-        myButtonPanel.add(newGame);
-        myButtonPanel.add(exitGame);
-        // still part of the test
-        theGroup.add(loadGame);
-        theGroup.add(newGame);
-        theGroup.add(exitGame);
+
+
+        add(loadGame);
+        add(newGame);
+        add(exitGame);
         
         loadGame.setVisible(true);
         newGame.setVisible(true);
@@ -57,7 +53,7 @@ public class MainButtonPanel {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-
+            getRootPane().setContentPane(new InGamePanel());
         }
     };
     ActionListener LoadGame = new ActionListener() {

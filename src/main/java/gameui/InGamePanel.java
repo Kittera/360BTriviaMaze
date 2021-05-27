@@ -3,7 +3,7 @@ package gameui;
 import javax.swing.*;
 import java.awt.*;
 
-public class InGamePanel {
+public class InGamePanel extends JPanel {
 
     private JPanel myPanel;
     private JPanel myQuestionPanel;

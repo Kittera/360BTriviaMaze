@@ -117,7 +117,6 @@ class OpenTriviaDBSchema {
      * this class.
      */
     class FetchResponse(
-        val response_code: Int,
         val results: List<QuestionPackage>,
     )
 

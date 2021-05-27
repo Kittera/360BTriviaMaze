@@ -9,11 +9,13 @@ import okhttp3.OkHttpClient
 import controller.OpenTriviaDBSchema.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
+val openTriviaDBMaxPerQuery = 50
 val importerPath = "jdbc:sqlite:./Trivia.sqlite"
 val myClient = OkHttpClient()
 val myDB = QuestionDB()
 val myTokenGetter = TokenHttp()
 val myCounter = CategoryCountHttp()
+
 val myFetcher = QuestionFetchHttp()
 
 val token = myTokenGetter.get(client = myClient)
@@ -36,11 +38,11 @@ fun main() {
             var remaining = myCounter.get(category = category, client = myClient)
 
             //loop requests using token until category has fewer than 50 questions left.
-            while (remaining > 50) {
+            while (remaining > openTriviaDBMaxPerQuery) {
                 myFetcher.get(category = category, client = myClient, token = token)
                     .results
                     .forEach { myDB.importFromGson(it) }
-                remaining -= 50
+                remaining -= openTriviaDBMaxPerQuery
             }
 
             //get remaining questions

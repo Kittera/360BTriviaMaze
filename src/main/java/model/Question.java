@@ -4,13 +4,24 @@ import java.util.List;
 import java.util.Observable;
 
 /**
- * Abstraction of a Question object where common attributes and behaviors are defined.
+ * Question acts as a container for a question and some statistics about that question
+ * needed for the context of the trivia maze game.
  *
  * @author Kittera Ashleigh McCloud
- * @version 2021.05.11.03.36
+ * @version 2021.05.26.03.36
  */
 @SuppressWarnings("deprecation")
 public class Question extends Observable {
+   
+   /**
+    * Number of times an attempt has been made to answer this question.
+    */
+   private int myAttemptCounter;
+   
+   /**
+    * Whether this question has been answered correctly yet.
+    */
+   private boolean myAnswered;
    
    /**
     * Enumerated question category.
@@ -30,17 +41,17 @@ public class Question extends Observable {
    /**
     * Stores the question represented by this Question.
     */
-   private final String myPrompt;
+   public final String myPrompt;
    
    /**
     * The correct Answer.
     */
-   private final Answer myCorrectAnswer;
+   public final Answer myCorrectAnswer;
    
    /**
     * Stores all Answer objects associated with this question.
     */
-   private final List<Answer> myIncorrectAnswers;
+   public final List<Answer> myIncorrectAnswers;
    
    /**
     * Creates a Question container. By default, all parameters are required to create a
@@ -58,13 +69,24 @@ public class Question extends Observable {
          final Difficulty theDifficulty,
          final String theQuestion,
          final Answer theCorrectAnswer,
-         final List<Answer> theIncorrectAnswers) {
+         final List<Answer> theIncorrectAnswers
+   ) {
       myCategory = theCategory;
       myType = theType;
       myDifficulty = theDifficulty;
       myPrompt = theQuestion;
       myCorrectAnswer = theCorrectAnswer;
       myIncorrectAnswers = theIncorrectAnswers;
+      myAttemptCounter = 0;
+      myAnswered = false;
+   }
+   
+   /**
+    * Accessor for attempt counter.
+    * @return number of attempts so far
+    */
+   public int getAttemptCount() {
+      return myAttemptCounter;
    }
    
    /**
@@ -111,12 +133,26 @@ public class Question extends Observable {
    }
    
    /**
+    * Query for whether this question has been answered correctly
+    * @return status of correct answer detection
+    */
+   public boolean hasCorrectAnswer() {
+      return myAnswered;
+   }
+   
+   /**
     * Determines if the correct answer has been chosen or not.
     *
     * @param theAnswer Answer that was chosen
     * @return whether the answer is correct
     */
    public boolean tryAnswer(Answer theAnswer) {
-      return theAnswer == myCorrectAnswer;
+      myAttemptCounter++;
+      notifyObservers(this);
+      boolean result = theAnswer == myCorrectAnswer;
+      if (result) {
+         myAnswered = true;
+      }
+      return result;
    }
 }

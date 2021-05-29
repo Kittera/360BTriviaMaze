@@ -1,11 +1,9 @@
 package model;
 
-import java.util.Observer;
-
 /**
  * Specifies the contract for interacting with a Door.
  */
-public interface MazeDoor extends Observer {
+public interface MazeDoor {
    /**
     * Accessor for the Question a door is holding onto.
     * @return stored Question
@@ -32,4 +30,12 @@ public interface MazeDoor extends Observer {
     * @throws IllegalStateException if door is not unlocked
     */
    MazeRoom roomBehind();
+   
+   /**
+    * Forward the Answer attempt to the stored Question and update based on question
+    * state.
+    * @param theAnswer answer to try
+    * @return whether the answer was correct
+    */
+   boolean tryAnswer(Answer theAnswer);
 }

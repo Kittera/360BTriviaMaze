@@ -1,6 +1,7 @@
 package model;
 
 public class Player {
+   
    private MazeRoom myRoom;
    
    Player(final MazeRoom theStartingRoom) {

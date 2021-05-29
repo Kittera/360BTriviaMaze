@@ -4,18 +4,11 @@ import java.util.*;
 
 public class MockRoom implements MazeRoom {
    
-//   private List<MazeDoor> testDoors;
-   
-   private Map<Direction, Optional<MazeDoor>> testDoors;
-   
-   MockRoom() {
-      testDoors = new EnumMap<>(Direction.class);
-   }
-   
+   MockRoom() {  }
    
    @Override
-   public List<MazeDoor> getDoors() {
-      return null;
+   public Collection<MazeDoor> getDoors() {
+      return new ArrayList<>();
    }
    
    @Override
@@ -24,7 +17,7 @@ public class MockRoom implements MazeRoom {
    }
    
    @Override
-   public void update(Observable o, Object arg) {
-   
+   public boolean addDoor(final MazeDoor theDoor) {
+      return false;
    }
 }

@@ -1,5 +1,5 @@
 import controller.QuestionFactory
-import controller.QuestionPanelFactory
+import view.QuestionPanelFactory
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.FlowLayout
@@ -12,7 +12,7 @@ fun main() {
     val canvas = JPanel(FlowLayout(FlowLayout.CENTER))
     canvas.preferredSize = Dimension(600, 600)
     canvas.background = Color.BLACK
-    canvas.add(QuestionPanelFactory().getQuestionPanel(QuestionFactory().getQuestion()))
+    canvas.add(QuestionPanelFactory().getQuestionPanel(QuestionFactory.get()))
 
     val testFrame = JFrame()
     testFrame.add(canvas)

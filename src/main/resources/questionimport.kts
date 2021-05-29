@@ -1,6 +1,5 @@
 package resources
 
-import com.google.gson.GsonBuilder
 import org.jetbrains.exposed.sql.*
 import controller.DRIVER
 import controller.QuestionDB
@@ -9,57 +8,55 @@ import model.Category
 import okhttp3.OkHttpClient
 import controller.OpenTriviaDBSchema.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.Connection
 
+val openTriviaDBMaxPerQuery = 50
 val importerPath = "jdbc:sqlite:./Trivia.sqlite"
 val myClient = OkHttpClient()
 val myDB = QuestionDB()
-val myTokenGetter = TokenHttp()
-val myCounter = CategoryCountHttp()
-val myFetcher = QuestionFetchHttp()
-val gsonBuilder = GsonBuilder().create()
 
-val token = myTokenGetter.get(client = myClient)
-main()
-
+val token = TokenHttp.get(client = myClient)
 
 fun main() {
     for /* every */ (category in Category.values()) /* import all questions */ {
-        /* but */ if (category == Category.ANY) continue /* because no endpoint for "any" */
+        /* but */ if (category == Category.ANY) continue // because no endpoint for "any"
         else {
+            // "connect" to database file
             Database.connect(importerPath, DRIVER)
 
-            //create table if it's not made yet
-            transaction {
+            // create Questions table if it's not already present
+            transaction(Connection.TRANSACTION_SERIALIZABLE, 2) {
                 if (!Questions.exists()) {
                     SchemaUtils.create(Questions)
                 }
             }
-            //first ping API for the total count
-            var remaining = myCounter.get(category = category, client = myClient)
 
-            //loop requests using token until category has fewer than 50 questions left.
-            while (remaining > 50) {
-                myFetcher.get(category = category, client = myClient, token = token)
+            // first ping API for the total count
+            var remaining = CategoryCountHttp.get(category = category, client = myClient)
+
+            // loop requests using token until category has fewer than 50 questions left
+            while (remaining > openTriviaDBMaxPerQuery) {
+                QuestionFetchHttp.get(
+                    category = category,
+                    client = myClient,
+                    token = token,
+                )
                     .results
-                    .forEach { myDB.importFromGson(it) }
-                remaining -= 50
+                    .forEach { myDB.importGson(it) }
+                remaining -= openTriviaDBMaxPerQuery
             }
 
-            //get remaining questions
-            myFetcher.get(
+            // get remaining questions
+            QuestionFetchHttp.get(
                 category = category,
                 client = myClient,
                 token = token,
-                count = remaining - 1,
+                count = remaining - 1, // - 1 to make extra sure we don't hit the limit
             )
                 .results
-                .forEach { myDB.importFromGson(it) }
+                .forEach { QuestionDB.importGson(it) } //import each question from result
         }
     }
 }
 
-//get token - CHECK
-//determine category maximum - CHECK
-//make requests 50 at a time until <remaining> is < 50 then <remaining>
-//get json as string
-//send string to importJSON ----- QuestionDB().importFromJSON()
+main()

@@ -1,7 +1,7 @@
 package gameui;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,6 +23,7 @@ public class GamePanel extends JFrame {
 
         pack();
         setLocationRelativeTo(null); //centers the frame to windows screen
+        setResizable(true);
         setVisible(true);
         setSize(800, 740);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

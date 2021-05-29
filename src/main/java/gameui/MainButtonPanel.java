@@ -45,9 +45,7 @@ public class MainButtonPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-
-            getRootPane().setContentPane(new InGamePanel()
-            );
+            getRootPane().setContentPane(new OptionPanel());
         }
     };
     ActionListener LoadGame = new ActionListener() {

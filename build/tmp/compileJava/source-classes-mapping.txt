@@ -1,26 +1,15 @@
 model/Room.java
  model.Room
-gameui/MainMenu.java
- gameui.MainMenu
 model/Answer.java
  model.Answer
-model/Door.java
- model.Door
 gameui/RoomPanel.java
  gameui.RoomPanel
-model/QuestionType.java
- model.QuestionType
-gameui/MainButtonPanel.java
- gameui.MainButtonPanel
- gameui.MainButtonPanel$1
- gameui.MainButtonPanel$2
- gameui.MainButtonPanel$3
-model/Difficulty.java
- model.Difficulty
 model/Category.java
  model.Category
-gameui/InGamePanel.java
- gameui.InGamePanel
+model/Maze.java
+ model.Maze
+model/Player.java
+ model.Player
 gameui/InGameMenuBar.java
  gameui.InGameMenuBar
  gameui.InGameMenuBar$1
@@ -28,9 +17,36 @@ gameui/InGameMenuBar.java
  gameui.InGameMenuBar$3
  gameui.InGameMenuBar$4
  gameui.InGameMenuBar$5
+model/MazeDoor.java
+ model.MazeDoor
+gameui/MainMenu.java
+ gameui.MainMenu
+view/MainMenu.java
+ view.MainMenu
+model/QuestionType.java
+ model.QuestionType
+model/Direction.java
+ model.Direction
+model/Question.java
+ model.Question
+model/TriviaMaze.java
+ model.TriviaMaze
+model/MazeRoom.java
+ model.MazeRoom
+model/Difficulty.java
+ model.Difficulty
+model/TriviaDoor.java
+ model.TriviaDoor
 gameui/GamePanel.java
  gameui.GamePanel
  gameui.GamePanel$1
  gameui.GamePanel$2
-model/Question.java
- model.Question
+gameui/InGamePanel.java
+ gameui.InGamePanel
+gameui/MainButtonPanel.java
+ gameui.MainButtonPanel
+ gameui.MainButtonPanel$1
+ gameui.MainButtonPanel$2
+ gameui.MainButtonPanel$3
+gameui/OptionPanel.java
+ gameui.OptionPanel

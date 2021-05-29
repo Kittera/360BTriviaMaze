@@ -10,8 +10,7 @@ public class MainMenu extends JPanel{
 
     private static final long serialVersionUID = 1L;
 
-    private JLabel myBackground;
-    private JPanel myMainMenu;
+
     private ImageIcon myImage;
     private Image myPic;
 

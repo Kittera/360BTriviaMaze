@@ -11,8 +11,11 @@ public class InGamePanel extends JPanel {
     private MenuBar myMenuBar;
 
 
-    public InGamePanel() {
+    public InGamePanel(ButtonGroup catButtonGroup) {
         createPanel();
+    }
+
+    public InGamePanel(ButtonModel selection, ButtonModel selection1) {
     }
 
     private void createPanel() {

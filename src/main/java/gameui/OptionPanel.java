@@ -1,11 +1,14 @@
 package gameui;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class OptionPanel extends JPanel {
 
     private JPanel myPanel;
-
+    private ButtonGroup catButtonGroup = new ButtonGroup();
+    private ButtonGroup difButtonGroup = new ButtonGroup();
     public OptionPanel() {
         createPanel();
     }
@@ -15,10 +18,11 @@ public class OptionPanel extends JPanel {
         setSize(800, 740);
         createLabels();
         createButtons();
+        setVisible(true);
     }
 
     private void createButtons() {
-        ButtonGroup difButtonGroup = new ButtonGroup();
+        difButtonGroup = new ButtonGroup();
         JCheckBox easy = new JCheckBox("Easy", true);
         easy.setBounds(100, 120, 100, 25 );
         JCheckBox medium = new JCheckBox("Medium");
@@ -34,7 +38,7 @@ public class OptionPanel extends JPanel {
         add(medium);
         add(hard);
 
-        ButtonGroup catButtonGroup = new ButtonGroup();
+        catButtonGroup = new ButtonGroup();
 
         JCheckBox anyCat = new JCheckBox("All", true);
         anyCat.setBounds(350, 120, 100, 20 );
@@ -102,10 +106,12 @@ public class OptionPanel extends JPanel {
 
         JButton startGame = new JButton("Start Game");
         startGame.setBounds(600, 620, 100, 25);
+        startGame.addActionListener(StartGame);
         add(startGame);
 
         JButton mainMenu = new JButton("Back");
         mainMenu.setBounds(100, 620, 100, 25);
+        mainMenu.addActionListener(Back);
         add(mainMenu);
 
     }
@@ -115,12 +121,27 @@ public class OptionPanel extends JPanel {
         difficulty.setHorizontalAlignment(SwingConstants.LEFT);
         difficulty.setBounds(100,  100, 100, 20);
 
-        JLabel catagory = new JLabel("Select Catagory");
-        catagory.setHorizontalAlignment(SwingConstants.LEFT);
-        catagory.setBounds(350,  100, 100, 20);
+        JLabel category = new JLabel("Select Category");
+        category.setHorizontalAlignment(SwingConstants.LEFT);
+        category.setBounds(350,  100, 100, 20);
 
-        add(catagory);
+        add(category);
         add(difficulty);
     }
+    ActionListener StartGame = new ActionListener() {
 
+        @Override
+        public void actionPerformed(ActionEvent event) {
+
+        }
+    };
+
+    ActionListener Back = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            //getRootPane().setContentPane(new InGamePanel(catButtonGroup.getSelection(), difButtonGroup.getSelection()));
+            getRootPane().setContentPane(new MainMenu());
+        }
+    };
 }

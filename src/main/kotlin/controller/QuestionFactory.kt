@@ -27,7 +27,7 @@ class QuestionFactory {
     private val pickedList: MutableList<Int>
 
     init {
-        pickedList = ArrayList()
+        pickedList = ArrayList() // TODO Figure out logic to reset() this
         Database.connect(PATH, DRIVER)
     }
 
@@ -39,21 +39,12 @@ class QuestionFactory {
         category: Category,
         difficulty: Difficulty,
     ): Question {
-        val resultRow = transaction {
-            Questions.selectAll()
-                .orderBy(Random())
-                .first {
-                    it[Questions.category].lowercase() == category.name.lowercase()
-                            && it[Questions.difficulty].lowercase() == difficulty.difficulty.lowercase()
-                            && !pickedList.contains(it[Questions.id].value)
-                }
-        }
-        //"it": a Kotlin keyword that shrinks lambdas
-        // similar to Java's static references
+        
+
+        val resultRow = fetch(category, difficulty)
 
         //use this to ensure no duplicate picks
         pickedList.add(resultRow[Questions.id].value)
-
 
         return Question(
             //this is a constructor call for the Java class Question in model
@@ -70,6 +61,18 @@ class QuestionFactory {
             //theIncorrectAnswers =
             resultRow[Questions.incorrect_answers].split(",").map { Answer(it) }
         )
+    }
+
+    private fun fetch(category: Category, difficulty: Difficulty) = transaction {
+        Questions.selectAll()
+            .orderBy(Random())
+            .first {
+                it[Questions.category].lowercase() == category.name.lowercase()
+                        && it[Questions.difficulty].lowercase() == difficulty.difficulty.lowercase()
+                        && !pickedList.contains(it[Questions.id].value)
+            }
+        //"it": a Kotlin keyword that shrinks lambdas
+        // similar to Java's static references
     }
 
 

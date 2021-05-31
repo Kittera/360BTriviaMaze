@@ -25,7 +25,7 @@ fun main() {
             Database.connect(importerPath, DRIVER)
 
             // create Questions table if it's not already present
-            transaction(Connection.TRANSACTION_SERIALIZABLE, 2) {
+            transaction(Connection.TRANSACTION_SERIALIZABLE, 3) {
                 if (!Questions.exists()) {
                     SchemaUtils.create(Questions)
                 }

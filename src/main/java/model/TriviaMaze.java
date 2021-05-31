@@ -64,7 +64,7 @@ public class TriviaMaze implements Maze {
    public boolean movePlayer(Direction theDirection) {
       
       
-      return false; //TODO
+      return false;
    }
    
    @Override

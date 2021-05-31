@@ -1,6 +1,8 @@
 package model;
 
-public class Player {
+import controller.MazePlayer;
+
+public class Player implements MazePlayer {
    
    private MazeRoom myRoom;
    
@@ -8,15 +10,15 @@ public class Player {
       myRoom = theStartingRoom;
    }
    
-   public MazeRoom getRoom() {
-      return myRoom;
-   }
-   
-   public void moveToRoom(final MazeRoom theNewRoom) {
+   public void sendToRoom(final MazeRoom theNewRoom) {
       if (theNewRoom == null) {
          throw new IllegalArgumentException("Null room object passed to player.");
       }
-      
       myRoom = theNewRoom;
+   }
+   
+   @Override
+   public MazeRoom getCurrentRoom() {
+      return myRoom;
    }
 }

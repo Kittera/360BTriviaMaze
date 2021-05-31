@@ -35,21 +35,19 @@ class QuestionDB {
     /**
      * Provide a QuestionPackage to this method to import it into the question database.
      */
-    fun importGson(qPackage: OpenTriviaDBSchema.QuestionPackage) {
-        println(unHTML(qPackage.question))
-        transaction {
-            Questions.insert {
-                it[category] = unHTML(qPackage.category)
-                it[format] = unHTML(qPackage.type)
-                it[difficulty] = unHTML(qPackage.difficulty)
-                it[question] = unHTML(qPackage.question)
-                it[correct_answer] = unHTML(qPackage.correct_answer)
-                it[incorrect_answers] = unHTML(qPackage.incorrect_answers.toString())
-                    .replace("[", "")
-                    .replace("]", "")
-            }
+    fun importGson(qPackage: OpenTriviaDBSchema.QuestionPackage) = transaction {
+        Questions.insert {
+            it[category] = unHTML(qPackage.category)
+            it[format] = unHTML(qPackage.type)
+            it[difficulty] = unHTML(qPackage.difficulty)
+            it[question] = unHTML(qPackage.question)
+            it[correct_answer] = unHTML(qPackage.correct_answer)
+            it[incorrect_answers] = unHTML(qPackage.incorrect_answers.toString())
+                .replace("[", "")
+                .replace("]", "")
         }
     }
+
 
     fun categoryCount(theCategory: Category) = transaction {
         Database.connect(PATH, DRIVER)

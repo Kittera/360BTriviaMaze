@@ -2,6 +2,8 @@ package model;
 
 import controller.MazePlayer;
 
+import java.util.Objects;
+
 public class Player implements MazePlayer {
    
    private MazeRoom myRoom;
@@ -11,7 +13,7 @@ public class Player implements MazePlayer {
    }
    
    public void sendToRoom(final MazeRoom theNewRoom) {
-      if (theNewRoom == null) {
+      if (Objects.isNull(theNewRoom)) {
          throw new IllegalArgumentException("Null room object passed to player.");
       }
       myRoom = theNewRoom;

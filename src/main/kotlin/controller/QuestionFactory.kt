@@ -47,7 +47,7 @@ class QuestionFactory {
                     .first {
                         !pickedList.contains(it[Questions.id].value)
                                 &&
-                        it[Questions.category].lowercase() == theCategory.name
+                        it[Questions.category].lowercase() == theCategory.title
                                 &&
                         it[Questions.difficulty].lowercase() == theDifficulty.difficulty
                     }

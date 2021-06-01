@@ -52,7 +52,7 @@ class QuestionPanelFactory {
         val choices = (question.incorrectAnswers + question.correctAnswer).shuffled()
 
         multiChoicePanel.answerPanel.add(makeAnswerPanel(choices))
-        multiChoicePanel.title.text = question.category.name
+        multiChoicePanel.title.text = question.category.title
         multiChoicePanel.content.text = question.prompt
 
         return multiChoicePanel

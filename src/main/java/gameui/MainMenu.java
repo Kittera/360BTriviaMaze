@@ -11,7 +11,6 @@ public class MainMenu extends JPanel{
     private static final long serialVersionUID = 123215456L;
 
 
-    private ImageIcon myImage;
     private Image myPic;
 
     public MainMenu() {
@@ -24,8 +23,7 @@ public class MainMenu extends JPanel{
         //this adds image but having issues with it
 
         setSize(800, 740);
-        myImage = new ImageIcon(this.getClass().getResource("/MyPost.png"));
-        myPic = myImage.getImage();
+        myPic = new ImageIcon("src/main/resources/MyPost.png").getImage();
         add(new MainButtonPanel(), BorderLayout.SOUTH);
         setVisible(true);
     }

@@ -22,24 +22,24 @@ public class GamePanel extends JFrame {
         setJMenuBar(myMenu.getBar());
 
         pack();
-        setLocationRelativeTo(null); //centers the frame to windows screen
         setResizable(true);
         setVisible(true);
         setSize(800, 740);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setLocationRelativeTo(null); //centers the frame to windows screen
         //setContentPane(tempMenu.getMainMenu());
 
+        Component pan = this;
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 String closeMessage = "Warning: Any game data not saved will be lost on exit.";
-                JOptionPane warningPane = null;
-                int reply = warningPane.showConfirmDialog(null, closeMessage,
+                int reply = JOptionPane.showConfirmDialog(pan, closeMessage,
                         "warning", JOptionPane.YES_NO_OPTION );
                 if(reply == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 } else {
-
+                    //TODO
                 }
             }
         });

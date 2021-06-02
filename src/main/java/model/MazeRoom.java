@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.Observer;
 import java.util.Optional;
@@ -17,10 +18,10 @@ public interface MazeRoom {
    int MAX_DOORS = 4;
    
    /**
-    * Shortcut to get all doors in a room.
-    * @return list of doors found
+    * Adds a door to the room on a particular wall if said wall is not already inhabited
+    * by a door.
     */
-   Collection<? extends MazeDoor> getDoors();
+   boolean addDoor(final MazeDoor theDoor, final Direction theDirection);
    
    /**
     * Get a door on a specific wall.
@@ -30,8 +31,24 @@ public interface MazeRoom {
    Optional<MazeDoor> getDoor(final Direction theDirection);
    
    /**
-    * Adds a door to the room on a particular wall if said wall is not already inhabited
-    * by a door.
+    * Shortcut to get all doors in a room.
+    * @return list of doors found
     */
-   boolean addDoor(final MazeDoor theDoor);
+   Collection<? extends MazeDoor> getDoors();
+   
+   /**
+    * Accessor for this Room's location in the grid.
+    * @return 2D java.awt.Point containing row and col indexes
+    */
+   Point getLocation();
+   
+   /**
+    * Used for maze generation, this provides information on whether the algorithm has
+    * "visited" this room already.
+    * @return algorithm visit status
+    */
+   boolean isVisited();
+   
+   /** Marks a room as visited by the maze generation algorithm. */
+   void visit();
 }

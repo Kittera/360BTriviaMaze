@@ -39,27 +39,27 @@ class QuestionFactory {
         category: Category,
         difficulty: Difficulty,
     ): Question {
-        
 
-        val resultRow = fetch(category, difficulty)
+        val resultRow = try {
+            fetch(category, difficulty)
+        } catch (fourOhFour: NoSuchElementException) {
+            reset()
+            fetch(category, difficulty)
+        }
 
         //use this to ensure no duplicate picks
         pickedList.add(resultRow[Questions.id].value)
 
         return Question(
             //this is a constructor call for the Java class Question in model
-            //theCategory =
-            Category.fromName(resultRow[Questions.category]),
-            //theType =
-            QuestionType.fromKey(resultRow[Questions.format]),
-            //thDifficulty =
-            Difficulty.fromName(resultRow[Questions.difficulty]),
-            //theQuestion =
-            resultRow[Questions.question],
-            //theCorrectAnswer =
-            Answer(resultRow[Questions.correct_answer]),
-            //theIncorrectAnswers =
-            resultRow[Questions.incorrect_answers].split(",").map { Answer(it) }
+            /* theCategory = */ Category.fromName(resultRow[Questions.category]),
+            /* theType = */ QuestionType.fromKey(resultRow[Questions.format]),
+            /* theDifficulty = */ Difficulty.fromName(resultRow[Questions.difficulty]),
+            /* theQuestion = */ resultRow[Questions.question],
+            /* theCorrectAnswer = */ Answer(resultRow[Questions.correct_answer]),
+            /* theIncorrectAnswers = */ resultRow[Questions.incorrect_answers]
+                .split(",")
+                .map { Answer(it) }
         )
     }
 

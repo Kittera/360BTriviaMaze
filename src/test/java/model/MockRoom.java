@@ -17,7 +17,7 @@ public class MockRoom implements MazeRoom {
    }
    
    @Override
-   public boolean addDoor(final MazeDoor theDoor) {
+   public boolean addDoor(final MazeDoor theDoor, final Direction theDirection) {
       return false;
    }
 }

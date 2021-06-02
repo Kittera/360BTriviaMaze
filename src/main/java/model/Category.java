@@ -1,7 +1,5 @@
 package model;
 
-import kotlin.collections.ArrayDeque;
-
 import java.util.*;
 
 public enum Category {
@@ -47,10 +45,10 @@ public enum Category {
    }
    
    public static Category random() {
-      ArrayDeque<Category> hat = new ArrayDeque<>(Arrays.asList(values()));
-      Collections.shuffle(hat);
+      List<Category> hat = new ArrayList<>(Arrays.asList(values()));
       hat.remove(Category.ANY);
-      return hat.first();
+      Collections.shuffle(hat);
+      return hat.remove(0);
    }
    
 }

@@ -19,16 +19,30 @@ class TriviaMazeTest {
    
    @Test
    void addPlayer() {
-      fail();
+      testMaze.addPlayer(testPlayer);
+      assertSame(
+            testMaze.getRoom(1, 1),
+            testPlayer.getCurrentRoom()
+      );
    }
    
    @Test
    void getRoom() {
-      fail();
+      assertSame(
+            testMaze.getRoom(1, 1),
+            testPlayer.getCurrentRoom()
+      );
    }
    
    @Test
    void movePlayer() {
-      fail();
+      assertThrows(
+            IllegalStateException.class,
+            () -> testMaze.movePlayer(Direction.SOUTH)
+      );
+      testMaze.addPlayer(testPlayer);
+      assertTrue(
+            testMaze.movePlayer(Direction.SOUTH) || testMaze.movePlayer(Direction.EAST)
+      );
    }
 }

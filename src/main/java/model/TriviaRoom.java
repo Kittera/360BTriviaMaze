@@ -15,11 +15,13 @@ import java.util.Optional;
  * @author Kittera Ashleigh McCloud
  */
 public class TriviaRoom extends JPanel implements MazeRoom {
-   private static final Color BG_COLOR = new Color(0x090909);
    
    //////////  SWING FIELDS  //////////
    
+   private static final Color BG_COLOR = new Color(0x090909);
    private final JPanel myPlayerIndicator;
+   
+   //////////  ROOM FIELDS  //////////
    
    private final EnumMap<Direction, MazeDoor> myDoors;
    
@@ -88,13 +90,11 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    public void enter(MazePlayer thePlayer) {
       if (thePlayer.getCurrentRoom() == this) myDiscovered = true;
       myPlayerIndicator.setVisible(true);
-      revalidate();
    }
    
    @Override
    public void leave() {
       myPlayerIndicator.setVisible(false);
-      revalidate();
    }
    
    //////////////////  SWING CODE  //////////////////
@@ -140,5 +140,12 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       }
    }
    
-   //leave() player calls this to set the player location indicator invisible
+   @Override
+   public void paintComponent(Graphics g) {
+      if (myDiscovered) {
+         super.paintComponent(g);
+      } else {
+         g.fillRect(0, 0, getWidth(), getHeight());
+      }
+   }
 }

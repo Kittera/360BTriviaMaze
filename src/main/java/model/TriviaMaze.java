@@ -138,11 +138,18 @@ public class TriviaMaze extends JPanel implements Maze {
       Optional<MazeDoor> doorInDirection = currentRoom.getDoor(theDirection);
       
       try {
-         if (doorInDirection.isPresent()) {
-            myPlayer.sendToRoom(doorInDirection.get().roomBehind());
+         if (theDirection == Direction.CENTER) {
             result = true;
+            System.err.println("CENTER");
+         } else if (doorInDirection.isPresent()) {
+            if (doorInDirection.get().isLocked()) {
+               result = false; // the door was locked, return false to indicate no move
+            } else {
+               myPlayer.sendToRoom(doorInDirection.get().roomBehind());
+               result = true; // the door was unlocked, return true to indicate move
+            }
          } else {
-            result = false;
+            result = false; // if nothing else, return false to indicate no operation
          }
       } catch (final IllegalStateException shallNotPass) {
          result = false;
@@ -230,11 +237,11 @@ public class TriviaMaze extends JPanel implements Maze {
          }
          
          // TODO remove this sleep call from production, it's for the test visualizer
-//         try {
-//            Thread.sleep(10);
-//         } catch (InterruptedException e) {
-//            e.printStackTrace();
-//         }
+         try {
+            Thread.sleep(2);
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+         }
       }
    }
    

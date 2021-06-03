@@ -15,13 +15,15 @@ public class Player extends JPanel implements MazePlayer {
    private MazeRoom myRoom;
    
    public Player(final MazeRoom theStartingRoom) {
-      sendToRoom(theStartingRoom);
+      myRoom = theStartingRoom;
+      theStartingRoom.enter(this);
    }
    
    public void sendToRoom(final MazeRoom theNewRoom) {
       if (Objects.isNull(theNewRoom)) {
          throw new IllegalArgumentException("Null room object passed to player.");
       }
+      myRoom.leave();
       myRoom = theNewRoom;
       myRoom.enter(this);
    }

@@ -1,6 +1,9 @@
 package model;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public enum Direction {
    EAST, NORTH, WEST, SOUTH, CENTER;
@@ -37,5 +40,15 @@ public enum Direction {
          result = CENTER;
       }
       return result;
+   }
+   
+   /**
+    * Gets a random direction.
+    * @return random Direction
+    */
+   public static Direction random() {
+      List<Direction> hat = Arrays.asList(values());
+      Collections.shuffle(hat);
+      return hat.get(0);
    }
 }

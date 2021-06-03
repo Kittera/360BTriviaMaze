@@ -95,6 +95,6 @@ public class TriviaDoor implements MazeDoor {
    
    public void twinUnlocked(final MazeDoor theCaller) {
       Optional.ofNullable(myOtherSide)
-            .ifPresent(door -> this.isLocked = (door == theCaller));
+            .ifPresent(door -> this.isLocked = !(door == theCaller));
    }
 }

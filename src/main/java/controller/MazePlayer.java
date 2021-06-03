@@ -2,6 +2,8 @@ package controller;
 
 import model.MazeRoom;
 
+import java.awt.*;
+
 public interface MazePlayer {
    
    /**
@@ -15,4 +17,10 @@ public interface MazePlayer {
     * @param theRoom Maze Room to move to
     */
    void sendToRoom(MazeRoom theRoom);
+   
+   /**
+    * Finds the player's map coordinates.
+    * @return Point where x is row and y is column with (0, 0) at top left
+    */
+   Point getLocation();
 }

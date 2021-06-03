@@ -30,4 +30,14 @@ public class MockDoor implements MazeDoor {
    
    @Override
    public boolean tryAnswer(Answer theAnswer) { return false;}
+   
+   @Override
+   public void linkOtherSide(MazeDoor theDoor) {
+   
+   }
+   
+   @Override
+   public void twinUnlocked(MazeDoor theCaller) {
+   
+   }
 }

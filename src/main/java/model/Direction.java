@@ -1,16 +1,12 @@
 package model;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public enum Direction {
    EAST, NORTH, WEST, SOUTH, CENTER;
    
    /**
-    * Given two Points where x represents rows and y columns, and where 0, 0 is at the
+    * Given two Points where x represents columns and y rows, and where 0, 0 is at the
     * "top left," determines the appropriate direction constant for travelling FROM
     * theSrcLocation, TO theDestLocation.
     * @param theSrcLocation location being vacated
@@ -24,21 +20,20 @@ public enum Direction {
       Direction result;
       if (theSrcLocation.x < theDestLocation.x
             && theSrcLocation.y == theDestLocation.y) {
-         result = NORTH;
+         result = EAST;
       }
       else if (theSrcLocation.x > theDestLocation.x
             && theSrcLocation.y == theDestLocation.y) {
-         result = SOUTH;
-      }
-      else if (theSrcLocation.x == theDestLocation.x
-            && theSrcLocation.y < theDestLocation.y) {
          result = WEST;
       }
       else if (theSrcLocation.x == theDestLocation.x
-            && theSrcLocation.y > theDestLocation.y) {
-         result = EAST;
+            && theSrcLocation.y < theDestLocation.y) {
+         result = SOUTH;
       }
-      else {
+      else if (theSrcLocation.x == theDestLocation.x
+            && theSrcLocation.y > theDestLocation.y) {
+         result = NORTH;
+      } else {
          result = CENTER;
       }
       return result;

@@ -2,14 +2,20 @@ package model;
 
 import controller.MazePlayer;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Objects;
 
-public class Player implements MazePlayer {
+/**
+ * The Player class is something of a view pointer. It knows what room it's in, and can
+ * be sent to other rooms.
+ */
+public class Player extends JPanel implements MazePlayer {
    
    private MazeRoom myRoom;
    
-   Player(final MazeRoom theStartingRoom) {
-      myRoom = theStartingRoom;
+   public Player(final MazeRoom theStartingRoom) {
+      sendToRoom(theStartingRoom);
    }
    
    public void sendToRoom(final MazeRoom theNewRoom) {
@@ -17,10 +23,16 @@ public class Player implements MazePlayer {
          throw new IllegalArgumentException("Null room object passed to player.");
       }
       myRoom = theNewRoom;
+      myRoom.discover(this);
    }
    
    @Override
    public MazeRoom getCurrentRoom() {
       return myRoom;
+   }
+   
+   @Override
+   public Point getLocation() {
+      return myRoom.getLocation();
    }
 }

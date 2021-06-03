@@ -25,7 +25,7 @@ public interface Maze {
    /**
     * Set a Player into this Maze.
     *
-    * @param thePlayer Player to be interred into the maze.
+    * @param thePlayer Player to be interred into the maze at the stating point.
     */
    boolean addPlayer(MazePlayer thePlayer);
 }

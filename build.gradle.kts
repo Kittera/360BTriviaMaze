@@ -10,7 +10,7 @@ repositories {
 }
 
 group = "org.sqdat-capaul-sp21"
-version = "1.0-SNAPSHOT"
+version = "0.6-SNAPSHOT"
 
 val exposedVersion: String by project
 val kotlinVersion: String by project

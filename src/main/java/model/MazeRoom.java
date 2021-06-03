@@ -1,5 +1,8 @@
 package model;
 
+import controller.MazePlayer;
+
+import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Observer;
@@ -51,4 +54,7 @@ public interface MazeRoom {
    
    /** Marks a room as visited by the maze generation algorithm. */
    void markVisited();
+   
+   /** Marks a room as discovered by the player. */
+   boolean discover(MazePlayer thePlayer);
 }

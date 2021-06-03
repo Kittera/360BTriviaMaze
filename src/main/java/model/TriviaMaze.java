@@ -3,6 +3,7 @@ package model;
 import controller.MazePlayer;
 import controller.QuestionFactory;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  *
  */
-public class TriviaMaze implements Maze {
+public class TriviaMaze extends JPanel implements Maze {
    
    // use a hasBeenDiscovered boolean to control whether a room renders
    // use a GridLayout and make Rooms also extend JPanel OR make a view class
@@ -21,6 +22,7 @@ public class TriviaMaze implements Maze {
     * Largest value that can be assigned to any dimensions of the maze.
     */
    public static final int MAX_DIM = 30;
+   private static final int ROOM_SIZE = 50;
    
    private int myRows;
    private int myCols;
@@ -36,11 +38,14 @@ public class TriviaMaze implements Maze {
     * @param theRooms pre-made rooms to be imported
     */
    TriviaMaze(final int theRows, final int theCols, final MazeRoom[][] theRooms) {
-      if (badDimensions(theRows, theCols, myRows, myCols)) {
+      if (badDimensions(theRows, theCols, MAX_DIM, MAX_DIM)) {
          throw new MazeIndexOutOfBoundsError();
       }
-      myRooms = importRooms(theRooms); // + 2 for null-buffer
+      myRows = theRows;
+      myCols = theCols;
+      myRooms = importRooms(theRooms);
       myPlayer = null;
+      initSwingGraphics();
    }
    
    /**
@@ -57,11 +62,15 @@ public class TriviaMaze implements Maze {
          final Category theCategory,
          final Difficulty theDifficulty
    ) {
-      if (badDimensions(theRows, theCols, myRows, myCols)) {
+      if (badDimensions(theRows, theCols, MAX_DIM, MAX_DIM)) {
          throw new MazeIndexOutOfBoundsError();
       }
+      myRows = theRows;
+      myCols = theCols;
       myRooms = generateRooms(theRows, theCols);
+      initSwingGraphics();
       generateDoors(myRooms, theCategory, theDifficulty);
+      System.out.println("done with doors.");
       myPlayer = null;
    }
    
@@ -181,7 +190,7 @@ public class TriviaMaze implements Maze {
       while (!mazeStack.isEmpty()) {
          MazeRoom currentRoom = mazeStack.pop(); // pop a room off the stack
          List<MazeRoom> currentUnexploredNeighbors =
-               gatherNeighbors(currentRoom.getLocation(), theRooms);
+               gatherUnexploredNeighbors(currentRoom.getLocation(), theRooms);
          
          if (currentUnexploredNeighbors.size() > 0) {
             mazeStack.push(currentRoom); //push current room
@@ -222,16 +231,24 @@ public class TriviaMaze implements Maze {
             
             chosenRoom.markVisited();
             mazeStack.push(chosenRoom);
+            ((JPanel) chosenRoom).revalidate();
+   
+            
+         }
+         try {
+            Thread.sleep(50);
+         } catch (InterruptedException e) {
+            e.printStackTrace();
          }
       }
    }
    
-   private List<MazeRoom> gatherNeighbors(
+   private List<MazeRoom> gatherUnexploredNeighbors(
          final Point theLocation,
          final MazeRoom[][] theRooms
    ) {
-      final int row = theLocation.x;
-      final int col = theLocation.y;
+      final int row = theLocation.y;
+      final int col = theLocation.x;
       return Arrays.stream(
             new MazeRoom[]{
                   theRooms[row - 1][col],
@@ -275,6 +292,41 @@ public class TriviaMaze implements Maze {
       if (theCols <= 0 || theCols > theCMax) result = true;
       return result;
    }
+   
+   //////////////////  SWING CODE  //////////////////
+   
+   
+   private void initSwingGraphics() {
+      setLayout(new BorderLayout());
+      setBackground(Color.YELLOW);
+      JPanel gridPanel = new JPanel(new GridLayout(myRows, myCols));
+      setPreferredSize(new Dimension(ROOM_SIZE * myCols, ROOM_SIZE * myRows));
+      for (int row = 1 ; row <= myRows; row++) {
+         for (int col = 1 ; col <= myCols; col++) {
+            Object d = myRooms[row][col];
+            if (d instanceof TriviaRoom) {
+               gridPanel.add((TriviaRoom) d);
+            }
+         }
+      }
+      
+      add(gridPanel, BorderLayout.CENTER);
+      revalidate();
+      makeTestFrame();
+   }
+   
+   private void makeTestFrame() {
+      JFrame visualFrame = new JFrame();
+      visualFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      visualFrame.setResizable(false);
+      
+      visualFrame.add(this);
+      visualFrame.pack();
+      visualFrame.setLocationRelativeTo(null);
+      visualFrame.setVisible(true);
+   }
+   
+   
    
    private static class MazeIndexOutOfBoundsError extends IllegalArgumentException {
       public MazeIndexOutOfBoundsError() {

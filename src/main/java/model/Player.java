@@ -23,7 +23,7 @@ public class Player extends JPanel implements MazePlayer {
          throw new IllegalArgumentException("Null room object passed to player.");
       }
       myRoom = theNewRoom;
-      myRoom.discover(this);
+      myRoom.enter(this);
    }
    
    @Override

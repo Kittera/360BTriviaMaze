@@ -30,9 +30,14 @@ public class MockRoom implements MazeRoom {
    }
    
    @Override
-   public boolean discover(MazePlayer thePlayer) {
-      return false;
+   public void enter(MazePlayer thePlayer) {
    }
+   
+   @Override
+   public void leave() {
+   
+   }
+   
    
    @Override
    public Optional<MazeDoor> getDoor(Direction theDirection) {

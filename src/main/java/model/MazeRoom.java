@@ -2,10 +2,8 @@ package model;
 
 import controller.MazePlayer;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
-import java.util.Observer;
 import java.util.Optional;
 
 public interface MazeRoom {
@@ -55,6 +53,12 @@ public interface MazeRoom {
    /** Marks a room as visited by the maze generation algorithm. */
    void markVisited();
    
-   /** Marks a room as discovered by the player. */
-   boolean discover(MazePlayer thePlayer);
+   /** Used by the Player to turn on the roo's player presence indicator. Marks a room as
+    *  discovered by the player if they haven't been here before. */
+   void enter(MazePlayer thePlayer);
+   
+   /**
+    * Sets the player presence indicator to false in this room.
+    */
+   void leave();
 }

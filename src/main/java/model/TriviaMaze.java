@@ -230,11 +230,11 @@ public class TriviaMaze extends JPanel implements Maze {
          }
          
          // TODO remove this sleep call from production, it's for the test visualizer
-         try {
-            Thread.sleep(50);
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
+//         try {
+//            Thread.sleep(10);
+//         } catch (InterruptedException e) {
+//            e.printStackTrace();
+//         }
       }
    }
    

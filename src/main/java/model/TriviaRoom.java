@@ -84,10 +84,17 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       }
    }
    
-   public boolean discover(MazePlayer thePlayer) {
-      myDiscovered = thePlayer.getCurrentRoom() == this;
+   @Override
+   public void enter(MazePlayer thePlayer) {
+      if (thePlayer.getCurrentRoom() == this) myDiscovered = true;
       myPlayerIndicator.setVisible(true);
-      return myDiscovered;
+      revalidate();
+   }
+   
+   @Override
+   public void leave() {
+      myPlayerIndicator.setVisible(false);
+      revalidate();
    }
    
    //////////////////  SWING CODE  //////////////////
@@ -96,12 +103,12 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       setLayout(new BorderLayout());
       setBackground(BG_COLOR);
       setPreferredSize(new Dimension(30, 30));
-   
+      
       initialBorder(BorderLayout.NORTH);
       initialBorder(BorderLayout.EAST);
       initialBorder(BorderLayout.SOUTH);
       initialBorder(BorderLayout.WEST);
-   
+      
       myPlayerIndicator.setBackground(Color.MAGENTA);
       myPlayerIndicator.setVisible(false);
       add(myPlayerIndicator, BorderLayout.CENTER);
@@ -121,16 +128,15 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       doorIndicator.setPreferredSize(new Dimension(5, 5));
       switch (theDirection) {
          case NORTH -> add(doorIndicator, BorderLayout.NORTH);
-         case EAST  -> add(doorIndicator, BorderLayout.EAST);
+         case EAST -> add(doorIndicator, BorderLayout.EAST);
          case SOUTH -> add(doorIndicator, BorderLayout.SOUTH);
-         case WEST  -> add(doorIndicator, BorderLayout.WEST);
-         case CENTER ->
-               System.out.printf(
-                     "Detected Direction.CENTER in addDoorIndicator()" +
-                           "cell: %d, %d%n",
-                     getLocation().x,
-                     getLocation().y
-               );
+         case WEST -> add(doorIndicator, BorderLayout.WEST);
+         case CENTER -> System.out.printf(
+               "Detected Direction.CENTER in addDoorIndicator()" +
+                     "cell: %d, %d%n",
+               getLocation().x,
+               getLocation().y
+         );
       }
    }
    

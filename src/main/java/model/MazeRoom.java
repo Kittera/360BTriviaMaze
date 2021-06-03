@@ -50,5 +50,5 @@ public interface MazeRoom {
    boolean isVisited();
    
    /** Marks a room as visited by the maze generation algorithm. */
-   void visit();
+   void markVisited();
 }

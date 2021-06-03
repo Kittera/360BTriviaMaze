@@ -14,16 +14,18 @@ public class TriviaRoom implements MazeRoom {
    private final int myColLocation;
    
    private boolean myVisited;
+   private boolean myDiscovered;
    
    public TriviaRoom(
          final EnumMap<Direction, MazeDoor> theDoors,
          final int theRow,
          final int theCol
    ) {
-      this.myDoors = theDoors;
+      myDoors = theDoors;
       myRowLocation = theRow;
       myColLocation = theCol;
       myVisited = false;
+      myDiscovered = false;
    }
    
    public TriviaRoom(final int theRow, final int theCol) {
@@ -32,7 +34,8 @@ public class TriviaRoom implements MazeRoom {
    
    @Override
    public boolean addDoor(final MazeDoor theDoor, final Direction theDirection) {
-      return Objects.nonNull(myDoors.putIfAbsent(theDirection, theDoor));
+      // putIfAbsent returns null if the given key wasn't already mapped to a door
+      return Objects.isNull(myDoors.putIfAbsent(theDirection, theDoor));
    }
    
    @Override
@@ -56,7 +59,7 @@ public class TriviaRoom implements MazeRoom {
    }
    
    @Override
-   public void visit() {
+   public void markVisited() {
       if (!myVisited) {
          myVisited = true;
       }

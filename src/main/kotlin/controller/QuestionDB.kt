@@ -8,7 +8,7 @@ import org.apache.commons.text.StringEscapeUtils
 import java.sql.Connection
 
 const val PATH = "jdbc:sqlite:./src/main/resources/Trivia.sqlite"
-const val DRIVER = "org.sqlite.JDBC"
+const val SQLITE_DRIVER = "org.sqlite.JDBC"
 
 /**
  * Library class that provides an interface to the Trivia Maze Questions Database.

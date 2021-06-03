@@ -17,7 +17,7 @@ class QuestionFactory {
 
         @JvmStatic
         fun get() =
-            fact.getQuestion(category = Category.random(), difficulty = Difficulty.EASY)
+            fact.getQuestion(category = Category.random(), difficulty = Difficulty.random())
 
         @JvmStatic
         fun get(theCategory: Category, theDifficulty: Difficulty) =
@@ -28,7 +28,7 @@ class QuestionFactory {
 
     init {
         pickedList = ArrayList() // TODO Figure out logic to reset() this
-        Database.connect(PATH, DRIVER)
+        Database.connect(PATH, SQLITE_DRIVER)
     }
 
     /**
@@ -39,7 +39,6 @@ class QuestionFactory {
         category: Category,
         difficulty: Difficulty,
     ): Question {
-
         val resultRow = try {
             fetch(category, difficulty)
         } catch (fourOhFour: NoSuchElementException) {

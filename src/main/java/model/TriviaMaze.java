@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
  */
 public class TriviaMaze implements Maze {
    
-   //use a hasBeenDiscovered boolean to control whether a room renders
-   //use a GridLayout and make Rooms also extend JPanel OR make a view class as a
+   // use a hasBeenDiscovered boolean to control whether a room renders
+   // use a GridLayout and make Rooms also extend JPanel OR make a view class
    // wrapper for a room
    
    /**
@@ -33,14 +33,12 @@ public class TriviaMaze implements Maze {
     *
     * @param theRows first dimension of the maze grid
     * @param theCols second dimension of the maze grid
+    * @param theRooms pre-made rooms to be imported
     */
    TriviaMaze(final int theRows, final int theCols, final MazeRoom[][] theRooms) {
-      throwIfBadDimensions(
-            theRows,
-            theCols,
-            MAX_DIM,
-            MAX_DIM
-      );
+      if (badDimensions(theRows, theCols, myRows, myCols)) {
+         throw new MazeIndexOutOfBoundsError();
+      }
       myRooms = importRooms(theRooms); // + 2 for null-buffer
       myPlayer = null;
    }
@@ -50,16 +48,51 @@ public class TriviaMaze implements Maze {
     *
     * @param theRows first dimension of the maze grid
     * @param theCols second dimension of the maze grid
+    * @param theCategory category to pull questions from
+    * @param theDifficulty difficulty of questions to pull
     */
-   public TriviaMaze(final int theRows, final int theCols) {
-      throwIfBadDimensions(
-            theRows,
-            theCols,
-            MAX_DIM,
-            MAX_DIM
-      );
-      myRooms = generateMaze(theRows, theCols); // + 2 for null-buffer
+   public TriviaMaze(
+         final int theRows,
+         final int theCols,
+         final Category theCategory,
+         final Difficulty theDifficulty
+   ) {
+      if (badDimensions(theRows, theCols, myRows, myCols)) {
+         throw new MazeIndexOutOfBoundsError();
+      }
+      myRooms = generateRooms(theRows, theCols);
+      generateDoors(myRooms, theCategory, theDifficulty);
       myPlayer = null;
+   }
+   
+   /**
+    * Overload of standard constructor to provide parameter position flexibility.
+    * @param theRows first dimension of the maze grid
+    * @param theCols second dimension of the maze grid
+    * @param theCategory category to pull questions from
+    * @param theDifficulty difficulty of questions to pull
+    */
+   public TriviaMaze(
+         final int theRows,
+         final int theCols,
+         final Difficulty theDifficulty,
+         final Category theCategory
+   ) {
+      this(theRows, theCols, theCategory, theDifficulty);
+   }
+   
+   /**
+    * Constructs a fresh Trivia Maze with auto-generated input and random
+    * category/difficulty.
+    *
+    * @param theRows first dimension of the maze grid
+    * @param theCols second dimension of the maze grid
+    */
+   public TriviaMaze(
+         final int theRows,
+         final int theCols
+   ) {
+      this(theRows, theCols, Category.random(), Difficulty.random());
    }
    
    @Override
@@ -76,7 +109,9 @@ public class TriviaMaze implements Maze {
    
    @Override
    public MazeRoom getRoom(final int theRow, final int theCol) {
-      throwIfBadDimensions(theRow, theCol, myRows, myCols);
+      if (badDimensions(theRow, theCol, myRows, myCols)) {
+         throw new MazeIndexOutOfBoundsError();
+      }
       return myRooms[theRow][theCol];
    }
    
@@ -111,56 +146,81 @@ public class TriviaMaze implements Maze {
       return result;
    }
    
-   private MazeRoom[][] generateMaze(final int theRows, final int theCols) {
+   private MazeRoom[][] generateRooms(final int theRows, final int theCols) {
       MazeRoom[][] mazeResult = new MazeRoom[theRows + 2][theCols + 2];
       
       // build out the 2D array with null buffer
-      // tell each room where it's at
+      // tell each room where it's at TODO is this still needed?
       for (int row = 1; row <= theRows; row++) {
          for (int col = 1; col <= theCols; col++) {
             MazeRoom newRoom = new TriviaRoom(row, col);
             mazeResult[row][col] = newRoom;
          }
       }
-      generateDoors(mazeResult);
       return mazeResult;
    }
    
-   private void generateDoors(final MazeRoom[][] theRooms) {
-      MazeRoom initialRoom = theRooms[1][1];
+   /**
+    * Uses a randomized depth-first-search to iteratively add doors to the maze
+    * @param theRooms 2D array of rooms to join with doors
+    * @param theCategory category to pull questions from, defaults to any
+    * @param theDifficulty difficulty of questions to pull, defaults to any
+    */
+   private void generateDoors(
+         final MazeRoom[][] theRooms,
+         final Category theCategory,
+         final Difficulty theDifficulty
+   ) {
       ArrayDeque<MazeRoom> mazeStack = new ArrayDeque<>();
       
-      initialRoom.visit();
+      //choose an initial cell, mark it as visited, push it to mazeStack
+      MazeRoom initialRoom = theRooms[1][1];
+      initialRoom.markVisited();
       mazeStack.push(initialRoom);
       
       while (!mazeStack.isEmpty()) {
-         
-         MazeRoom currentRoom = mazeStack.pop();
+         MazeRoom currentRoom = mazeStack.pop(); // pop a room off the stack
          List<MazeRoom> currentUnexploredNeighbors =
                gatherNeighbors(currentRoom.getLocation(), theRooms);
          
-         // this will be true when the current Room has any unvisited neighbors
          if (currentUnexploredNeighbors.size() > 0) {
-            mazeStack.push(currentRoom);
+            mazeStack.push(currentRoom); //push current room
             Collections.shuffle(currentUnexploredNeighbors);
             MazeRoom chosenRoom = currentUnexploredNeighbors.get(0);
             
-            //to "remove the wall" we add a door in each Room on the shared wall.
+            // to "remove the wall" we add a door in each Room on the shared wall.
+            // first let's make the doors
+            MazeDoor doorForChosenRoom = new TriviaDoor(
+                  QuestionFactory.get(theCategory, theDifficulty),
+                  currentRoom
+            );
+            
+            MazeDoor doorForCurrentRoom = new TriviaDoor(
+                  QuestionFactory.get(theCategory, theDifficulty),
+                  chosenRoom
+            );
+            
+            // link the doors up so that when the room is entered, it can be left
+            doorForChosenRoom.linkOtherSide(doorForCurrentRoom);
+            doorForCurrentRoom.linkOtherSide(doorForChosenRoom);
+            
+            // now add each door to its respective room
             chosenRoom.addDoor(
-                  new TriviaDoor(QuestionFactory.get(), currentRoom),
+                  doorForChosenRoom,
                   Direction.betweenRooms(
-                        chosenRoom.getLocation(), currentRoom.getLocation()
+                        chosenRoom.getLocation(),
+                        currentRoom.getLocation()
                   )
             );
-            //now from the other side
             currentRoom.addDoor(
-                  new TriviaDoor(QuestionFactory.get(), chosenRoom),
+                  doorForCurrentRoom,
                   Direction.betweenRooms(
-                        currentRoom.getLocation(), chosenRoom.getLocation()
+                        currentRoom.getLocation(),
+                        chosenRoom.getLocation()
                   )
             );
             
-            chosenRoom.visit();
+            chosenRoom.markVisited();
             mazeStack.push(chosenRoom);
          }
       }
@@ -172,7 +232,6 @@ public class TriviaMaze implements Maze {
    ) {
       final int row = theLocation.x;
       final int col = theLocation.y;
-      
       return Arrays.stream(
             new MazeRoom[]{
                   theRooms[row - 1][col],
@@ -206,21 +265,20 @@ public class TriviaMaze implements Maze {
       return result;
    }
    
-   private void throwIfBadDimensions(
+   private boolean badDimensions(
          final int theRows,
          final int theCols,
          final int theRMax,
          final int theCMax
    ) {
-      if (theRows <= 0 || theRows > theRMax) {
-         throw new IllegalArgumentException(String.format(
-               "Row count given is out of range. Range is 0 < x < %d", theRMax
-         ));
-      }
-      if (theCols <= 0 || theCols > theCMax) {
-         throw new IllegalArgumentException(String.format(
-               "Column count given is out of range. Range is 0 < x < %d", theCMax
-         ));
+      boolean result = theRows <= 0 || theRows > theRMax;
+      if (theCols <= 0 || theCols > theCMax) result = true;
+      return result;
+   }
+   
+   private static class MazeIndexOutOfBoundsError extends IllegalArgumentException {
+      public MazeIndexOutOfBoundsError() {
+         super("Row or column given does not exit on this maze.");
       }
    }
 }

@@ -1,7 +1,7 @@
 package resources
 
 import org.jetbrains.exposed.sql.*
-import controller.DRIVER
+import controller.SQLITE_DRIVER
 import controller.QuestionDB
 import controller.QuestionDB.Questions
 import model.Category
@@ -39,7 +39,7 @@ fun main() {
         }
     }
 
-    Database.connect(importerPath, DRIVER)
+    Database.connect(importerPath, SQLITE_DRIVER)
     transaction(Connection.TRANSACTION_SERIALIZABLE, 3) {
         println()
         if (!Questions.exists()) {

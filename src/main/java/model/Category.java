@@ -31,6 +31,11 @@ public enum Category {
       name = theName;
    }
    
+   /**
+    * Given a name, gives back an appropriate category constant.
+    * @param theName name of desired category
+    * @return category found by that name or Category.ANY
+    */
    public static Category fromName(final String theName) {
       
       final Optional<Category> result = Arrays.stream(values())
@@ -44,6 +49,10 @@ public enum Category {
       }
    }
    
+   /**
+    * Picks a random Category.
+    * @return a random Category
+    */
    public static Category random() {
       List<Category> hat = new ArrayList<>(Arrays.asList(values()));
       hat.remove(Category.ANY);

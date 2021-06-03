@@ -9,6 +9,11 @@ import java.util.EnumMap;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Container for up to four doors or walls. Can me added to Java Swing containers.
+ *
+ * @author Kittera Ashleigh McCloud
+ */
 public class TriviaRoom extends JPanel implements MazeRoom {
    private static final Color BG_COLOR = new Color(0x090909);
    

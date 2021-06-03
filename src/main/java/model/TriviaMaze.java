@@ -10,13 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Container for all of the maze rooms, capable of being added to a Swing container and
+ * rendering itself appropriately for testing.
  *
+ * @author Kittera Ashleigh McCloud
  */
 public class TriviaMaze extends JPanel implements Maze {
    
-   // use a hasBeenDiscovered boolean to control whether a room renders
-   // use a GridLayout and make Rooms also extend JPanel OR make a view class
-   // wrapper for a room
+   // TODO use a hasBeenDiscovered boolean to control whether a room renders for player?
    
    /**
     * Largest value that can be assigned to any dimensions of the maze.
@@ -124,12 +125,6 @@ public class TriviaMaze extends JPanel implements Maze {
       return myRooms[theRow][theCol];
    }
    
-   /**
-    * Attempts to move the player in a certain direction.
-    *
-    * @param theDirection direction to attempt move
-    * @return <code>true</code> iff move was successful
-    */
    @Override
    public boolean movePlayer(final Direction theDirection) {
       if (Objects.isNull(myPlayer)) {
@@ -159,7 +154,7 @@ public class TriviaMaze extends JPanel implements Maze {
       MazeRoom[][] mazeResult = new MazeRoom[theRows + 2][theCols + 2];
       
       // build out the 2D array with null buffer
-      // tell each room where it's at TODO is this still needed?
+      // tell each room where it's at
       for (int row = 1; row <= theRows; row++) {
          for (int col = 1; col <= theCols; col++) {
             MazeRoom newRoom = new TriviaRoom(row, col);
@@ -170,7 +165,7 @@ public class TriviaMaze extends JPanel implements Maze {
    }
    
    /**
-    * Uses a randomized depth-first-search to iteratively add doors to the maze
+    * Uses a randomized depth-first-search to iteratively add doors to the maze.
     * @param theRooms 2D array of rooms to join with doors
     * @param theCategory category to pull questions from, defaults to any
     * @param theDifficulty difficulty of questions to pull, defaults to any
@@ -232,9 +227,9 @@ public class TriviaMaze extends JPanel implements Maze {
             chosenRoom.markVisited();
             mazeStack.push(chosenRoom);
             ((JPanel) chosenRoom).revalidate();
-   
-            
          }
+         
+         // TODO remove this sleep call from production, it's for the test visualizer
          try {
             Thread.sleep(50);
          } catch (InterruptedException e) {
@@ -292,6 +287,7 @@ public class TriviaMaze extends JPanel implements Maze {
       if (theCols <= 0 || theCols > theCMax) result = true;
       return result;
    }
+   
    
    //////////////////  SWING CODE  //////////////////
    

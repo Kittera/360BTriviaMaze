@@ -17,17 +17,23 @@ class QuestionFactory {
 
         @JvmStatic
         fun get() =
-            fact.getQuestion(category = Category.random(), difficulty = Difficulty.random())
+            fact.getQuestion(
+                category = Category.random(),
+                difficulty = Difficulty.random()
+            )
 
         @JvmStatic
         fun get(theCategory: Category, theDifficulty: Difficulty) =
-            fact.getQuestion(category = theCategory, difficulty = theDifficulty)
+            fact.getQuestion(
+                category = theCategory,
+                difficulty = theDifficulty
+            )
     }
 
     private val pickedList: MutableList<Int>
 
     init {
-        pickedList = ArrayList() // TODO Figure out logic to reset() this
+        pickedList = ArrayList()
         Database.connect(PATH, SQLITE_DRIVER)
     }
 
@@ -39,11 +45,21 @@ class QuestionFactory {
         category: Category,
         difficulty: Difficulty,
     ): Question {
+        //guard for case of ANY
+        val finalCategory = when (category) {
+            Category.ANY -> Category.random()
+            else -> category
+        }
+        val finalDifficulty = when (difficulty) {
+            Difficulty.ANY -> Difficulty.random()
+            else -> difficulty
+        }
+
         val resultRow = try {
-            fetch(category, difficulty)
+            fetch(finalCategory, finalDifficulty)
         } catch (fourOhFour: NoSuchElementException) {
             reset()
-            fetch(category, difficulty)
+            fetch(finalCategory, finalDifficulty)
         }
 
         //use this to ensure no duplicate picks

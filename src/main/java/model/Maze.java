@@ -2,10 +2,12 @@ package model;
 
 import controller.MazePlayer;
 
+
 public interface Maze {
    
    /**
     * Get a specific room from the model.
+    *
     * @param theRow row of room to get
     * @param theCol column of room to get
     * @return the room if found
@@ -14,6 +16,7 @@ public interface Maze {
    
    /**
     * Attempts to move the player to an adjacent room
+    *
     * @param theDirection direction to attempt move
     * @return whether move could be made.
     */
@@ -21,8 +24,8 @@ public interface Maze {
    
    /**
     * Set a Player into this Maze.
+    *
     * @param thePlayer Player to be interred into the maze.
     */
    boolean addPlayer(MazePlayer thePlayer);
-   
 }

@@ -71,7 +71,6 @@ public class TriviaMaze extends JPanel implements Maze {
       myRooms = generateRooms(theRows, theCols);
       initSwingGraphics();
       generateDoors(myRooms, theCategory, theDifficulty);
-      System.out.println("done with doors.");
       myPlayer = null;
    }
    
@@ -140,7 +139,7 @@ public class TriviaMaze extends JPanel implements Maze {
       try {
          if (theDirection == Direction.CENTER) {
             result = true;
-            System.err.println("CENTER");
+            System.err.println("CENTER(in TriviaMaze)");
          } else if (doorInDirection.isPresent()) {
             if (doorInDirection.get().isLocked()) {
                result = false; // the door was locked, return false to indicate no move

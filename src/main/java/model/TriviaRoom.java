@@ -56,6 +56,7 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       boolean result = Objects.isNull(myDoors.putIfAbsent(theDirection, theDoor));
       if (result) {
          addDoorIndicator(theDirection);
+         revalidate();
       }
       return result;
    }

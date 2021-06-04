@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 /**
  * Container for all of the maze rooms, capable of being added to a Swing container and
@@ -34,8 +35,8 @@ public class TriviaMaze extends JPanel implements Maze {
    /**
     * Constructs a fresh Trivia Maze with pre-made input.
     *
-    * @param theRows first dimension of the maze grid
-    * @param theCols second dimension of the maze grid
+    * @param theRows  first dimension of the maze grid
+    * @param theCols  second dimension of the maze grid
     * @param theRooms pre-made rooms to be imported
     */
    TriviaMaze(final int theRows, final int theCols, final MazeRoom[][] theRooms) {
@@ -52,9 +53,9 @@ public class TriviaMaze extends JPanel implements Maze {
    /**
     * Constructs a fresh Trivia Maze with auto-generated input.
     *
-    * @param theRows first dimension of the maze grid
-    * @param theCols second dimension of the maze grid
-    * @param theCategory category to pull questions from
+    * @param theRows       first dimension of the maze grid
+    * @param theCols       second dimension of the maze grid
+    * @param theCategory   category to pull questions from
     * @param theDifficulty difficulty of questions to pull
     */
    public TriviaMaze(
@@ -76,9 +77,10 @@ public class TriviaMaze extends JPanel implements Maze {
    
    /**
     * Overload of standard constructor to provide parameter position flexibility.
-    * @param theRows first dimension of the maze grid
-    * @param theCols second dimension of the maze grid
-    * @param theCategory category to pull questions from
+    *
+    * @param theRows       first dimension of the maze grid
+    * @param theCols       second dimension of the maze grid
+    * @param theCategory   category to pull questions from
     * @param theDifficulty difficulty of questions to pull
     */
    public TriviaMaze(
@@ -172,8 +174,9 @@ public class TriviaMaze extends JPanel implements Maze {
    
    /**
     * Uses a randomized depth-first-search to iteratively add doors to the maze.
-    * @param theRooms 2D array of rooms to join with doors
-    * @param theCategory category to pull questions from, defaults to any
+    *
+    * @param theRooms      2D array of rooms to join with doors
+    * @param theCategory   category to pull questions from, defaults to any
     * @param theDifficulty difficulty of questions to pull, defaults to any
     */
    private void generateDoors(
@@ -182,6 +185,7 @@ public class TriviaMaze extends JPanel implements Maze {
          final Difficulty theDifficulty
    ) {
       ArrayDeque<MazeRoom> mazeStack = new ArrayDeque<>();
+      Random rand = new Random();
       
       //choose an initial cell, mark it as visited, push it to mazeStack
       MazeRoom initialRoom = theRooms[1][1];
@@ -191,12 +195,12 @@ public class TriviaMaze extends JPanel implements Maze {
       while (!mazeStack.isEmpty()) {
          MazeRoom currentRoom = mazeStack.pop(); // pop a room off the stack
          List<MazeRoom> currentUnexploredNeighbors =
-               gatherUnexploredNeighbors(currentRoom.getLocation(), theRooms);
+               findUnexploredNeighbors(currentRoom.getLocation(), theRooms);
          
          if (currentUnexploredNeighbors.size() > 0) {
             mazeStack.push(currentRoom); //push current room
-            Collections.shuffle(currentUnexploredNeighbors);
-            MazeRoom chosenRoom = currentUnexploredNeighbors.get(0);
+            MazeRoom chosenRoom = currentUnexploredNeighbors
+                  .get(rand.nextInt(currentUnexploredNeighbors.size()));
             
             // to "remove the wall" we add a door in each Room on the shared wall.
             // first let's make the doors
@@ -211,33 +215,35 @@ public class TriviaMaze extends JPanel implements Maze {
             );
             
             // link the doors up so that when the room is entered, it can be left
-            doorForChosenRoom.linkOtherSide(doorForCurrentRoom);
-            doorForCurrentRoom.linkOtherSide(doorForChosenRoom);
-            
-            // now add each door to its respective room
-            chosenRoom.addDoor(
-                  doorForChosenRoom,
-                  Direction.betweenRooms(
-                        chosenRoom.getLocation(),
-                        currentRoom.getLocation()
-                  )
-            );
-            currentRoom.addDoor(
-                  doorForCurrentRoom,
-                  Direction.betweenRooms(
-                        currentRoom.getLocation(),
-                        chosenRoom.getLocation()
-                  )
-            );
+            Thread backgroundLink = new Thread(() -> {
+               doorForChosenRoom.linkOtherSide(doorForCurrentRoom);
+               doorForCurrentRoom.linkOtherSide(doorForChosenRoom);
+               
+               // now add each door to its respective room
+               chosenRoom.addDoor(
+                     doorForChosenRoom,
+                     Direction.betweenRooms(
+                           chosenRoom.getLocation(),
+                           currentRoom.getLocation()
+                     )
+               );
+               currentRoom.addDoor(
+                     doorForCurrentRoom,
+                     Direction.betweenRooms(
+                           currentRoom.getLocation(),
+                           chosenRoom.getLocation()
+                     )
+               );
+            });
+            backgroundLink.start();
             
             chosenRoom.markVisited();
             mazeStack.push(chosenRoom);
-            ((JPanel) chosenRoom).revalidate();
          }
       }
    }
    
-   private List<MazeRoom> gatherUnexploredNeighbors(
+   private List<MazeRoom> findUnexploredNeighbors(
          final Point theLocation,
          final MazeRoom[][] theRooms
    ) {
@@ -296,8 +302,8 @@ public class TriviaMaze extends JPanel implements Maze {
       setBackground(Color.YELLOW);
       JPanel gridPanel = new JPanel(new GridLayout(myRows, myCols));
       setPreferredSize(new Dimension(ROOM_SIZE * myCols, ROOM_SIZE * myRows));
-      for (int row = 1 ; row <= myRows; row++) {
-         for (int col = 1 ; col <= myCols; col++) {
+      for (int row = 1; row <= myRows; row++) {
+         for (int col = 1; col <= myCols; col++) {
             Object d = myRooms[row][col];
             if (d instanceof TriviaRoom) {
                gridPanel.add((TriviaRoom) d);
@@ -307,7 +313,7 @@ public class TriviaMaze extends JPanel implements Maze {
       
       add(gridPanel, BorderLayout.CENTER);
       revalidate();
-      makeTestFrame();
+      makeTestFrame(); //TODO this comment is just a tag for the frame we won't need later
    }
    
    private void makeTestFrame() {
@@ -321,7 +327,6 @@ public class TriviaMaze extends JPanel implements Maze {
       visualFrame.setBackground(Color.BLACK);
       visualFrame.setVisible(true);
    }
-   
    
    
    private static class MazeIndexOutOfBoundsError extends IllegalArgumentException {

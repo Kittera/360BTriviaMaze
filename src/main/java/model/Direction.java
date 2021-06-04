@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public enum Direction {
    EAST, NORTH, WEST, SOUTH, CENTER;
@@ -47,8 +48,8 @@ public enum Direction {
     * @return random Direction
     */
    public static Direction random() {
-      List<Direction> hat = Arrays.asList(values());
-      Collections.shuffle(hat);
-      return hat.get(0);
+      Random rand = new Random();
+      int draw = rand.nextInt(values().length);
+      return values()[draw];
    }
 }

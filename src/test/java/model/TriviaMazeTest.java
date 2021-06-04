@@ -16,7 +16,7 @@ class TriviaMazeTest {
    
    @BeforeEach
    void setUp() {
-      testMaze = new TriviaMaze(6, 6);
+      testMaze = new TriviaMaze(4, 4);
       testPlayer = new Player(testMaze.getRoom(1, 1));
    }
    

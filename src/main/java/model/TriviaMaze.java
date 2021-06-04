@@ -235,13 +235,6 @@ public class TriviaMaze extends JPanel implements Maze {
             mazeStack.push(chosenRoom);
             ((JPanel) chosenRoom).revalidate();
          }
-         
-         // TODO remove this sleep call from production, it's for the test visualizer
-         try {
-            Thread.sleep(2);
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
       }
    }
    
@@ -326,6 +319,7 @@ public class TriviaMaze extends JPanel implements Maze {
       visualFrame.add(this);
       visualFrame.pack();
       visualFrame.setLocationRelativeTo(null);
+      visualFrame.setBackground(Color.BLACK);
       visualFrame.setVisible(true);
    }
    

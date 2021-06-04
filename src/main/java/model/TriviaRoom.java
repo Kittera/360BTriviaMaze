@@ -18,7 +18,8 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    
    //////////  SWING FIELDS  //////////
    
-   private static final Color BG_COLOR = new Color(0x090909);
+//   private static final Color BG_COLOR = new Color(0x090909);
+   private static final Color BG_COLOR = Color.DARK_GRAY;
    private final JPanel myPlayerIndicator;
    
    //////////  ROOM FIELDS  //////////
@@ -110,6 +111,7 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       initialBorder(BorderLayout.WEST);
       
       myPlayerIndicator.setBackground(Color.MAGENTA);
+      myPlayerIndicator.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
       myPlayerIndicator.setVisible(false);
       add(myPlayerIndicator, BorderLayout.CENTER);
       //TODO blackout based on discovered status

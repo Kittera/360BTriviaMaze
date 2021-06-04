@@ -12,11 +12,23 @@ import controller.QuestionDB.*
  * This class provides Question objects on demand.
  */
 class QuestionFactory {
+    companion object {
+        private val fact = QuestionFactory()
+
+        @JvmStatic
+        fun get() =
+            fact.getQuestion(category = Category.random(), difficulty = Difficulty.EASY)
+
+        @JvmStatic
+        fun get(theCategory: Category, theDifficulty: Difficulty) =
+            fact.getQuestion(category = theCategory, difficulty = theDifficulty)
+    }
 
     private val pickedList: MutableList<Int>
 
     init {
         pickedList = ArrayList()
+        Database.connect(PATH, DRIVER)
     }
 
     /**
@@ -24,40 +36,24 @@ class QuestionFactory {
      * for category and difficulty.
      */
     fun getQuestion(
-        theCategory: Category = Category.ANY,
-        theDifficulty: Difficulty = Difficulty.EASY,
+        category: Category,
+        difficulty: Difficulty,
     ): Question {
-
-        Database.connect(PATH, DRIVER)
-
         val resultRow = transaction {
-            when (theCategory) {
-                //...is any, don't provide a category filter
-                Category.ANY -> Questions.selectAll()
-                    .orderBy(Random())
-                    .first {
-                        !pickedList.contains(it[Questions.id].value) &&
-                        it[Questions.difficulty].lowercase() ==
-                                theDifficulty.difficulty.lowercase()
-                    }
-
-                //...is anything but "any", we need a specific filter for it
-                else -> Questions.selectAll()
-                    .orderBy(Random())
-                    .first {
-                        !pickedList.contains(it[Questions.id].value)
-                                &&
-                        it[Questions.category].lowercase() == theCategory.name
-                                &&
-                        it[Questions.difficulty].lowercase() == theDifficulty.difficulty
-                    }
-            }
+            Questions.selectAll()
+                .orderBy(Random())
+                .first {
+                    it[Questions.category].lowercase() == category.name.lowercase()
+                            && it[Questions.difficulty].lowercase() == difficulty.difficulty.lowercase()
+                            && !pickedList.contains(it[Questions.id].value)
+                }
         }
         //"it": a Kotlin keyword that shrinks lambdas
         // similar to Java's static references
 
-        //use this to ensure
+        //use this to ensure no duplicate picks
         pickedList.add(resultRow[Questions.id].value)
+
 
         return Question(
             //this is a constructor call for the Java class Question in model

@@ -1,6 +1,5 @@
 package view
 
-import controller.AnswerButton
 import model.Question
 import model.Answer
 import model.QuestionType.*

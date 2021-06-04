@@ -1,7 +1,8 @@
 package model;
 
-import java.util.Arrays;
-import java.util.Optional;
+import kotlin.collections.ArrayDeque;
+
+import java.util.*;
 
 public enum Category {
    ANY        ( 0, "All Categories"),
@@ -33,18 +34,23 @@ public enum Category {
    }
    
    public static Category fromName(final String theName) {
+      
       final Optional<Category> result = Arrays.stream(values())
             .filter(category -> category.name.equals(theName))
             .findFirst();
       
-      final Category out;
-      
       if (result.isEmpty()) {
-         out = Category.ANY;
+         return Category.ANY;
       } else {
-         out = result.get();
+         return result.get();
       }
-      
-      return out;
    }
+   
+   public static Category random() {
+      ArrayDeque<Category> hat = new ArrayDeque<>(Arrays.asList(values()));
+      Collections.shuffle(hat);
+      hat.remove(Category.ANY);
+      return hat.first();
+   }
+   
 }

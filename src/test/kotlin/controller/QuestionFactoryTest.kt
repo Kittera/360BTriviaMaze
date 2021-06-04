@@ -13,7 +13,7 @@ internal class QuestionFactoryTest {
         val sentinel2 = "You Died."
 
         val testQuestion: Question = try {
-            QuestionFactory().getQuestion()
+            QuestionFactory.get()
         } catch (e: Exception) {
             val dummyAnswers =
                 mutableListOf(

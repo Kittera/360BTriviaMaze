@@ -11,7 +11,8 @@ import okhttp3.Request
 class OpenTriviaDBSchema {
 
 
-    //Wrappers for HTTP request code on various specific tasks
+    // Wrappers for HTTP request code on various specific tasks
+    // companion objects allow us to refer to a class as if it were a static Java class
 
 
     /**
@@ -22,19 +23,30 @@ class OpenTriviaDBSchema {
      * about.
      */
     class TokenHttp {
+
+        companion object {
+            private val mySingleton = TokenHttp()
+
+            fun get(client: OkHttpClient) = mySingleton.get(client)
+        }
+
         fun get(client: OkHttpClient): String {
+            // build OkHttpRequest
             val tokenRequest = Request.Builder()
                 .url("https://opentdb.com/api_token.php?command=request")
                 .get()
                 .build()
 
+            //make the call
             val response = client.newCall(tokenRequest).execute()
 
+            //declare possibility of string, get gson to parse the response
             val body: String?
             response.use { body = it.body?.string() }
             val tokenPackage =
                 GsonBuilder().create().fromJson(body, TokenResponse::class.java)
 
+            //return the count from the parsed json
             return tokenPackage.token
         }
     }
@@ -44,21 +56,33 @@ class OpenTriviaDBSchema {
      * of questions in a category.
      */
     class CategoryCountHttp {
+        companion object {
+            private val mySingleton = CategoryCountHttp()
+
+            fun get(client: OkHttpClient, category: Category) =
+                mySingleton.get(client, category)
+        }
+
+
         fun get(client: OkHttpClient, category: Category): Int {
             val countURL =
                 "https://opentdb.com/api_count.php?category=${category.categoryID}"
 
+            // Build the OkHttpRequest
             val totalRequest = Request.Builder()
                 .url(countURL)
                 .get()
                 .build()
 
+            //make the call
             val totalResponse = client.newCall(totalRequest)
                 .execute()
 
+            // declare a string, but it might be null
             var body: String?
             totalResponse.use { body = it.body?.string()?: "Oops" }
 
+            //return parsing result
             return GsonBuilder().create()
                 .fromJson(body, CategoryCountResponse::class.java)
                 .category_question_count
@@ -71,36 +95,58 @@ class OpenTriviaDBSchema {
      */
     class QuestionFetchHttp {
 
+        companion object {
+            private val mySingleton = QuestionFetchHttp()
+
+            fun get(
+                client: OkHttpClient,
+                category: Category = Category.ANY,
+                count: Int = 50,
+                token: String,
+            ) = mySingleton.get(
+                client = client,
+                category = category,
+                count = count,
+                token = token,
+            )
+        }
+
+
         /**
          * Retrieves questions from OpenTriviaDB. Optional parameters: Category and amount.
          * Defaults to no specified category, and 50 questions per batch.
          */
         fun get(
-            category: Category = Category.ANY,
+            category: Category,
             client: OkHttpClient,
-            count: Int = 50,
+            count: Int,
             token: String,
         ): FetchResponse {
+            // build url for OkHttpRequest
             val urlsb = StringBuilder("https://opentdb.com/api.php?")
             urlsb.append("amount=$count&")
             urlsb.append("token=$token&")
 
+            // add this parameter to the url if filter given, keep out otherwise
             if (category != Category.ANY) {
                 urlsb.append("category=${category.categoryID}")
             }
 
+            // build actual OkHttpRequest
             val getRequest = Request.Builder()
                 .url(urlsb.toString())
                 .get()
+                .build()
 
-            val httpParams = getRequest.build()
+            // make call
+            val getResponse = client.newCall(getRequest).execute()
 
-            val getResponse = client.newCall(httpParams).execute()
-
+            // navigate json body
             val body = getResponse.body?.string()
             println("GET from OpenTDB.")
             getResponse.close()
 
+            // return FetchResponse gson object
             return GsonBuilder().create()
                 .fromJson(body, FetchResponse::class.java)
         }

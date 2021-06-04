@@ -14,16 +14,6 @@ import java.util.Observable;
 public class Question extends Observable {
    
    /**
-    * Number of times an attempt has been made to answer this question.
-    */
-   private int myAttemptCounter;
-   
-   /**
-    * Whether this question has been answered correctly yet.
-    */
-   private boolean myAnswered;
-   
-   /**
     * Enumerated question category.
     */
    public final Category myCategory;
@@ -54,13 +44,24 @@ public class Question extends Observable {
    public final List<Answer> myIncorrectAnswers;
    
    /**
+    * Number of times an attempt has been made to answer this question.
+    */
+   private int myAttemptCounter;
+   
+   /**
+    * Whether this question has been answered correctly yet.
+    */
+   private boolean myAnswered;
+   
+   /**
     * Creates a Question container. By default, all parameters are required to create a
     * Question.
-    * @param theCategory enumerated category constant
-    * @param theType enumerated format constant
-    * @param theDifficulty enumerated difficulty constant
-    * @param theQuestion string of text, the question
-    * @param theCorrectAnswer Answer containing the correct answer
+    *
+    * @param theCategory         enumerated category constant
+    * @param theType             enumerated format constant
+    * @param theDifficulty       enumerated difficulty constant
+    * @param theQuestion         string of text, the question
+    * @param theCorrectAnswer    Answer containing the correct answer
     * @param theIncorrectAnswers List of incorrect answers
     */
    public Question(
@@ -83,6 +84,7 @@ public class Question extends Observable {
    
    /**
     * Accessor for attempt counter.
+    *
     * @return number of attempts so far
     */
    public int getAttemptCount() {
@@ -100,6 +102,7 @@ public class Question extends Observable {
    
    /**
     * Accessor for enumerated category.
+    *
     * @return enumerated category constant
     */
    public Category getCategory() {
@@ -117,6 +120,7 @@ public class Question extends Observable {
    
    /**
     * Accessor for enumerated difficulty category.
+    *
     * @return enumerated difficulty constant
     */
    public Difficulty getDifficulty() {
@@ -134,6 +138,7 @@ public class Question extends Observable {
    
    /**
     * Query for whether this question has been answered correctly
+    *
     * @return status of correct answer detection
     */
    public boolean hasCorrectAnswer() {
@@ -148,11 +153,11 @@ public class Question extends Observable {
     */
    public boolean tryAnswer(Answer theAnswer) {
       myAttemptCounter++;
-      notifyObservers(this);
       boolean result = theAnswer == myCorrectAnswer;
       if (result) {
          myAnswered = true;
       }
+      notifyObservers(this);
       return result;
    }
 }

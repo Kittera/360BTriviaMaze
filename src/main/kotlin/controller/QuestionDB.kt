@@ -1,5 +1,6 @@
 package controller
 
+import model.Category
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -12,6 +13,12 @@ const val DRIVER = "org.sqlite.JDBC"
  * Library class that provides an interface to the Trivia Maze Questions Database.
  */
 class QuestionDB {
+
+    companion object {
+        private val mySingleton = QuestionDB()
+        fun importGson(qPackage: OpenTriviaDBSchema.QuestionPackage) =
+            mySingleton.importGson(qPackage = qPackage)
+    }
 
     /**
      * Defines the structure of the Questions table under the JetBrains Exposed DSL.
@@ -28,7 +35,7 @@ class QuestionDB {
     /**
      * Provide a QuestionPackage to this method to import it into the question database.
      */
-    fun importFromGson(qPackage: OpenTriviaDBSchema.QuestionPackage) {
+    fun importGson(qPackage: OpenTriviaDBSchema.QuestionPackage) {
         println(unHTML(qPackage.question))
         transaction {
             Questions.insert {
@@ -40,6 +47,18 @@ class QuestionDB {
                 it[incorrect_answers] = unHTML(qPackage.incorrect_answers.toString())
                     .replace("[", "")
                     .replace("]", "")
+            }
+        }
+    }
+
+    fun categoryCount(theCategory: Category) = transaction {
+        Database.connect(PATH, DRIVER)
+        when (theCategory) {
+            Category.ANY -> Questions.selectAll().count()
+            else -> transaction {
+                Questions.select {
+                    Questions.category.lowerCase() eq theCategory.name.lowercase()
+                }.count()
             }
         }
     }

@@ -1,5 +1,7 @@
 package model;
 
+import controller.MazePlayer;
+
 public interface Maze {
    
    /**
@@ -9,12 +11,6 @@ public interface Maze {
     * @return the room if found
     */
    MazeRoom getRoom(int theRow, int theCol);
-   
-   /**
-    * Get the room the player is currently in
-    * @return player's current room
-    */
-   MazeRoom getCurrentRoom();
    
    /**
     * Attempts to move the player to an adjacent room
@@ -27,6 +23,6 @@ public interface Maze {
     * Set a Player into this Maze.
     * @param thePlayer Player to be interred into the maze.
     */
-   void addPlayer(Player thePlayer);
+   boolean addPlayer(MazePlayer thePlayer);
    
 }

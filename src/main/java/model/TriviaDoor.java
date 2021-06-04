@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Observable;
-
 public class TriviaDoor implements MazeDoor {
    
    /**
@@ -12,12 +10,12 @@ public class TriviaDoor implements MazeDoor {
    /**
     * Becomes true when MAX_ATTEMPTS is exceeded.
     */
-   private boolean amIJammed;
+   private boolean isJammed;
    
    /**
     * Default True, becomes false if internal question is answered correctly.
     */
-   private boolean amILocked;
+   private boolean isLocked;
    
    /**
     * Reference to the Room behind this Door.
@@ -31,16 +29,16 @@ public class TriviaDoor implements MazeDoor {
    
    /**
     * Builds a Door with a question and a connection to a room.
-    * @param theQuestion question that must be answered to unlock this Door
-    * @param theRoom Room this door leads to
+    *
+    * @param theQuestion   question that must be answered to unlock this Door
+    * @param theRoomBehind Room this door leads to
     */
-   public TriviaDoor(final Question theQuestion, final MazeRoom theRoom) {
+   public TriviaDoor(final Question theQuestion, final MazeRoom theRoomBehind) {
       myQuestion = theQuestion;
-      roomBehindMe = theRoom;
-      amIJammed = false;
-      amILocked = true;
+      roomBehindMe = theRoomBehind;
+      isJammed = false;
+      isLocked = true;
    }
-   
    
    @Override
    public Question getQuestion() {
@@ -49,12 +47,12 @@ public class TriviaDoor implements MazeDoor {
    
    @Override
    public boolean isLocked() {
-      return amILocked;
+      return this.isLocked;
    }
    
    @Override
    public boolean isJammed() {
-      return amIJammed;
+      return this.isJammed;
    }
    
    @Override
@@ -63,15 +61,13 @@ public class TriviaDoor implements MazeDoor {
    }
    
    @Override
-   public void update(Observable o, Object arg) {
-      if (arg instanceof Question) {
-         Question q = (Question) arg;
-   
-         if (q.getAttemptCount() > MAX_ATTEMPTS) {
-            amIJammed = true;
-         } else if (q.hasCorrectAnswer()) {
-            amILocked = false;
-         }
+   public boolean tryAnswer(Answer theAnswer) {
+      boolean correct = myQuestion.tryAnswer(theAnswer);
+      if (myQuestion.getAttemptCount() >= MAX_ATTEMPTS) {
+         this.isJammed = true;
+      } else if (correct) {
+         this.isLocked = false;
       }
+      return correct;
    }
 }

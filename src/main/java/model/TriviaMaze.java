@@ -72,6 +72,7 @@ public class TriviaMaze extends JPanel implements Maze {
       myRooms = generateRooms(theRows, theCols);
       initSwingGraphics();
       generateDoors(myRooms, theCategory, theDifficulty);
+//      new Thread(() -> generateDoors(myRooms, theCategory, theDifficulty)).start();
       myPlayer = null;
    }
    
@@ -198,45 +199,37 @@ public class TriviaMaze extends JPanel implements Maze {
                findUnexploredNeighbors(currentRoom.getLocation(), theRooms);
          
          if (currentUnexploredNeighbors.size() > 0) {
+            Question question1 = QuestionFactory.get(theCategory, theDifficulty);
+            Question question2 = QuestionFactory.get(theCategory, theDifficulty);
+            
             mazeStack.push(currentRoom); //push current room
             MazeRoom chosenRoom = currentUnexploredNeighbors
                   .get(rand.nextInt(currentUnexploredNeighbors.size()));
             
             // to "remove the wall" we add a door in each Room on the shared wall.
             // first let's make the doors
-            MazeDoor doorForChosenRoom = new TriviaDoor(
-                  QuestionFactory.get(theCategory, theDifficulty),
-                  currentRoom
-            );
-            
-            MazeDoor doorForCurrentRoom = new TriviaDoor(
-                  QuestionFactory.get(theCategory, theDifficulty),
-                  chosenRoom
-            );
+            MazeDoor doorForChosenRoom = new TriviaDoor(question1, currentRoom);
+            MazeDoor doorForCurrentRoom = new TriviaDoor(question2, chosenRoom);
             
             // link the doors up so that when the room is entered, it can be left
-            Thread backgroundLink = new Thread(() -> {
-               doorForChosenRoom.linkOtherSide(doorForCurrentRoom);
-               doorForCurrentRoom.linkOtherSide(doorForChosenRoom);
-               
-               // now add each door to its respective room
-               chosenRoom.addDoor(
-                     doorForChosenRoom,
-                     Direction.betweenRooms(
-                           chosenRoom.getLocation(),
-                           currentRoom.getLocation()
-                     )
-               );
-               currentRoom.addDoor(
-                     doorForCurrentRoom,
-                     Direction.betweenRooms(
-                           currentRoom.getLocation(),
-                           chosenRoom.getLocation()
-                     )
-               );
-            });
-            backgroundLink.start();
+            doorForChosenRoom.linkOtherSide(doorForCurrentRoom);
+            doorForCurrentRoom.linkOtherSide(doorForChosenRoom);
             
+            // now add each door to its respective room
+            chosenRoom.addDoor(
+                  doorForChosenRoom,
+                  Direction.betweenRooms(
+                        chosenRoom.getLocation(),
+                        currentRoom.getLocation()
+                  )
+            );
+            currentRoom.addDoor(
+                  doorForCurrentRoom,
+                  Direction.betweenRooms(
+                        currentRoom.getLocation(),
+                        chosenRoom.getLocation()
+                  )
+            );
             chosenRoom.markVisited();
             mazeStack.push(chosenRoom);
          }
@@ -329,7 +322,7 @@ public class TriviaMaze extends JPanel implements Maze {
    }
    
    
-   private static class MazeIndexOutOfBoundsError extends IllegalArgumentException {
+   public static class MazeIndexOutOfBoundsError extends IllegalArgumentException {
       public MazeIndexOutOfBoundsError() {
          super("Row or column given does not exit on this maze.");
       }

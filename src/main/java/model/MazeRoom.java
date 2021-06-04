@@ -32,12 +32,6 @@ public interface MazeRoom {
    Optional<MazeDoor> getDoor(final Direction theDirection);
    
    /**
-    * Shortcut to get all doors in a room.
-    * @return list of doors found
-    */
-   Collection<? extends MazeDoor> getDoors();
-   
-   /**
     * Accessor for this Room's location in the grid.
     * @return 2D java.awt.Point containing row and col indexes
     */

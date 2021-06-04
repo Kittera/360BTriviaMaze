@@ -10,11 +10,6 @@ public class MockRoom implements MazeRoom {
    MockRoom() {  }
    
    @Override
-   public Collection<MazeDoor> getDoors() {
-      return new ArrayList<>();
-   }
-   
-   @Override
    public Point getLocation() {
       return null;
    }

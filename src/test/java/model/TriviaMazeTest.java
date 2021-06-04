@@ -35,6 +35,18 @@ class TriviaMazeTest {
             testMaze.getRoom(1, 1),
             testPlayer.getCurrentRoom()
       );
+      assertThrows(
+            TriviaMaze.MazeIndexOutOfBoundsError.class,
+            () -> testMaze.getRoom(10000,10000)
+      );
+      assertThrows(
+            TriviaMaze.MazeIndexOutOfBoundsError.class,
+            () -> testMaze.getRoom(-1,-1)
+      );
+      assertThrows(
+            TriviaMaze.MazeIndexOutOfBoundsError.class,
+            () -> testMaze.getRoom(0,0)
+      );
    }
    
    @Test

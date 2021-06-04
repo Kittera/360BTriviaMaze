@@ -63,9 +63,7 @@ public class TriviaDoor implements MazeDoor {
    
    @Override
    public boolean isJammed() {
-      return Optional.ofNullable(myOtherSide)
-            .map(otherSideDoor -> this.isJammed || otherSideDoor.isJammed())
-            .orElseGet(() -> this.isJammed);
+      return this.isJammed;
    }
    
    @Override
@@ -76,8 +74,10 @@ public class TriviaDoor implements MazeDoor {
    @Override
    public boolean tryAnswer(Answer theAnswer) {
       boolean correct = myQuestion.tryAnswer(theAnswer);
-      if (myQuestion.getAttemptCount() >= MAX_ATTEMPTS) {
+      if (!correct && myQuestion.getAttemptCount() >= MAX_ATTEMPTS && this.isLocked) {
          this.isJammed = true;
+         Optional.ofNullable(myOtherSide)
+               .ifPresent(otherSide -> otherSide.twinJammed(this));
       } else if (correct) {
          this.isLocked = false;
          Optional.ofNullable(myOtherSide)
@@ -96,5 +96,10 @@ public class TriviaDoor implements MazeDoor {
    public void twinUnlocked(final MazeDoor theCaller) {
       Optional.ofNullable(myOtherSide)
             .ifPresent(door -> this.isLocked = !(door == theCaller));
+   }
+   
+   public void twinJammed(final MazeDoor theCaller) {
+      Optional.ofNullable(myOtherSide)
+            .ifPresent(door -> this.isJammed = (door == theCaller));
    }
 }

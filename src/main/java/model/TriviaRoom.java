@@ -4,7 +4,6 @@ import controller.MazePlayer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,7 +54,7 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       // putIfAbsent returns null if the given key wasn't already mapped to a door
       boolean result = Objects.isNull(myDoors.putIfAbsent(theDirection, theDoor));
       if (result) {
-         addDoorIndicator(theDirection);
+//         addDoorIndicator(theDirection);
          revalidate();
       }
       return result;
@@ -64,11 +63,6 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    @Override
    public Optional<MazeDoor> getDoor(Direction theDirection) {
       return Optional.ofNullable(myDoors.get(theDirection));
-   }
-   
-   @Override
-   public Collection<? extends MazeDoor> getDoors() {
-      return myDoors.values();
    }
    
    @Override
@@ -106,13 +100,13 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       setBackground(BG_COLOR);
       setPreferredSize(new Dimension(30, 30));
       
-      initialBorder(BorderLayout.NORTH);
-      initialBorder(BorderLayout.EAST);
-      initialBorder(BorderLayout.SOUTH);
-      initialBorder(BorderLayout.WEST);
+//      initialBorder(BorderLayout.NORTH);
+//      initialBorder(BorderLayout.EAST);
+//      initialBorder(BorderLayout.SOUTH);
+//      initialBorder(BorderLayout.WEST);
       
       myPlayerIndicator.setBackground(Color.MAGENTA);
-      myPlayerIndicator.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+      myPlayerIndicator.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
       myPlayerIndicator.setVisible(false);
       add(myPlayerIndicator, BorderLayout.CENTER);
       //TODO blackout based on discovered status
@@ -145,10 +139,59 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    
    @Override
    public void paintComponent(Graphics g) {
-      if (myDiscovered) {
-         super.paintComponent(g);
-      } else {
+      if (!myDiscovered) {
+         g.setColor(new Color(0x000077));
          g.fillRect(0, 0, getWidth(), getHeight());
+      } else {
+         Color savedColor = g.getColor(); //get color from graphics
+         g.setColor(Color.BLACK);
+         ((Graphics2D) g).setStroke(new BasicStroke(8));
+         g.fillRect(0, 0, getWidth(), getHeight());
+   
+         if (getDoor(Direction.NORTH).isPresent()) {
+            g.setColor(switchBarColor(getDoor(Direction.NORTH).get()));
+         } else {
+            g.setColor(Color.BLUE);
+         }
+         g.drawLine(0,0,getWidth(),0);
+   
+         if (getDoor(Direction.EAST).isPresent()) {
+            g.setColor(switchBarColor(getDoor(Direction.EAST).get()));
+         } else {
+            g.setColor(Color.BLUE);
+         }
+         g.drawLine(getWidth(),0,getWidth(),getHeight());
+   
+         if (getDoor(Direction.SOUTH).isPresent()) {
+            g.setColor(switchBarColor(getDoor(Direction.SOUTH).get()));
+         } else {
+            g.setColor(Color.BLUE);
+         }
+         g.drawLine(getWidth(),getHeight(),0,getHeight());
+   
+         if (getDoor(Direction.WEST).isPresent()) {
+            g.setColor(switchBarColor(getDoor(Direction.WEST).get()));
+         } else {
+            g.setColor(Color.BLUE);
+         }
+         g.drawLine(0,getHeight(),0, 0);
+         
+         g.setColor(savedColor);
+         // blue = wall
+         // BG color = unlocked door
+         // ?? = locked door
+         // red = jammed door
+         
+         // Idea: Lines drawn here from ne corner to another depending ong door presence
+         // set the color dynamically based on discovered status
       }
+   }
+   
+   private Color switchBarColor(MazeDoor theDoor) {
+      Color result;
+      if (theDoor.isLocked()) result = Color.YELLOW;
+      else if (theDoor.isJammed()) result = Color.RED;
+      else result = BG_COLOR;
+      return result;
    }
 }

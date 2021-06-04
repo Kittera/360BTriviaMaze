@@ -40,4 +40,9 @@ public class MockDoor implements MazeDoor {
    public void twinUnlocked(MazeDoor theCaller) {
    
    }
+   
+   @Override
+   public void twinJammed(MazeDoor theCaller) {
+   
+   }
 }

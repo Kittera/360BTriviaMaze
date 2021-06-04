@@ -47,4 +47,6 @@ public interface MazeDoor {
    void linkOtherSide(final MazeDoor theDoor);
    
    void twinUnlocked(final MazeDoor theCaller);
+   
+   void twinJammed(final MazeDoor theCaller);
 }

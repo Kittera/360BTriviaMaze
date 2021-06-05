@@ -24,6 +24,8 @@ public class QuestionPanel extends JPanel {
 
     private ArrayList<JRadioButton> rdbtnsAnswers;
 
+    private JTextPane myShortAnswerPane;
+
     public QuestionPanel() {
 
         //initialize fields
@@ -41,12 +43,17 @@ public class QuestionPanel extends JPanel {
         myQuestionPane.setEditable(false);
         myQuestionPane.setBackground((Color.LIGHT_GRAY));
         mainPanel.add(myQuestionPane);
-
+        myShortAnswerPane = new JTextPane();
+        myShortAnswerPane.setEditable(true);
+        myShortAnswerPane.setText("Enter Answer Here.");
+        myShortAnswerPane.setPreferredSize(new Dimension(100, 30));
+        myShortAnswerPane.setVisible(false);
         myQuestionButtons = new JPanel();
         myQuestionButtons.setLayout(new BoxLayout(myQuestionButtons, BoxLayout.PAGE_AXIS));
         myQuestionButtons.setPreferredSize(new Dimension(300, 200));
 
         add(mainPanel, BorderLayout.CENTER);
+        add(myShortAnswerPane, BorderLayout.SOUTH);
         add(myQuestionButtons, BorderLayout.SOUTH);
 
         setBackground(Color.BLUE);
@@ -54,7 +61,7 @@ public class QuestionPanel extends JPanel {
     }
 
     public void setPanelQuestion(Question theQuestion) {
-
+        myShortAnswerPane.setVisible(false);
         myQuestion = theQuestion;
         if (myQuestion.getType() == QuestionType.TRUE_FALSE) {
             createTFButtons();
@@ -68,11 +75,13 @@ public class QuestionPanel extends JPanel {
 
     private void createSAButtons() {
         clearList();
-
+        myQuestionButtons.setVisible(false);
+        myShortAnswerPane.setVisible(true);
     }
 
     private void createMCButtons() {
         clearList();
+        myQuestionButtons.setVisible(true);
         myQuestionPane.setText(myQuestion.getPrompt());
         for (int i = 0; i <= myQuestion.getIncorrectAnswers().size()-1;i ++) {
             JRadioButton rdBtn = new JRadioButton((myQuestion.getIncorrectAnswers().get(i)).get());
@@ -99,6 +108,7 @@ public class QuestionPanel extends JPanel {
 
     private void createTFButtons() {
         clearList();
+        myQuestionButtons.setVisible(true);
         myQuestionPane.setText(myQuestion.getPrompt());
 
         JRadioButton trueButton = new JRadioButton("True");

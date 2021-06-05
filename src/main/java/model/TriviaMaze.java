@@ -17,9 +17,13 @@ import java.util.Random;
  * @author Kittera Ashleigh McCloud
  */
 public class TriviaMaze extends JPanel implements Maze {
-   
-   // TODO use a hasBeenDiscovered boolean to control whether a room renders for player?
-   
+
+   //////////  SWING FIELDS  //////////
+
+   private static final JPanel myGridPanel = new JPanel();
+
+
+
    /**
     * Largest value that can be assigned to any dimensions of the maze.
     */
@@ -45,6 +49,7 @@ public class TriviaMaze extends JPanel implements Maze {
       }
       myRows = theRows;
       myCols = theCols;
+      myGridPanel.setLayout(new GridLayout(myRows, myCols));
       myRooms = importRooms(theRooms);
       myPlayer = null;
       initSwingGraphics();
@@ -69,11 +74,11 @@ public class TriviaMaze extends JPanel implements Maze {
       }
       myRows = theRows;
       myCols = theCols;
+      myGridPanel.setLayout(new GridLayout(myRows, myCols));
+      myPlayer = null;
       myRooms = generateRooms(theRows, theCols);
       initSwingGraphics();
       generateDoors(myRooms, theCategory, theDifficulty);
-//      new Thread(() -> generateDoors(myRooms, theCategory, theDifficulty)).start();
-      myPlayer = null;
    }
    
    /**
@@ -166,8 +171,14 @@ public class TriviaMaze extends JPanel implements Maze {
       // tell each room where it's at
       for (int row = 1; row <= theRows; row++) {
          for (int col = 1; col <= theCols; col++) {
-            MazeRoom newRoom = new TriviaRoom(row, col);
+            TriviaRoom newRoom = new TriviaRoom(row, col);
             mazeResult[row][col] = newRoom;
+            myGridPanel.add(newRoom);
+            if (row == 1 && col == 1) {
+               newRoom.setStartingRoom();
+            } else if (row == myRows && col == myCols) {
+               newRoom.setEndingRoom();
+            }
          }
       }
       return mazeResult;
@@ -292,33 +303,10 @@ public class TriviaMaze extends JPanel implements Maze {
    
    private void initSwingGraphics() {
       setLayout(new BorderLayout());
-      setBackground(Color.YELLOW);
-      JPanel gridPanel = new JPanel(new GridLayout(myRows, myCols));
+      setBackground(Color.BLACK);
       setPreferredSize(new Dimension(ROOM_SIZE * myCols, ROOM_SIZE * myRows));
-      for (int row = 1; row <= myRows; row++) {
-         for (int col = 1; col <= myCols; col++) {
-            Object d = myRooms[row][col];
-            if (d instanceof TriviaRoom) {
-               gridPanel.add((TriviaRoom) d);
-            }
-         }
-      }
-      
-      add(gridPanel, BorderLayout.CENTER);
+      add(myGridPanel, BorderLayout.CENTER);
       revalidate();
-      //makeTestFrame(); //TODO this comment is just a tag for the frame we won't need later
-   }
-   
-   private void makeTestFrame() {
-      JFrame visualFrame = new JFrame();
-      visualFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      visualFrame.setResizable(false);
-      
-      visualFrame.add(this);
-      visualFrame.pack();
-      visualFrame.setLocationRelativeTo(null);
-      visualFrame.setBackground(Color.BLACK);
-      visualFrame.setVisible(true);
    }
    
    

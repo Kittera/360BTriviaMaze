@@ -1,13 +1,30 @@
 
-import model.*
+import model.Direction
+import model.MazeRoom
+import model.Player
+import model.TriviaMaze
+import java.awt.Color
+import javax.swing.JFrame
 import kotlin.system.exitProcess
 import kotlin.system.measureTimeMillis
 
 fun main() {
 
+    val visualFrame = JFrame()
+    visualFrame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+    visualFrame.isResizable = false
+    visualFrame.background = Color.BLACK
+
     val maze: TriviaMaze
-    val time = measureTimeMillis { maze = TriviaMaze(10, 7) }
+    val time = measureTimeMillis { maze = TriviaMaze(7, 7) }
     println("Maze Generation took $time ms.")
+
+    visualFrame.add(maze)
+    visualFrame.pack()
+    visualFrame.setLocationRelativeTo(null)
+    visualFrame.isVisible = true
+
+
     val room1 = maze.getRoom(1, 1)
     val testPlayer = Player(room1)
     maze.addPlayer(testPlayer)
@@ -31,7 +48,7 @@ fun main() {
         foundDoor.tryAnswer(ques.correctAnswer)
         maze.movePlayer(direction)
         seenList.add(testPlayer.currentRoom)
-        Thread.sleep(9)
+        Thread.sleep(10)
     }
     Thread.sleep(500)
     exitProcess(0)

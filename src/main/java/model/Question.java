@@ -160,4 +160,8 @@ public class Question extends Observable {
       notifyObservers(this);
       return result;
    }
+
+   public QuestionType getType() {
+      return myType;
+   }
 }

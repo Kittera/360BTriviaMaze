@@ -22,12 +22,12 @@ public class GamePanel extends JFrame {
         setJMenuBar(myMenu.getBar());
 
         pack();
-        setLocationRelativeTo(null); //centers the frame to windows screen
+        setLocation(70, 10); //centers the frame to windows screen
         setResizable(true);
         setVisible(true);
-        setSize(800, 740);
+        setSize(1000, 700);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        //setContentPane(tempMenu.getMainMenu());
+
 
         addWindowListener(new WindowAdapter() {
             @Override

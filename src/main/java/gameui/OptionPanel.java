@@ -1,7 +1,8 @@
 package gameui;
 
+import model.Category;
+
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class OptionPanel extends JPanel {
@@ -9,6 +10,7 @@ public class OptionPanel extends JPanel {
     private JPanel myPanel;
     private ButtonGroup catButtonGroup = new ButtonGroup();
     private ButtonGroup difButtonGroup = new ButtonGroup();
+
     public OptionPanel() {
         createPanel();
     }
@@ -40,68 +42,24 @@ public class OptionPanel extends JPanel {
 
         catButtonGroup = new ButtonGroup();
 
-        JCheckBox anyCat = new JCheckBox("All", true);
-        anyCat.setBounds(350, 120, 100, 20 );
+        int categoryListX = 350;
+        int startingCategoryListY = 120;
+        int catButtonWidth = 200;
+        int catButtonHeight = 22;
 
-        JCheckBox genCat = new JCheckBox("General");
-        genCat.setBounds(350, 140, 100, 20 );
+        int count = 0;
+        for (Category c : Category.values()) {
+            JCheckBox catButton = new JCheckBox(c.title);
+            catButton.setBounds(
+                    categoryListX,
+                    startingCategoryListY + (catButtonHeight * count++),
+                    catButtonWidth,
+                    catButtonHeight
+            );
+            catButtonGroup.add(catButton);
+            this.add(catButton);
+        }
 
-        JCheckBox filmCat = new JCheckBox("Film");
-        filmCat.setBounds(350, 160, 100, 20 );
-
-        JCheckBox musicCat = new JCheckBox("Music");
-        musicCat.setBounds(350, 180, 100, 20 );
-
-        JCheckBox vidGameCat = new JCheckBox("Video Games");
-        vidGameCat.setBounds(350, 200, 100, 20 );
-
-        JCheckBox compSciCat = new JCheckBox("Computer Science");
-        compSciCat.setBounds(350, 220, 200, 20 );
-
-        JCheckBox mathCat = new JCheckBox("Math");
-        mathCat.setBounds(350, 240, 100, 20 );
-
-        JCheckBox mythologyCat = new JCheckBox("Mythology");
-        mythologyCat.setBounds(350, 260, 100, 20 );
-
-        JCheckBox historyCat = new JCheckBox("Animals");
-        historyCat.setBounds(350, 280, 100, 20 );
-
-        JCheckBox animalsCat = new JCheckBox("History");
-        animalsCat.setBounds(350, 300, 100, 20 );
-
-        JCheckBox vehiclesCat = new JCheckBox("Vehicles");
-        vehiclesCat.setBounds(350, 320, 100, 20 );
-
-        JCheckBox randomCat = new JCheckBox("Random");
-        randomCat.setBounds(350, 340, 100, 20 );
-
-
-        catButtonGroup.add(anyCat);
-        catButtonGroup.add(genCat);
-        catButtonGroup.add(filmCat);
-        catButtonGroup.add(musicCat);
-        catButtonGroup.add(vidGameCat);
-        catButtonGroup.add(compSciCat);
-        catButtonGroup.add(mathCat);
-        catButtonGroup.add(mythologyCat);
-        catButtonGroup.add(historyCat);
-        catButtonGroup.add(animalsCat);
-        catButtonGroup.add(vehiclesCat);
-        catButtonGroup.add(randomCat);
-
-        add(anyCat);
-        add(genCat);
-        add(filmCat);
-        add(musicCat);
-        add(vidGameCat);
-        add(compSciCat);
-        add(mathCat);
-        add(mythologyCat);
-        add(historyCat);
-        add(animalsCat);
-        add(vehiclesCat);
-        add(randomCat);
 
 
         JButton startGame = new JButton("Start Game");
@@ -128,20 +86,13 @@ public class OptionPanel extends JPanel {
         add(category);
         add(difficulty);
     }
-    ActionListener StartGame = new ActionListener() {
 
-        @Override
-        public void actionPerformed(ActionEvent event) {
-
-        }
+    ActionListener StartGame = event -> {
+        getRootPane().setContentPane(new InGamePanel());
     };
 
-    ActionListener Back = new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            //getRootPane().setContentPane(new InGamePanel(catButtonGroup.getSelection(), difButtonGroup.getSelection()));
-            getRootPane().setContentPane(new MainMenu());
-        }
+    ActionListener Back = event -> {
+        //getRootPane().setContentPane(new InGamePanel(catButtonGroup.getSelection(), difButtonGroup.getSelection()));
+        getRootPane().setContentPane(new MainMenu());
     };
 }

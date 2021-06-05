@@ -16,16 +16,24 @@ import java.util.Optional;
 public class TriviaRoom extends JPanel implements MazeRoom {
    
    //////////  SWING FIELDS  //////////
-   
+
+   //colors
    private static final Color BG_COLOR = new Color(0x0A0A0A);
-   private static final Color OPEN_DOOR_COLOR = new Color(0x141414);
-   private static final Color WALL_COLOR = new Color(0x31B2FF);
-   private static final Color PLAYER_COLOR = Color.MAGENTA;
+   private static final Color STARTING_ROOM_COLOR = new Color(0x284F3D);
+   private static final Color ENDING_ROOM_COLOR = new Color(0x653131);
+   private static final Color UNEXPLORED_ROOM_COLOR = new Color(0x25004F);
+   private static final Color OPEN_DOOR_COLOR = new Color(0x0B0421);
+   private static final Color WALL_COLOR = new Color(0x3700FF);
+   private static final Color PLAYER_COLOR = new Color(0xB700FF);
+
+
+   //dimensions
    private static final Dimension ROOM_DIMENSION = new Dimension(50, 50);
-   
-   private static final int PLAYER_IND_INSET = 5;
-   private static final int WALL_THICKNESS = 3;
+   private static final int PLAYER_IND_INSET = 10;
+   private static final int WALL_THICKNESS = 4;
    private static final int WALL_LINE_PX = WALL_THICKNESS / 2;
+
+   //objects
    private final JPanel myPlayerIndicator;
    
    //////////  ROOM FIELDS  //////////
@@ -48,9 +56,8 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       myColLocation = theCol;
       myVisited = false;
       myDiscovered = false;
-      myPlayerIndicator = new PlayerIndicator();
-      add(myPlayerIndicator);
       initSwingGraphics();
+      myPlayerIndicator = (JPanel) add(new PlayerIndicator());
    }
    
    public TriviaRoom(final int theRow, final int theCol) {
@@ -102,40 +109,47 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       myPlayerIndicator.setVisible(false);
       repaint();
    }
+
+   void setStartingRoom() {
+      setBackground(STARTING_ROOM_COLOR);
+   }
+
+   void setEndingRoom() {
+      setBackground(ENDING_ROOM_COLOR);
+   }
    
    //////////////////  SWING CODE  //////////////////
    
    private void initSwingGraphics() {
-      setLayout(new FlowLayout(
-            FlowLayout.CENTER,
-            PLAYER_IND_INSET,
-            PLAYER_IND_INSET + 8)
-      );
-      if (getLocation().x == 1 && getLocation().y == 1) {
-         setBackground(new Color(0x003300));
-      } else {
-         setBackground(BG_COLOR);
-      }
+      setLayout(new BorderLayout());
+      setBackground(BG_COLOR);
       setPreferredSize(ROOM_DIMENSION);
    }
    
    @Override
    public void paintComponent(Graphics g) {
+      ((Graphics2D) g).setRenderingHint(
+              RenderingHints.KEY_ANTIALIASING,
+              RenderingHints.VALUE_ANTIALIAS_ON
+      );
       Color savedColor = g.getColor(); //get color from graphics
-      
+      BasicStroke standard = new BasicStroke(WALL_THICKNESS);
+      BasicStroke border = new BasicStroke(WALL_THICKNESS, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
+
+      ((Graphics2D) g).setStroke(border);
+      g.setColor(getBackground());
+      g.fillRect(0, 0, getWidth(), getHeight());
+
+      g.setColor(WALL_COLOR);
+      g.drawRect(
+              WALL_LINE_PX,
+              WALL_LINE_PX,
+              getWidth() - (2 * WALL_LINE_PX),
+              getHeight() - (2 * WALL_LINE_PX)
+      );
+
       if (myDiscovered) {
-         ((Graphics2D) g).setStroke(new BasicStroke(WALL_THICKNESS));
-         g.setColor(getBackground());
-         g.fillRect(0, 0, getWidth(), getHeight());
-   
-         g.setColor(WALL_COLOR);
-         g.drawRect(
-               WALL_LINE_PX,
-               WALL_LINE_PX,
-               getWidth() - WALL_LINE_PX - 1,
-               getHeight() - WALL_LINE_PX - 1
-         );
-   
+         ((Graphics2D) g).setStroke(standard);
          if (getDoor(Direction.NORTH).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.NORTH).get()));
             g.drawLine(
@@ -176,8 +190,14 @@ public class TriviaRoom extends JPanel implements MazeRoom {
             );
          }
       } else {
-         g.setColor(new Color(0x460087));
-         g.fillRect(0, 0, getWidth(), getHeight());
+         ((Graphics2D) g).setStroke(new BasicStroke(1));
+         g.setColor(UNEXPLORED_ROOM_COLOR);
+         g.fillRect(
+                 WALL_THICKNESS,
+                 WALL_THICKNESS,
+                 getWidth() - 2 * WALL_THICKNESS,
+                 getHeight() - 2 * WALL_THICKNESS
+         );
       }
       g.setColor(savedColor);
    }
@@ -189,7 +209,8 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       else result = OPEN_DOOR_COLOR;
       return result;
    }
-   
+
+
    private static class PlayerIndicator extends JPanel {
       public PlayerIndicator() {
          setBackground(PLAYER_COLOR);
@@ -201,6 +222,10 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    
       @Override
       public void paintComponent(Graphics g) {
+         ((Graphics2D) g).setRenderingHint(
+                 RenderingHints.KEY_ANTIALIASING,
+                 RenderingHints.VALUE_ANTIALIAS_ON
+         );
          g.setColor(PLAYER_COLOR);
          g.fillOval(
                PLAYER_IND_INSET,

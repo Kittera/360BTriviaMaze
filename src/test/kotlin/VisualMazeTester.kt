@@ -16,13 +16,13 @@ fun main() {
     visualFrame.background = Color.BLACK
 
     val maze: TriviaMaze
-    val time = measureTimeMillis { maze = TriviaMaze(10, 7) }
+    val time = measureTimeMillis { maze = TriviaMaze(7, 7) }
+    println("Maze Generation took $time ms.")
 
     visualFrame.add(maze)
     visualFrame.pack()
     visualFrame.setLocationRelativeTo(null)
     visualFrame.isVisible = true
-    println("Maze Generation took $time ms.")
 
 
     val room1 = maze.getRoom(1, 1)
@@ -48,7 +48,7 @@ fun main() {
         foundDoor.tryAnswer(ques.correctAnswer)
         maze.movePlayer(direction)
         seenList.add(testPlayer.currentRoom)
-        Thread.sleep(10)
+        Thread.sleep(50)
     }
     Thread.sleep(500)
     exitProcess(0)

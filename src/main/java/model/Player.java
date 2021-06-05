@@ -1,22 +1,40 @@
 package model;
 
-public class Player {
+import controller.MazePlayer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Objects;
+
+/**
+ * The Player class is something of a view pointer. It knows what room it's in, and can
+ * be sent to other rooms.
+ */
+public class Player extends JPanel implements MazePlayer {
    
    private MazeRoom myRoom;
    
-   Player(final MazeRoom theStartingRoom) {
+   public Player(final MazeRoom theStartingRoom) {
       myRoom = theStartingRoom;
+      theStartingRoom.enter(this);
    }
    
-   public MazeRoom getRoom() {
+   public void sendToRoom(final MazeRoom theNewRoom) {
+      if (Objects.isNull(theNewRoom)) {
+         throw new IllegalArgumentException("Null room object passed to player.");
+      }
+      myRoom.leave();
+      myRoom = theNewRoom;
+      myRoom.enter(this);
+   }
+   
+   @Override
+   public MazeRoom getCurrentRoom() {
       return myRoom;
    }
    
-   public void moveToRoom(final MazeRoom theNewRoom) {
-      if (theNewRoom == null) {
-         throw new IllegalArgumentException("Null room object passed to player.");
-      }
-      
-      myRoom = theNewRoom;
+   @Override
+   public Point getLocation() {
+      return myRoom.getLocation();
    }
 }

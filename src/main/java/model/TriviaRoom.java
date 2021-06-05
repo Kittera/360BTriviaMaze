@@ -17,8 +17,9 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    
    //////////  SWING FIELDS  //////////
    
-//   private static final Color BG_COLOR = new Color(0x090909);
-   private static final Color BG_COLOR = Color.DARK_GRAY;
+   private static final Color BG_COLOR = new Color(0x171717);
+   private static final Color WALL_COLOR = Color.BLUE;
+//   private static final Color BG_COLOR = Color.DARK_GRAY;
    private final JPanel myPlayerIndicator;
    
    //////////  ROOM FIELDS  //////////
@@ -56,6 +57,7 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       if (result) {
 //         addDoorIndicator(theDirection);
          revalidate();
+         repaint();
       }
       return result;
    }
@@ -100,11 +102,6 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       setBackground(BG_COLOR);
       setPreferredSize(new Dimension(30, 30));
       
-//      initialBorder(BorderLayout.NORTH);
-//      initialBorder(BorderLayout.EAST);
-//      initialBorder(BorderLayout.SOUTH);
-//      initialBorder(BorderLayout.WEST);
-      
       myPlayerIndicator.setBackground(Color.MAGENTA);
       myPlayerIndicator.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
       myPlayerIndicator.setVisible(false);
@@ -112,37 +109,12 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       //TODO blackout based on discovered status
    }
    
-   private void initialBorder(final String theDirection) {
-      JPanel wallBorder = new JPanel();
-      wallBorder.setPreferredSize(new Dimension(5, 5));
-      wallBorder.setBackground(Color.BLUE);
-      add(wallBorder, theDirection);
-   }
-   
-   private void addDoorIndicator(final Direction theDirection) {
-      JPanel doorIndicator = new JPanel();
-      doorIndicator.setBackground(BG_COLOR);
-      doorIndicator.setPreferredSize(new Dimension(5, 5));
-      switch (theDirection) {
-         case NORTH -> add(doorIndicator, BorderLayout.NORTH);
-         case EAST -> add(doorIndicator, BorderLayout.EAST);
-         case SOUTH -> add(doorIndicator, BorderLayout.SOUTH);
-         case WEST -> add(doorIndicator, BorderLayout.WEST);
-         case CENTER -> System.out.printf(
-               "Detected Direction.CENTER in addDoorIndicator()" +
-                     "cell: %d, %d%n",
-               getLocation().x,
-               getLocation().y
-         );
-      }
-   }
-   
    @Override
    public void paintComponent(Graphics g) {
-      if (!myDiscovered) {
-         g.setColor(new Color(0x000077));
-         g.fillRect(0, 0, getWidth(), getHeight());
-      } else {
+//      if (!myDiscovered) {
+//         g.setColor(new Color(0x000077));
+//         g.fillRect(0, 0, getWidth(), getHeight());
+//      } else {
          Color savedColor = g.getColor(); //get color from graphics
          g.setColor(Color.BLACK);
          ((Graphics2D) g).setStroke(new BasicStroke(8));
@@ -151,28 +123,28 @@ public class TriviaRoom extends JPanel implements MazeRoom {
          if (getDoor(Direction.NORTH).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.NORTH).get()));
          } else {
-            g.setColor(Color.BLUE);
+            g.setColor(WALL_COLOR);
          }
          g.drawLine(0,0,getWidth(),0);
    
          if (getDoor(Direction.EAST).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.EAST).get()));
          } else {
-            g.setColor(Color.BLUE);
+            g.setColor(WALL_COLOR);
          }
          g.drawLine(getWidth(),0,getWidth(),getHeight());
    
          if (getDoor(Direction.SOUTH).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.SOUTH).get()));
          } else {
-            g.setColor(Color.BLUE);
+            g.setColor(WALL_COLOR);
          }
          g.drawLine(getWidth(),getHeight(),0,getHeight());
    
          if (getDoor(Direction.WEST).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.WEST).get()));
          } else {
-            g.setColor(Color.BLUE);
+            g.setColor(WALL_COLOR);
          }
          g.drawLine(0,getHeight(),0, 0);
          
@@ -184,14 +156,15 @@ public class TriviaRoom extends JPanel implements MazeRoom {
          
          // Idea: Lines drawn here from ne corner to another depending ong door presence
          // set the color dynamically based on discovered status
-      }
+      
+//      }
    }
    
    private Color switchBarColor(MazeDoor theDoor) {
       Color result;
-      if (theDoor.isLocked()) result = Color.YELLOW;
+      if (theDoor.isLocked()) result = BG_COLOR;
       else if (theDoor.isJammed()) result = Color.RED;
-      else result = BG_COLOR;
+      else result = Color.BLACK;
       return result;
    }
 }

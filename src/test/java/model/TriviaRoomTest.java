@@ -14,7 +14,6 @@ class TriviaRoomTest {
    @BeforeEach
    void setUp() {
       testRoom = new TriviaRoom(1, 1);
-      
    }
    
    @Test
@@ -37,7 +36,6 @@ class TriviaRoomTest {
       );
       assertTrue(testRoom.getDoor(Direction.SOUTH).isEmpty());
       assertFalse(testRoom.getDoor(Direction.EAST).isEmpty());
-      
    }
    
    @Test

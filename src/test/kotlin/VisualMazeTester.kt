@@ -6,12 +6,12 @@ import kotlin.system.measureTimeMillis
 fun main() {
 
     val maze: TriviaMaze
-    val time = measureTimeMillis { maze = TriviaMaze(15, 10) }
+    val time = measureTimeMillis { maze = TriviaMaze(10, 7) }
     println("Maze Generation took $time ms.")
     val room1 = maze.getRoom(1, 1)
     val testPlayer = Player(room1)
     maze.addPlayer(testPlayer)
-    Thread.sleep(1750)
+    Thread.sleep(1000)
 
     val seenList = mutableListOf<MazeRoom>(room1)
     for (i in 1 until 5000) {
@@ -31,9 +31,8 @@ fun main() {
         foundDoor.tryAnswer(ques.correctAnswer)
         maze.movePlayer(direction)
         seenList.add(testPlayer.currentRoom)
-        Thread.sleep(50)
+        Thread.sleep(9)
     }
     Thread.sleep(500)
     exitProcess(0)
-
 }

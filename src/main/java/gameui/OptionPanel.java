@@ -1,6 +1,7 @@
 package gameui;
 
 import model.Category;
+import model.Difficulty;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -17,7 +18,7 @@ public class OptionPanel extends JPanel {
 
     private void createPanel() {
         setLayout(null);
-        setSize(800, 740);
+        setSize(1000, 740);
         createLabels();
         createButtons();
         setVisible(true);
@@ -26,10 +27,13 @@ public class OptionPanel extends JPanel {
     private void createButtons() {
         difButtonGroup = new ButtonGroup();
         JCheckBox easy = new JCheckBox("Easy", true);
+        easy.setActionCommand("Easy");
         easy.setBounds(100, 120, 100, 25 );
         JCheckBox medium = new JCheckBox("Medium");
+        medium.setActionCommand("Medium");
         medium.setBounds(100, 140, 100, 25 );
         JCheckBox hard = new JCheckBox("Hard");
+        hard.setActionCommand("Hard");
         hard.setBounds(100, 160, 100, 25 );
 
         difButtonGroup.add(easy);
@@ -50,11 +54,13 @@ public class OptionPanel extends JPanel {
         int count = 0;
         for (Category c : Category.values()) {
             JCheckBox catButton = new JCheckBox(c.title);
+            catButton.setActionCommand(c.title);
             catButton.setBounds(
                     categoryListX,
                     startingCategoryListY + (catButtonHeight * count++),
                     catButtonWidth,
                     catButtonHeight
+
             );
             catButtonGroup.add(catButton);
             this.add(catButton);
@@ -88,7 +94,15 @@ public class OptionPanel extends JPanel {
     }
 
     ActionListener StartGame = event -> {
-        getRootPane().setContentPane(new InGamePanel());
+        String cat = catButtonGroup.getSelection().getActionCommand();
+        String dif = difButtonGroup.getSelection().getActionCommand();
+        System.out.println(cat);
+        System.out.println(dif);
+
+        InGamePanel temp = new InGamePanel(
+                Category.fromName(cat),
+                Difficulty.fromName(dif));
+        getRootPane().setContentPane(temp);
     };
 
     ActionListener Back = event -> {

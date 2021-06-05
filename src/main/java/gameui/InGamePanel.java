@@ -7,23 +7,29 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class InGamePanel extends JPanel {
+    TriviaMaze myMaze;
 
-    private JPanel myPanel;
     QuestionPanel myQuestionPanel;
-    private JPanel myRoomPanel;
+
     private GridBagConstraints gbc;
 
-    public InGamePanel(ButtonGroup catButtonGroup) {
-        createPanel();
-    }
 
-    public InGamePanel(ButtonModel selection, ButtonModel selection1) { createPanel();
-        //startGame method with selection difficulty and selection1 question categories
+    public InGamePanel(Category theCategory, Difficulty theDifficulty) {
+        createPanel();
+        myMaze = new TriviaMaze(4, 4, theCategory, theDifficulty); //maybe change size based on difficulty?
+        add(myMaze);
+
     }
     public InGamePanel() {
         createPanel();
     }
+
+
     private void createPanel() {
+
+
+
+        //could pull other questions, just haven't used test questions yet
 
         ArrayList<Answer> tempc =  new ArrayList<Answer>();
         tempc.add(new Answer("Mic"));
@@ -31,20 +37,21 @@ public class InGamePanel extends JPanel {
         tempc.add(new Answer("Scott"));
         Question temp = new Question(Category.ANY, QuestionType.MULTI_CHOICE, Difficulty.EASY, "What is my Name?",new Answer("Steven"),tempc) ;
 
+        //test of panels
         myQuestionPanel = new QuestionPanel();
         myQuestionPanel.setPanelQuestion(temp);
+
+
         gbc = new GridBagConstraints();
+
+
+
         setLayout(new BorderLayout());
         setLocation(0,0);
         setBackground(Color.BLACK);
         setSize(1000, 700);
-        myRoomPanel = new RoomPanel(); // this should call start of maze
-//        gbc.gridwidth = 4;
-//        gbc.gridheight = 2;
-//        gbc.gridx = 4;
-//        gbc.gridy = 2;
-//        gbc.fill = GridBagConstraints.VERTICAL;
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+
         add(myQuestionPanel, BorderLayout.EAST);
 
 

@@ -128,6 +128,10 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    
    @Override
    public void paintComponent(Graphics g) {
+      Color tempColor = getBackground();
+      setBackground(Color.BLACK);
+      super.paintComponent(g);
+      setBackground(tempColor);
       ((Graphics2D) g).setRenderingHint(
               RenderingHints.KEY_ANTIALIASING,
               RenderingHints.VALUE_ANTIALIAS_ON
@@ -138,7 +142,12 @@ public class TriviaRoom extends JPanel implements MazeRoom {
 
       ((Graphics2D) g).setStroke(border);
       g.setColor(getBackground());
-      g.fillRect(0, 0, getWidth(), getHeight());
+      g.fillRect(
+              WALL_THICKNESS,
+              WALL_THICKNESS,
+              getWidth() - WALL_THICKNESS,
+              getHeight() - WALL_THICKNESS
+      );
 
       g.setColor(WALL_COLOR);
       g.drawRect(

@@ -48,7 +48,7 @@ fun main() {
         foundDoor.tryAnswer(ques.correctAnswer)
         maze.movePlayer(direction)
         seenList.add(testPlayer.currentRoom)
-        Thread.sleep(50)
+        Thread.sleep(10)
     }
     Thread.sleep(500)
     exitProcess(0)

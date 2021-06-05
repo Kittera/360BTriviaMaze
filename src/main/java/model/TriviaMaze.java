@@ -306,7 +306,7 @@ public class TriviaMaze extends JPanel implements Maze {
       
       add(gridPanel, BorderLayout.CENTER);
       revalidate();
-      makeTestFrame(); //TODO this comment is just a tag for the frame we won't need later
+      //makeTestFrame(); //TODO this comment is just a tag for the frame we won't need later
    }
    
    private void makeTestFrame() {

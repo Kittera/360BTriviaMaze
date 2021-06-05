@@ -4,20 +4,33 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class InGamePanel extends JPanel {
     TriviaMaze myMaze;
-
     QuestionPanel myQuestionPanel;
+    MazeRoom myRoom;
+    Player myPlayer;
 
-    private GridBagConstraints gbc;
+    private JPanel moveButtonPanel;
+    private JButton north;
+    private JButton south;
+    private JButton east;
+    private JButton west;
 
 
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
-        createPanel();
         myMaze = new TriviaMaze(4, 4, theCategory, theDifficulty); //maybe change size based on difficulty?
+        myRoom = myMaze.getRoom(1, 1);
+        myPlayer = new Player(myRoom);
+        myMaze.addPlayer(myPlayer);
+        createPanel();
+        createMoveButtons();
+        checkDoors();
         add(myMaze);
+        add(myQuestionPanel, BorderLayout.EAST);
+        add(moveButtonPanel, BorderLayout.SOUTH);
 
     }
     public InGamePanel() {
@@ -29,7 +42,7 @@ public class InGamePanel extends JPanel {
 
 
 
-        //could pull other questions, just haven't used test questions yet
+       // could pull other questions, just haven't used test questions yet
 
         ArrayList<Answer> tempc =  new ArrayList<Answer>();
         tempc.add(new Answer("Mic"));
@@ -40,11 +53,7 @@ public class InGamePanel extends JPanel {
         //test of panels
         myQuestionPanel = new QuestionPanel();
         myQuestionPanel.setPanelQuestion(temp);
-
-
-        gbc = new GridBagConstraints();
-
-
+        moveButtonPanel = new JPanel();
 
         setLayout(new BorderLayout());
         setLocation(0,0);
@@ -52,11 +61,58 @@ public class InGamePanel extends JPanel {
         setSize(1000, 700);
 
 
-        add(myQuestionPanel, BorderLayout.EAST);
-
-
-
     }
     //todo this will be the panel that houses the door panel/info(stat panel)/question panel
 
+    private void createMoveButtons() {
+        north = new JButton("North");
+        north.setPreferredSize(new Dimension(100, 30));
+        south = new JButton("South");
+        south.setPreferredSize(new Dimension(100, 30));
+        east = new JButton("East");
+        east.setPreferredSize(new Dimension(100, 30));
+        west = new JButton("West");
+        west.setPreferredSize(new Dimension(100, 30));
+        north.addActionListener(MoveNorth);
+        south.addActionListener(MoveSouth);
+        east.addActionListener(MoveEast);
+        west.addActionListener(MoveWest);
+
+        moveButtonPanel.add(north);
+        moveButtonPanel.add(south);
+        moveButtonPanel.add(east);
+        moveButtonPanel.add(west);
+        moveButtonPanel.setPreferredSize(new Dimension(500, 30));
+    }
+
+    private void checkDoors() {
+        if (!myRoom.getDoor(Direction.NORTH).isPresent()) {
+            north.setVisible(false);
+        }
+        if (!myRoom.getDoor(Direction.EAST).isPresent()) {
+            east.setVisible(false);
+        }
+        if (!myRoom.getDoor(Direction.SOUTH).isPresent()) {
+            south.setVisible(false);
+        }
+        if (!myRoom.getDoor(Direction.WEST).isPresent()) {
+            west.setVisible(false);
+        }
+    }
+
+    private ActionListener MoveNorth = event -> {
+        myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.NORTH).get().getQuestion());
+    };
+
+    private ActionListener MoveSouth = event -> {
+        myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).get().getQuestion());
+    };
+
+    private ActionListener MoveEast = event -> {
+        myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.EAST).get().getQuestion());
+    };
+
+    private ActionListener MoveWest = event -> {
+        myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.WEST).get().getQuestion());
+    };
 }

@@ -37,5 +37,16 @@ public interface MazeDoor {
     * @param theAnswer answer to try
     * @return whether the answer was correct
     */
-   boolean tryAnswer(Answer theAnswer);
+   boolean tryAnswer(final Answer theAnswer);
+   
+   /**
+    * This sets up the door on the other side of a wall so that when this one is unlocked,
+    * the player can still go back through the way they came.
+    * @param theDoor door that is to be on the other side of the wall from this one
+    */
+   void linkOtherSide(final MazeDoor theDoor);
+   
+   void twinUnlocked(final MazeDoor theCaller);
+   
+   void twinJammed(final MazeDoor theCaller);
 }

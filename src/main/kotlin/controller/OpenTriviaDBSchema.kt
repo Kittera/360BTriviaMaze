@@ -83,6 +83,7 @@ class OpenTriviaDBSchema {
             totalResponse.use { body = it.body?.string()?: "Oops" }
 
             //return parsing result
+            println("###### Getting Category: ${category.name}")
             return GsonBuilder().create()
                 .fromJson(body, CategoryCountResponse::class.java)
                 .category_question_count
@@ -97,6 +98,7 @@ class OpenTriviaDBSchema {
 
         companion object {
             private val mySingleton = QuestionFetchHttp()
+            private var myCount = 1
 
             fun get(
                 client: OkHttpClient,
@@ -143,7 +145,7 @@ class OpenTriviaDBSchema {
 
             // navigate json body
             val body = getResponse.body?.string()
-            println("GET from OpenTDB.")
+            println("--- GET #${myCount++} from OpenTDB.")
             getResponse.close()
 
             // return FetchResponse gson object

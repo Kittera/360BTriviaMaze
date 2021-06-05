@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TriviaDoorTest {
    
    private MazeDoor testDoor;
+   private MazeDoor otherDoor;
    private MazeRoom mockRoom;
    private Question testQuestion;
    
@@ -17,6 +18,8 @@ class TriviaDoorTest {
       testQuestion = QuestionFactory.get();
       mockRoom = new MockRoom();
       testDoor = new TriviaDoor(testQuestion, mockRoom);
+      otherDoor = new TriviaDoor(QuestionFactory.get(), new MockRoom());
+      testDoor.linkOtherSide(otherDoor);
    }
    
    @Test
@@ -59,5 +62,14 @@ class TriviaDoorTest {
    @Test
    void roomBehind() {
       assertSame(mockRoom, testDoor.roomBehind());
+   }
+   
+   @Test
+   void linkOtherSide() {
+      testDoor.tryAnswer(testQuestion.getCorrectAnswer());
+      assertTrue(otherDoor.isLocked());
+      otherDoor.linkOtherSide(testDoor);
+      testDoor.tryAnswer(testQuestion.getCorrectAnswer());
+      assertFalse(otherDoor.isLocked());
    }
 }

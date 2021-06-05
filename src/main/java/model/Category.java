@@ -1,7 +1,5 @@
 package model;
 
-import kotlin.collections.ArrayDeque;
-
 import java.util.*;
 
 public enum Category {
@@ -33,6 +31,11 @@ public enum Category {
       name = theName;
    }
    
+   /**
+    * Given a name, gives back an appropriate category constant.
+    * @param theName name of desired category
+    * @return category found by that name or Category.ANY
+    */
    public static Category fromName(final String theName) {
       
       final Optional<Category> result = Arrays.stream(values())
@@ -46,11 +49,15 @@ public enum Category {
       }
    }
    
+   /**
+    * Picks a random Category.
+    * @return a random Category
+    */
    public static Category random() {
-      ArrayDeque<Category> hat = new ArrayDeque<>(Arrays.asList(values()));
-      Collections.shuffle(hat);
+      List<Category> hat = new ArrayList<>(Arrays.asList(values()));
       hat.remove(Category.ANY);
-      return hat.first();
+      Collections.shuffle(hat);
+      return hat.remove(0);
    }
    
 }

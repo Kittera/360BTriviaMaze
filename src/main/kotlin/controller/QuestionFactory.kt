@@ -17,18 +17,24 @@ class QuestionFactory {
 
         @JvmStatic
         fun get() =
-            fact.getQuestion(category = Category.random(), difficulty = Difficulty.EASY)
+            fact.getQuestion(
+                category = Category.random(),
+                difficulty = Difficulty.random()
+            )
 
         @JvmStatic
         fun get(theCategory: Category, theDifficulty: Difficulty) =
-            fact.getQuestion(category = theCategory, difficulty = theDifficulty)
+            fact.getQuestion(
+                category = theCategory,
+                difficulty = theDifficulty
+            )
     }
 
     private val pickedList: MutableList<Int>
 
     init {
         pickedList = ArrayList()
-        Database.connect(PATH, DRIVER)
+        Database.connect(PATH, SQLITE_DRIVER)
     }
 
     /**
@@ -39,37 +45,49 @@ class QuestionFactory {
         category: Category,
         difficulty: Difficulty,
     ): Question {
-        val resultRow = transaction {
-            Questions.selectAll()
-                .orderBy(Random())
-                .first {
-                    it[Questions.category].lowercase() == category.name.lowercase()
-                            && it[Questions.difficulty].lowercase() == difficulty.difficulty.lowercase()
-                            && !pickedList.contains(it[Questions.id].value)
-                }
+        //guard for case of ANY
+        val finalCategory = when (category) {
+            Category.ANY -> Category.random()
+            else -> category
         }
-        //"it": a Kotlin keyword that shrinks lambdas
-        // similar to Java's static references
+        val finalDifficulty = when (difficulty) {
+            Difficulty.ANY -> Difficulty.random()
+            else -> difficulty
+        }
+
+        val resultRow = try {
+            fetch(finalCategory, finalDifficulty)
+        } catch (fourOhFour: NoSuchElementException) {
+            reset()
+            fetch(finalCategory, finalDifficulty)
+        }
 
         //use this to ensure no duplicate picks
         pickedList.add(resultRow[Questions.id].value)
 
-
         return Question(
             //this is a constructor call for the Java class Question in model
-            //theCategory =
-            Category.fromName(resultRow[Questions.category]),
-            //theType =
-            QuestionType.fromKey(resultRow[Questions.format]),
-            //thDifficulty =
-            Difficulty.fromName(resultRow[Questions.difficulty]),
-            //theQuestion =
-            resultRow[Questions.question],
-            //theCorrectAnswer =
-            Answer(resultRow[Questions.correct_answer]),
-            //theIncorrectAnswers =
-            resultRow[Questions.incorrect_answers].split(",").map { Answer(it) }
+            /* theCategory = */ Category.fromName(resultRow[Questions.category]),
+            /* theType = */ QuestionType.fromKey(resultRow[Questions.format]),
+            /* theDifficulty = */ Difficulty.fromName(resultRow[Questions.difficulty]),
+            /* theQuestion = */ resultRow[Questions.question],
+            /* theCorrectAnswer = */ Answer(resultRow[Questions.correct_answer]),
+            /* theIncorrectAnswers = */ resultRow[Questions.incorrect_answers]
+                .split(",")
+                .map { Answer(it) }
         )
+    }
+
+    private fun fetch(category: Category, difficulty: Difficulty) = transaction {
+        Questions.selectAll()
+            .orderBy(Random())
+            .first {
+                it[Questions.category].lowercase() == category.name.lowercase()
+                        && it[Questions.difficulty].lowercase() == difficulty.difficulty.lowercase()
+                        && !pickedList.contains(it[Questions.id].value)
+            }
+        //"it": a Kotlin keyword that shrinks lambdas
+        // similar to Java's static references
     }
 
 

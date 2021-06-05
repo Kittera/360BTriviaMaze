@@ -292,7 +292,7 @@ public class TriviaMaze extends JPanel implements Maze {
    
    private void initSwingGraphics() {
       setLayout(new BorderLayout());
-      setBackground(Color.YELLOW);
+      setBackground(Color.BLACK);
       JPanel gridPanel = new JPanel(new GridLayout(myRows, myCols));
       setPreferredSize(new Dimension(ROOM_SIZE * myCols, ROOM_SIZE * myRows));
       for (int row = 1; row <= myRows; row++) {
@@ -303,7 +303,7 @@ public class TriviaMaze extends JPanel implements Maze {
             }
          }
       }
-      
+      setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
       add(gridPanel, BorderLayout.CENTER);
       revalidate();
    }

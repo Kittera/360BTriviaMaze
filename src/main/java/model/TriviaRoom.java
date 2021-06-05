@@ -17,9 +17,15 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    
    //////////  SWING FIELDS  //////////
    
-   private static final Color BG_COLOR = new Color(0x171717);
+   private static final Color BG_COLOR = new Color(0x0F0F0F);
    private static final Color WALL_COLOR = Color.BLUE;
+   private static final Color PLAYER_COLOR = Color.MAGENTA;
+   private static final Dimension ROOM_DIMENSION = new Dimension(30, 30);
 //   private static final Color BG_COLOR = Color.DARK_GRAY;
+   
+   private static final int PLAYER_IND_INSET = 10;
+   private static final int WALL_THICKNESS = 4;
+   private static final int WALL_LINE_PX = WALL_THICKNESS / 2;
    private final JPanel myPlayerIndicator;
    
    //////////  ROOM FIELDS  //////////
@@ -43,6 +49,7 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       myVisited = false;
       myDiscovered = false;
       myPlayerIndicator = new JPanel();
+      myPlayerIndicator.setBackground(PLAYER_COLOR);
       initSwingGraphics();
    }
    
@@ -99,54 +106,93 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    
    private void initSwingGraphics() {
       setLayout(new BorderLayout());
-      setBackground(BG_COLOR);
-      setPreferredSize(new Dimension(30, 30));
+      if (getLocation().x == 1 && getLocation().y == 1) {
+         setBackground(new Color(0xab00ff));
+      } else {
+         setBackground(BG_COLOR);
+      }
+      setPreferredSize(ROOM_DIMENSION);
       
-      myPlayerIndicator.setBackground(Color.MAGENTA);
+      myPlayerIndicator.setOpaque(true);
       myPlayerIndicator.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
       myPlayerIndicator.setVisible(false);
-      add(myPlayerIndicator, BorderLayout.CENTER);
+      add(myPlayerIndicator);
       //TODO blackout based on discovered status
    }
    
    @Override
    public void paintComponent(Graphics g) {
-//      if (!myDiscovered) {
-//         g.setColor(new Color(0x000077));
-//         g.fillRect(0, 0, getWidth(), getHeight());
-//      } else {
-         Color savedColor = g.getColor(); //get color from graphics
-         g.setColor(Color.BLACK);
-         ((Graphics2D) g).setStroke(new BasicStroke(8));
+      if (!myDiscovered) {
+         g.setColor(new Color(0x000077));
          g.fillRect(0, 0, getWidth(), getHeight());
+      } else {
+         Color savedColor = g.getColor(); //get color from graphics
+         if (myPlayerIndicator.isVisible()) {
+            g.setColor(Color.CYAN);
+            g.fillRect(
+                  PLAYER_IND_INSET,
+                  PLAYER_IND_INSET,
+                  getWidth() - 2 * PLAYER_IND_INSET,
+                  getHeight() - 2 * PLAYER_IND_INSET
+                  );
+         }
+   
+         ((Graphics2D) g).setStroke(new BasicStroke(WALL_THICKNESS));
+         g.setColor(getBackground());
+         g.fillRect(
+               WALL_THICKNESS,
+               WALL_THICKNESS,
+               getWidth() - WALL_THICKNESS,
+               getHeight() - WALL_THICKNESS
+         );
+   
+         g.setColor(WALL_COLOR);
+         g.drawRect(
+               WALL_LINE_PX,
+               WALL_LINE_PX,
+               getWidth() - WALL_LINE_PX - 1,
+               getHeight() - WALL_LINE_PX - 1
+         );
    
          if (getDoor(Direction.NORTH).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.NORTH).get()));
-         } else {
-            g.setColor(WALL_COLOR);
+            g.drawLine(
+                  3 * WALL_THICKNESS,
+                  WALL_LINE_PX,
+                  getWidth() - 3 * WALL_THICKNESS,
+                  WALL_LINE_PX
+            );
          }
-         g.drawLine(0,0,getWidth(),0);
    
          if (getDoor(Direction.EAST).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.EAST).get()));
-         } else {
-            g.setColor(WALL_COLOR);
+            g.drawLine(
+                  getWidth() - WALL_LINE_PX,
+                  WALL_LINE_PX + 3 * WALL_THICKNESS,
+                  getWidth() - WALL_LINE_PX,
+                  getHeight() - 3 * WALL_THICKNESS
+            );
          }
-         g.drawLine(getWidth(),0,getWidth(),getHeight());
    
          if (getDoor(Direction.SOUTH).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.SOUTH).get()));
-         } else {
-            g.setColor(WALL_COLOR);
+            g.drawLine(
+                  getWidth() - 3 * WALL_THICKNESS,
+                  getHeight() - WALL_LINE_PX,
+                  3 * WALL_THICKNESS,
+                  getHeight() - WALL_LINE_PX
+            );
          }
-         g.drawLine(getWidth(),getHeight(),0,getHeight());
    
          if (getDoor(Direction.WEST).isPresent()) {
             g.setColor(switchBarColor(getDoor(Direction.WEST).get()));
-         } else {
-            g.setColor(WALL_COLOR);
+            g.drawLine(
+                  WALL_LINE_PX,
+                  getHeight() - 3 * WALL_THICKNESS,
+                  WALL_LINE_PX,
+                  WALL_LINE_PX + 3 * WALL_THICKNESS
+            );
          }
-         g.drawLine(0,getHeight(),0, 0);
          
          g.setColor(savedColor);
          // blue = wall
@@ -157,14 +203,14 @@ public class TriviaRoom extends JPanel implements MazeRoom {
          // Idea: Lines drawn here from ne corner to another depending ong door presence
          // set the color dynamically based on discovered status
       
-//      }
+      }
    }
    
    private Color switchBarColor(MazeDoor theDoor) {
       Color result;
-      if (theDoor.isLocked()) result = BG_COLOR;
+      if (theDoor.isLocked()) result = Color.YELLOW;
       else if (theDoor.isJammed()) result = Color.RED;
-      else result = Color.BLACK;
+      else result = BG_COLOR;
       return result;
    }
 }

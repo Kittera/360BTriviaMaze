@@ -12,12 +12,15 @@ public class InGamePanel extends JPanel {
     QuestionPanel myQuestionPanel;
     MazeRoom myRoom;
     Player myPlayer;
+    Direction myDirection;
 
     private JPanel moveButtonPanel;
     private JButton north;
     private JButton south;
     private JButton east;
     private JButton west;
+    private JButton submitBtn;
+    private GridBagConstraints gbc;
 
 
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
@@ -25,6 +28,7 @@ public class InGamePanel extends JPanel {
         myRoom = myMaze.getRoom(1, 1);
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
+
         createPanel();
         createMoveButtons();
         checkDoors();
@@ -46,7 +50,7 @@ public class InGamePanel extends JPanel {
 
         //test of panels
         myQuestionPanel = new QuestionPanel();
-        moveButtonPanel = new JPanel();
+        moveButtonPanel = new JPanel(new GridBagLayout());
 
         setLayout(new BorderLayout());
         setLocation(0,0);
@@ -58,6 +62,12 @@ public class InGamePanel extends JPanel {
     //todo this will be the panel that houses the door panel/info(stat panel)/question panel
 
     private void createMoveButtons() {
+
+        gbc = new GridBagConstraints();
+        gbc.gridwidth = 5;
+        gbc.gridheight = 0;
+        gbc.ipadx = 10;
+        gbc.ipady = 10;
         north = new JButton("North");
         north.setPreferredSize(new Dimension(100, 30));
         south = new JButton("South");
@@ -66,16 +76,39 @@ public class InGamePanel extends JPanel {
         east.setPreferredSize(new Dimension(100, 30));
         west = new JButton("West");
         west.setPreferredSize(new Dimension(100, 30));
+
         north.addActionListener(MoveNorth);
         south.addActionListener(MoveSouth);
         east.addActionListener(MoveEast);
         west.addActionListener(MoveWest);
 
-        moveButtonPanel.add(north);
-        moveButtonPanel.add(south);
-        moveButtonPanel.add(east);
-        moveButtonPanel.add(west);
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        moveButtonPanel.add(north, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        moveButtonPanel.add(south, gbc);
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        moveButtonPanel.add(east, gbc);
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        moveButtonPanel.add(west, gbc);
         moveButtonPanel.setPreferredSize(new Dimension(500, 30));
+
+        submitBtn = new JButton("Submit");
+        submitBtn.setPreferredSize(new Dimension(100, 30));
+        submitBtn.addActionListener(SubmitAnswer);
+
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        moveButtonPanel.add(submitBtn);
     }
 
     private void checkDoors() {
@@ -91,21 +124,60 @@ public class InGamePanel extends JPanel {
         if (!myRoom.getDoor(Direction.WEST).isPresent()) {
             west.setVisible(false);
         }
+        revalidate();
+        repaint();
+        submitBtn.setVisible(false);
     }
 
     private ActionListener MoveNorth = event -> {
-        myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.NORTH).get().getQuestion());
+        if ((myPlayer.getCurrentRoom().getDoor(Direction.NORTH)).get().isLocked()) {
+            myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.NORTH).get().getQuestion());
+            myDirection = Direction.NORTH;
+        } else {
+            myMaze.movePlayer(Direction.NORTH);
+        }
+        submitBtn.setVisible(true);
     };
-
     private ActionListener MoveSouth = event -> {
-        myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).get().getQuestion());
+        if ((myPlayer.getCurrentRoom().getDoor(Direction.SOUTH)).get().isLocked()) {
+            myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).get().getQuestion());
+            myDirection = Direction.SOUTH;
+        } else {
+            myMaze.movePlayer(Direction.SOUTH);
+        }
+        submitBtn.setVisible(true);
     };
-
     private ActionListener MoveEast = event -> {
-        myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.EAST).get().getQuestion());
+        if ((myPlayer.getCurrentRoom().getDoor(Direction.EAST)).get().isLocked()) {
+            myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.EAST).get().getQuestion());
+            myDirection = Direction.EAST;
+        } else {
+            myMaze.movePlayer(Direction.EAST);
+        }
+        submitBtn.setVisible(true);
     };
-
     private ActionListener MoveWest = event -> {
-        myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.WEST).get().getQuestion());
+        if ((myPlayer.getCurrentRoom().getDoor(Direction.WEST)).get().isLocked()) {
+            myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.WEST).get().getQuestion());
+            myDirection = Direction.WEST;
+        } else {
+            myMaze.movePlayer(Direction.WEST);
+        }
+        submitBtn.setVisible(true);
+    };
+    private ActionListener SubmitAnswer = event -> {
+
+        if (myQuestionPanel.isCorrectAnswer()) {
+            myMaze.getRoom(myPlayer.getLocation().x, myPlayer.getLocation().y ).getDoor(myDirection).get().tryAnswer(
+                    myMaze.getRoom(myPlayer.getLocation().x, myPlayer.getLocation().y ).getDoor(myDirection).get().getQuestion().getCorrectAnswer());
+
+            myMaze.movePlayer(myDirection);
+            myRoom = myPlayer.getCurrentRoom();
+
+            checkDoors();
+            revalidate();
+            repaint();
+        }
+        System.out.println(myRoom.getDoor(myDirection).get().getQuestion().getCorrectAnswer().get());
     };
 }

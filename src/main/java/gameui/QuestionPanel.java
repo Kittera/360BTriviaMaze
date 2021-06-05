@@ -59,6 +59,9 @@ public class QuestionPanel extends JPanel {
         setBackground(Color.BLUE);
         setVisible(true);
     }
+    public boolean isCorrectAnswer() {
+        return mcButtonGroup.getSelection().getActionCommand() == myQuestion.getCorrectAnswer().get();
+    }
 
     public void setPanelQuestion(Question theQuestion) {
         myShortAnswerPane.setVisible(false);
@@ -85,10 +88,12 @@ public class QuestionPanel extends JPanel {
         myQuestionPane.setText(myQuestion.getPrompt());
         for (int i = 0; i <= myQuestion.getIncorrectAnswers().size()-1;i ++) {
             JRadioButton rdBtn = new JRadioButton((myQuestion.getIncorrectAnswers().get(i)).get());
+            rdBtn.setActionCommand((myQuestion.getIncorrectAnswers().get(i)).get());
             rdbtnsAnswers.add(rdBtn);
             mcButtonGroup.add(rdBtn);
         }
         JRadioButton cAnswer = new JRadioButton(myQuestion.getCorrectAnswer().get());
+        cAnswer.setActionCommand(myQuestion.getCorrectAnswer().get());
         rdbtnsAnswers.add(cAnswer);
         mcButtonGroup.add(cAnswer);
 
@@ -112,12 +117,12 @@ public class QuestionPanel extends JPanel {
         myQuestionPane.setText(myQuestion.getPrompt());
 
         JRadioButton trueButton = new JRadioButton("True");
-        tfButtonGroup.add(trueButton);
+        mcButtonGroup.add(trueButton);
         myQuestionButtons.add(trueButton, BorderLayout.SOUTH);
         rdbtnsAnswers.add(trueButton);
 
         JRadioButton falseButton = new JRadioButton("False");
-        tfButtonGroup.add(falseButton);
+        mcButtonGroup.add(falseButton);
         myQuestionButtons.add(falseButton, BorderLayout.SOUTH);
         rdbtnsAnswers.add(falseButton);
 

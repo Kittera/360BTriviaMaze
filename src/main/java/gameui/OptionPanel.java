@@ -107,7 +107,6 @@ public class OptionPanel extends JPanel {
     };
 
     ActionListener Back = event -> {
-        //getRootPane().setContentPane(new InGamePanel(catButtonGroup.getSelection(), difButtonGroup.getSelection()));
         getRootPane().setContentPane(new MainMenu());
     };
 }

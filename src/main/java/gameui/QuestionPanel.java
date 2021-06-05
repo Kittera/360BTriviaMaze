@@ -1,6 +1,5 @@
 package gameui;
 
-import model.Answer;
 import model.Question;
 import model.QuestionType;
 
@@ -8,7 +7,6 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
@@ -18,15 +16,13 @@ public class QuestionPanel extends JPanel {
 
     private JPanel mainPanel;
 
-    JPanel myQuestionButtons;
+    private JPanel myQuestionButtons;
 
-    Question myQuestion;
+    private Question myQuestion;
 
-    String myCorrectAnswer;
+    private JTextPane myQuestionPane;
 
-    JTextPane myShortAnswerPane;
-
-    ArrayList<JRadioButton> rdbtnsAnswers;
+    private ArrayList<JRadioButton> rdbtnsAnswers;
 
     public QuestionPanel() {
 
@@ -40,11 +36,11 @@ public class QuestionPanel extends JPanel {
 
         setPreferredSize(new Dimension(300, 700));
 
-        myShortAnswerPane = new JTextPane();
-        myShortAnswerPane.setPreferredSize(new Dimension(300, 100));
-        myShortAnswerPane.setEditable(false);
-        myShortAnswerPane.setBackground((Color.LIGHT_GRAY));
-        mainPanel.add(myShortAnswerPane);
+        myQuestionPane = new JTextPane();
+        myQuestionPane.setPreferredSize(new Dimension(300, 100));
+        myQuestionPane.setEditable(false);
+        myQuestionPane.setBackground((Color.LIGHT_GRAY));
+        mainPanel.add(myQuestionPane);
 
         myQuestionButtons = new JPanel();
         myQuestionButtons.setLayout(new BoxLayout(myQuestionButtons, BoxLayout.PAGE_AXIS));
@@ -52,12 +48,13 @@ public class QuestionPanel extends JPanel {
 
         add(mainPanel, BorderLayout.CENTER);
         add(myQuestionButtons, BorderLayout.SOUTH);
-        //setupPanel();
+
         setBackground(Color.BLUE);
         setVisible(true);
     }
 
     public void setPanelQuestion(Question theQuestion) {
+
         myQuestion = theQuestion;
         if (myQuestion.getType() == QuestionType.TRUE_FALSE) {
             createTFButtons();
@@ -70,11 +67,13 @@ public class QuestionPanel extends JPanel {
     }
 
     private void createSAButtons() {
+        clearList();
+
     }
 
     private void createMCButtons() {
-        //cleanUpMC();
-        myShortAnswerPane.setText(myQuestion.getPrompt());
+        clearList();
+        myQuestionPane.setText(myQuestion.getPrompt());
         for (int i = 0; i <= myQuestion.getIncorrectAnswers().size()-1;i ++) {
             JRadioButton rdBtn = new JRadioButton((myQuestion.getIncorrectAnswers().get(i)).get());
             rdbtnsAnswers.add(rdBtn);
@@ -96,21 +95,22 @@ public class QuestionPanel extends JPanel {
             myQuestionButtons.add(rdbtnsAnswers.get(i));
         }
         add(myQuestionButtons, BorderLayout.SOUTH);
-        submitButton();
     }
 
     private void createTFButtons() {
-        //cleanUpPanelTF();
-        myShortAnswerPane.setText(myQuestion.getPrompt());
+        clearList();
+        myQuestionPane.setText(myQuestion.getPrompt());
 
         JRadioButton trueButton = new JRadioButton("True");
         tfButtonGroup.add(trueButton);
         myQuestionButtons.add(trueButton, BorderLayout.SOUTH);
+        rdbtnsAnswers.add(trueButton);
 
         JRadioButton falseButton = new JRadioButton("False");
         tfButtonGroup.add(falseButton);
         myQuestionButtons.add(falseButton, BorderLayout.SOUTH);
-        submitButton();
+        rdbtnsAnswers.add(falseButton);
+
     }
     private void submitButton() {
         JButton subBtn = new JButton("Submit Answer");
@@ -119,8 +119,11 @@ public class QuestionPanel extends JPanel {
 
     private void clearList() {
         for (int i = 0;i <= rdbtnsAnswers.size()-1;i++){
-            mainPanel.remove(rdbtnsAnswers.remove(i));
+            mcButtonGroup.remove(rdbtnsAnswers.get(i));
+            rdbtnsAnswers.get(i).setVisible(false);
+            myQuestionButtons.remove(rdbtnsAnswers.get(i));
         }
+        rdbtnsAnswers.removeAll(rdbtnsAnswers);
 
     }
 }

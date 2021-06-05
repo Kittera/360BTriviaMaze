@@ -44,15 +44,8 @@ public class InGamePanel extends JPanel {
 
        // could pull other questions, just haven't used test questions yet
 
-        ArrayList<Answer> tempc =  new ArrayList<Answer>();
-        tempc.add(new Answer("Mic"));
-        tempc.add(new Answer("Mike"));
-        tempc.add(new Answer("Scott"));
-        Question temp = new Question(Category.ANY, QuestionType.MULTI_CHOICE, Difficulty.EASY, "What is my Name?",new Answer("Steven"),tempc) ;
-
         //test of panels
         myQuestionPanel = new QuestionPanel();
-        myQuestionPanel.setPanelQuestion(temp);
         moveButtonPanel = new JPanel();
 
         setLayout(new BorderLayout());

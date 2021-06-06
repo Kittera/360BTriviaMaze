@@ -1,5 +1,6 @@
 package gameui;
 
+import model.Answer;
 import model.Question;
 import model.QuestionType;
 

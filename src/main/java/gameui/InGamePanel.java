@@ -45,6 +45,7 @@ public class InGamePanel extends JPanel {
         moveButtonPanel = new JPanel();
         moveButtonPanel.setPreferredSize(new Dimension(500, 30));
 
+
         setLayout(new BorderLayout());
         setLocation(0,0);
         setBackground(Color.BLACK);

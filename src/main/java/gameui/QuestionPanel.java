@@ -60,6 +60,8 @@ public class QuestionPanel extends JPanel {
         setVisible(true);
     }
     public boolean isCorrectAnswer() {
+        System.out.println(mcButtonGroup.getSelection().getActionCommand());
+        System.out.println(myQuestion.getCorrectAnswer().get());
         return mcButtonGroup.getSelection().getActionCommand() == myQuestion.getCorrectAnswer().get();
     }
 
@@ -118,18 +120,16 @@ public class QuestionPanel extends JPanel {
 
         JRadioButton trueButton = new JRadioButton("True");
         mcButtonGroup.add(trueButton);
+        trueButton.setActionCommand(trueButton.getText());
         myQuestionButtons.add(trueButton, BorderLayout.SOUTH);
         rdbtnsAnswers.add(trueButton);
 
         JRadioButton falseButton = new JRadioButton("False");
         mcButtonGroup.add(falseButton);
+        falseButton.setActionCommand(falseButton.getText());
         myQuestionButtons.add(falseButton, BorderLayout.SOUTH);
         rdbtnsAnswers.add(falseButton);
 
-    }
-    private void submitButton() {
-        JButton subBtn = new JButton("Submit Answer");
-        myQuestionButtons.add(subBtn);
     }
 
     private void clearList() {

@@ -24,7 +24,7 @@ public class InGamePanel extends JPanel {
 
 
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
-        myMaze = new TriviaMaze(4, 4, theCategory, theDifficulty); //maybe change size based on difficulty?
+        myMaze = new TriviaMaze(10, 7, theCategory, theDifficulty); //maybe change size based on difficulty?
         myRoom = myMaze.getRoom(1, 1);
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
@@ -90,13 +90,9 @@ public class InGamePanel extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 0;
         moveButtonPanel.add(south, gbc);
-        gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 2;
         gbc.gridy = 0;
         moveButtonPanel.add(east, gbc);
-        gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 3;
         gbc.gridy = 0;
         moveButtonPanel.add(west, gbc);
@@ -112,6 +108,7 @@ public class InGamePanel extends JPanel {
     }
 
     private void checkDoors() {
+
         if (!myRoom.getDoor(Direction.NORTH).isPresent()) {
             north.setVisible(false);
         }
@@ -174,10 +171,10 @@ public class InGamePanel extends JPanel {
             myMaze.movePlayer(myDirection);
             myRoom = myPlayer.getCurrentRoom();
 
-            checkDoors();
-            revalidate();
-            repaint();
         }
         System.out.println(myRoom.getDoor(myDirection).get().getQuestion().getCorrectAnswer().get());
+        checkDoors();
+        revalidate();
+        repaint();
     };
 }

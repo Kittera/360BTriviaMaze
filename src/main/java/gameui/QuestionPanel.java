@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class QuestionPanel extends JPanel {
     private final ButtonGroup mcButtonGroup = new ButtonGroup();
-    private final ButtonGroup tfButtonGroup = new ButtonGroup();
+
 
     private JPanel mainPanel;
 
@@ -22,14 +22,14 @@ public class QuestionPanel extends JPanel {
 
     private JTextPane myQuestionPane;
 
-    private ArrayList<JRadioButton> rdbtnsAnswers;
+    private ArrayList<JRadioButton> myAnswers;
 
     private JTextPane myShortAnswerPane;
 
     public QuestionPanel() {
 
         //initialize fields
-        rdbtnsAnswers = new ArrayList();
+        myAnswers = new ArrayList();
         mainPanel = new JPanel();
 
         // set Layouts
@@ -42,12 +42,15 @@ public class QuestionPanel extends JPanel {
         myQuestionPane.setPreferredSize(new Dimension(300, 100));
         myQuestionPane.setEditable(false);
         myQuestionPane.setBackground((Color.LIGHT_GRAY));
+
         mainPanel.add(myQuestionPane);
+
         myShortAnswerPane = new JTextPane();
         myShortAnswerPane.setEditable(true);
         myShortAnswerPane.setText("Enter Answer Here.");
         myShortAnswerPane.setPreferredSize(new Dimension(100, 30));
         myShortAnswerPane.setVisible(false);
+
         myQuestionButtons = new JPanel();
         myQuestionButtons.setLayout(new BoxLayout(myQuestionButtons, BoxLayout.PAGE_AXIS));
         myQuestionButtons.setPreferredSize(new Dimension(300, 200));
@@ -60,8 +63,6 @@ public class QuestionPanel extends JPanel {
         setVisible(true);
     }
     public boolean isCorrectAnswer() {
-        System.out.println(mcButtonGroup.getSelection().getActionCommand());
-        System.out.println(myQuestion.getCorrectAnswer().get());
         return mcButtonGroup.getSelection().getActionCommand() == myQuestion.getCorrectAnswer().get();
     }
 
@@ -91,54 +92,56 @@ public class QuestionPanel extends JPanel {
         for (int i = 0; i <= myQuestion.getIncorrectAnswers().size()-1;i ++) {
             JRadioButton rdBtn = new JRadioButton((myQuestion.getIncorrectAnswers().get(i)).get());
             rdBtn.setActionCommand((myQuestion.getIncorrectAnswers().get(i)).get());
-            rdbtnsAnswers.add(rdBtn);
+            myAnswers.add(rdBtn);
             mcButtonGroup.add(rdBtn);
         }
+        
         JRadioButton cAnswer = new JRadioButton(myQuestion.getCorrectAnswer().get());
         cAnswer.setActionCommand(myQuestion.getCorrectAnswer().get());
-        rdbtnsAnswers.add(cAnswer);
+        myAnswers.add(cAnswer);
         mcButtonGroup.add(cAnswer);
 
         Random r = new Random();
+
         int rand;
         for (int i = 0; i <= myQuestion.getIncorrectAnswers().size();i ++) {
-            rand = r.nextInt(rdbtnsAnswers.size());
+            rand = r.nextInt(myAnswers.size());
             if (rand != i) {
-                Collections.swap(rdbtnsAnswers, i, rand);
+                Collections.swap(myAnswers, i, rand);
             }
         }
+
         for (int i = 0; i <= myQuestion.getIncorrectAnswers().size();i ++) {
-            myQuestionButtons.add(rdbtnsAnswers.get(i));
+            myQuestionButtons.add(myAnswers.get(i));
         }
         add(myQuestionButtons, BorderLayout.SOUTH);
     }
 
     private void createTFButtons() {
         clearList();
-        myQuestionButtons.setVisible(true);
         myQuestionPane.setText(myQuestion.getPrompt());
 
         JRadioButton trueButton = new JRadioButton("True");
         mcButtonGroup.add(trueButton);
         trueButton.setActionCommand(trueButton.getText());
         myQuestionButtons.add(trueButton, BorderLayout.SOUTH);
-        rdbtnsAnswers.add(trueButton);
+        myAnswers.add(trueButton);
 
         JRadioButton falseButton = new JRadioButton("False");
         mcButtonGroup.add(falseButton);
         falseButton.setActionCommand(falseButton.getText());
         myQuestionButtons.add(falseButton, BorderLayout.SOUTH);
-        rdbtnsAnswers.add(falseButton);
-
+        myAnswers.add(falseButton);
+        add(myQuestionButtons, BorderLayout.SOUTH);
     }
 
     private void clearList() {
-        for (int i = 0;i <= rdbtnsAnswers.size()-1;i++){
-            mcButtonGroup.remove(rdbtnsAnswers.get(i));
-            rdbtnsAnswers.get(i).setVisible(false);
-            myQuestionButtons.remove(rdbtnsAnswers.get(i));
+        for (int i = 0;i <= myAnswers.size()-1;i++){
+            mcButtonGroup.remove(myAnswers.get(i));
+            myAnswers.get(i).setVisible(false);
+            myQuestionButtons.remove(myAnswers.get(i));
         }
-        rdbtnsAnswers.removeAll(rdbtnsAnswers);
+        myAnswers.removeAll(myAnswers);
 
     }
 }

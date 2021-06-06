@@ -4,6 +4,10 @@ package gameui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileReader;
 
 public class InGameMenuBar extends JFrame {
 
@@ -59,7 +63,14 @@ public class InGameMenuBar extends JFrame {
         @Override
         public void actionPerformed(ActionEvent event) {
             //todo save game
-
+            //window explorer implemented
+            JFileChooser fs = new JFileChooser((new File("360BTriviaMaze\saveFiles")));
+            fs.setDialogTitle("Save Game");
+            //fs.setFileFilter((new FileFilter(".txt", "Text File")));
+            int result = fs.showSaveDialog(null);
+            if(result == JFileChooser.APPROVE_OPTION){
+                //String content = textContent.getText
+            }
         }
     };
 
@@ -68,7 +79,22 @@ public class InGameMenuBar extends JFrame {
         @Override
         public void actionPerformed(ActionEvent event) {
             //todo load game
-        }
+            JFileChooser fs = new JFileChooser(new File("\360BTriviaMaze"));
+            fs.setDialogTitle("Load Game");
+            int result = fs.showOpenDialog((null));
+            if (result == JFileChooser.APPROVE_OPTION) {
+               try{ File file = fs.getSelectedFile();
+                BufferedReader bRead = new BufferedReader(new FileReader(file.getPath()));
+                String space = "";
+                String space2 = "";
+                while ((space2 = bRead.readLine()) != null) {
+                    space += space2;
+                }
+                if (bRead != null) bRead.close();
+            } catch (Exception e2) {
+                   JOptionPane.showMessageDialog(null, e2.getMessage());
+                }
+        }}
     };
 
 

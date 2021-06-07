@@ -1,5 +1,6 @@
 package gameui;
 
+import model.Answer;
 import model.Question;
 import model.QuestionType;
 
@@ -81,6 +82,27 @@ public class QuestionPanel extends JPanel {
         }
         return temp;
     }
+
+
+//    public boolean isCorrectAnswer() {
+//        Answer temp;
+//        boolean myAnswer = false;
+//        if (mcButtonGroup.getSelection() != null) {
+//            System.out.println("we got here");
+//            temp = new Answer(mcButtonGroup.getSelection().getActionCommand());
+//        } else {
+//            temp = new Answer("Wrong");
+//            myPopUp.showMessageDialog(null, "Please Choose an answer", "No Answer" , JOptionPane.OK_OPTION);
+//        }
+//        System.out.println(temp.get());
+//        System.out.println(myQuestion.getCorrectAnswer().get());
+//        System.out.println(myAnswer);
+//        myAnswer = myQuestion.tryAnswer(temp);
+//        if (!myAnswer && mcButtonGroup.getSelection() != null) {
+//            myPopUp.showMessageDialog(null, "", "Incorrect Answer" , JOptionPane.OK_OPTION);
+//        }
+//        return myAnswer;
+//    }
 
     /**
      * Takes in a question and creates the buttons based off question Type

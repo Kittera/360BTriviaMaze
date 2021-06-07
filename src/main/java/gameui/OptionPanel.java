@@ -56,7 +56,7 @@ public class OptionPanel extends JPanel {
         int count = 0;
         for (Category c : Category.values()) {
             JCheckBox catButton = new JCheckBox(c.title);
-            catButton.setActionCommand(c.title);
+            catButton.setActionCommand( String.valueOf(c.categoryID));
             catButton.setBounds(
                     categoryListX,
                     startingCategoryListY + (catButtonHeight * count++),

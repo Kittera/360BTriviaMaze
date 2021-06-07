@@ -86,10 +86,26 @@ public class InGamePanel extends JPanel {
 
     private void checkDoors() {
         submitBtn.setVisible(false);
+
+
         if (myRoom.getLocation().equals(myMaze.getEndingRoom().getLocation())) {
             JOptionPane temp = new JOptionPane();
             temp.showMessageDialog(null, "You Have Won", "No Answer" , JOptionPane.OK_OPTION);
         }
+
+        if (!myPlayer.getCurrentRoom().getDoor(Direction.NORTH).isPresent()) {
+            north.setVisible(false);
+        }
+        if (!myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).isPresent()) {
+            south.setVisible(false);
+        }
+        if (!myPlayer.getCurrentRoom().getDoor(Direction.EAST).isPresent()) {
+            east.setVisible(false);
+        }
+        if (!myPlayer.getCurrentRoom().getDoor(Direction.WEST).isPresent()) {
+            west.setVisible(false);
+        }
+
         revalidate();
         repaint();
     }
@@ -105,12 +121,13 @@ public class InGamePanel extends JPanel {
                     } else {
                         myQuestionPanel.createBlank();
                         myMaze.movePlayer(theDirection);
+                        setRoomsVisible(true);
+                        checkDoors();
                         submitBtn.setVisible(false);
                     }
                 }
         );
     }
-
     private final ActionListener MoveNorth = event -> handleMove(Direction.NORTH);
     private final ActionListener MoveSouth = event -> handleMove(Direction.SOUTH);
     private final ActionListener MoveEast = event -> handleMove(Direction.EAST);
@@ -122,11 +139,19 @@ public class InGamePanel extends JPanel {
             myRoom.getDoor(myDirection).get().tryAnswer(myRoom.getDoor(myDirection).get().getQuestion().getCorrectAnswer());
             myMaze.movePlayer(myDirection);
             myRoom = myPlayer.getCurrentRoom();
+
         }
         myQuestionPanel.createBlank();
-
+        setRoomsVisible(true);
         checkDoors();
         revalidate();
     };
+    private void setRoomsVisible(boolean theFlag) {
+        north.setVisible(theFlag);
+        south.setVisible(theFlag);
+        east.setVisible(theFlag);
+        west.setVisible(theFlag);
+    }
 }
+
 

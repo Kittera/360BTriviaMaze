@@ -1,0 +1,13 @@
+            Game Instructions
+
+You will have to navigate through the Maze and answer questions
+
+Each room will have doors in it.  These doors are locked with trivia questions.
+
+In order to traverse the maze you will have to choose a direction, you can go to rooms
+previously visited by clicking on the corresponding direction button.
+
+The current question will not display until a direction with a question on it has been accessed.
+Once this happens, a question will appear in the box to the left, and answer options will appear below it.
+
+After you have answered the question click on the submit button.

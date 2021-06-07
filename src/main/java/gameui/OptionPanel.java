@@ -77,6 +77,8 @@ public class OptionPanel extends JPanel {
         mainMenu.setBounds(100, 620, 100, 25);
         mainMenu.addActionListener(Back);
         add(mainMenu);
+        revalidate();
+        repaint();
 
     }
 
@@ -96,6 +98,7 @@ public class OptionPanel extends JPanel {
     ActionListener StartGame = event -> {
         String cat = catButtonGroup.getSelection().getActionCommand();
         String dif = difButtonGroup.getSelection().getActionCommand();
+        System.out.println(cat);
         Category tempcat = Category.fromName(cat);
         Difficulty tempdif = Difficulty.fromName(dif);
         InGamePanel temp = new InGamePanel(

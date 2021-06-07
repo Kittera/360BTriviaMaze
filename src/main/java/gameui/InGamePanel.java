@@ -95,7 +95,7 @@ public class InGamePanel extends JPanel {
 //        if (!myRoom.getDoor(Direction.WEST).isPresent()) {
 //            west.setVisible(false);
 //        }
-//        submitBtn.setVisible(false);
+        submitBtn.setVisible(false);
         revalidate();
         repaint();
     }
@@ -105,13 +105,16 @@ public class InGamePanel extends JPanel {
                 door -> {
                     if (door.isLocked()) {
                         myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        submitBtn.setVisible(true);
                         myDirection = Direction.NORTH;
                     } else {
                         myQuestionPanel.createBlank();
                         myMaze.movePlayer(Direction.NORTH);
+                        submitBtn.setVisible(false);
                     }
                 }
         );
+
     };
 
     private ActionListener MoveSouth = event -> {
@@ -119,10 +122,12 @@ public class InGamePanel extends JPanel {
                 door -> {
                     if (door.isLocked()) {
                         myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        submitBtn.setVisible(true);
                         myDirection = Direction.SOUTH;
                     } else {
                         myQuestionPanel.createBlank();
                         myMaze.movePlayer(Direction.SOUTH);
+                        submitBtn.setVisible(false);
                     }
                 }
         );
@@ -133,10 +138,12 @@ public class InGamePanel extends JPanel {
                 door -> {
                     if (door.isLocked()) {
                         myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        submitBtn.setVisible(true);
                         myDirection = Direction.EAST;
                     } else {
                         myQuestionPanel.createBlank();
                         myMaze.movePlayer(Direction.EAST);
+                        submitBtn.setVisible(false);
                     }
                 }
         );
@@ -147,10 +154,12 @@ public class InGamePanel extends JPanel {
                 door -> {
                     if (door.isLocked()) {
                         myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        submitBtn.setVisible(true);
                         myDirection = Direction.WEST;
                     } else {
                         myQuestionPanel.createBlank();
                         myMaze.movePlayer(Direction.WEST);
+                        submitBtn.setVisible(false);
                     }
                 }
         );

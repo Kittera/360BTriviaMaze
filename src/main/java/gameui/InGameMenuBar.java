@@ -8,12 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 
-public class InGameMenuBar extends JFrame {
+public class InGameMenuBar extends JPanel {
 
 
     private JOptionPane warningPane;
 
     public void setCurrentGame(Game currentGame) {
+        if (currentGame == null) return;
         this.currentGame = currentGame;
     }
 
@@ -21,7 +22,7 @@ public class InGameMenuBar extends JFrame {
         return currentGame;
     }
 
-    Game currentGame;
+    public Game currentGame;
     JMenuBar mainMenu;
     JMenu myFile, myHelp;
     JMenuItem mySaveGame, myLoadGame, myCloseGame, myAbout, myOptions;

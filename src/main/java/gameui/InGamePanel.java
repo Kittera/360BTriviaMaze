@@ -8,10 +8,10 @@ import java.awt.event.ActionListener;
 
 
 
-public class InGamePanel extends JFrame {
+public class InGamePanel extends JPanel {
 
     private final static String WRONGANSWER = "Choose another direction.";
-    InGameMenuBar menuBar;
+    public InGameMenuBar menuBar;
     private TriviaMaze myMaze;
     private QuestionPanel myQuestionPanel;
     private MazeRoom myRoom;
@@ -43,14 +43,13 @@ public class InGamePanel extends JFrame {
         menuBar.setCurrentGame(InGamePanelSave());
         InGameMenuBar myMenu = new InGameMenuBar();
         myMenu.setCurrentGame(InGamePanelSave());
-        setJMenuBar(myMenu.getBar());
+        //setJMenuBar(myMenu.getBar());
 
 
 
     }
 
     public InGamePanel() {
-
     }
 
     public void InGamePanelLoad(Game load){
@@ -151,8 +150,8 @@ public class InGamePanel extends JFrame {
         myQuestionPanel.createBlank();
         checkDoors();
         revalidate();
-        menuBar.setCurrentGame(InGamePanelSave());
-        setJMenuBar(menuBar.getBar());
+        //menuBar.setCurrentGame(InGamePanelSave());
+        //setJMenuBar(menuBar.getBar());
     };
 }
 

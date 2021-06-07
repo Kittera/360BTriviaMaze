@@ -2,8 +2,7 @@ package gameui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 
 public class MainMenu extends JPanel{
@@ -20,7 +19,6 @@ public class MainMenu extends JPanel{
 
     private void buildMyMenu() {
         setLayout(new BorderLayout(10,10));
-        //this adds image but having issues with it
 
         setSize(800, 740);
         myPic = new ImageIcon("src/main/resources/MyPost.png").getImage();

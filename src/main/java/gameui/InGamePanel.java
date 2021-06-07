@@ -28,7 +28,7 @@ public class InGamePanel extends JPanel {
 
 
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
-        myMaze = new TriviaMaze(4, 4, theCategory, theDifficulty); //maybe change size based on difficulty?
+        myMaze = new TriviaMaze(4, 4, theCategory, theDifficulty);
         myRoom = myMaze.getRoom(1, 1);
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
@@ -54,7 +54,8 @@ public class InGamePanel extends JPanel {
         setSize(1000, 700);
     }
 
-    private void createMoveButtons() {
+
+   private void createMoveButtons() {
 
         north = new JButton("North");
         north.setPreferredSize(new Dimension(100, 30));
@@ -85,6 +86,10 @@ public class InGamePanel extends JPanel {
 
     private void checkDoors() {
         submitBtn.setVisible(false);
+        if (myRoom.getLocation().equals(myMaze.getEndingRoom().getLocation())) {
+            JOptionPane temp = new JOptionPane();
+            temp.showMessageDialog(null, "You Have Won", "No Answer" , JOptionPane.OK_OPTION);
+        }
         revalidate();
         repaint();
     }
@@ -119,6 +124,7 @@ public class InGamePanel extends JPanel {
             myRoom = myPlayer.getCurrentRoom();
         }
         myQuestionPanel.createBlank();
+
         checkDoors();
         revalidate();
     };

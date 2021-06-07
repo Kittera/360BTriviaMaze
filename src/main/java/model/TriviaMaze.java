@@ -35,6 +35,8 @@ public class TriviaMaze extends JPanel implements Maze {
    
    private MazePlayer myPlayer;
    private final MazeRoom[][] myRooms;
+
+   private TriviaRoom endingRoom;
    
    /**
     * Constructs a fresh Trivia Maze with pre-made input.
@@ -123,7 +125,11 @@ public class TriviaMaze extends JPanel implements Maze {
       }
       return result;
    }
-   
+
+   public TriviaRoom getEndingRoom() {
+      return endingRoom;
+   }
+
    @Override
    public MazeRoom getRoom(final int theRow, final int theCol) {
       if (badDimensions(theRow, theCol, myRows, myCols)) {
@@ -177,7 +183,9 @@ public class TriviaMaze extends JPanel implements Maze {
             if (row == 1 && col == 1) {
                newRoom.setStartingRoom();
             } else if (row == myRows && col == myCols) {
-               newRoom.setEndingRoom();
+               endingRoom = newRoom;
+               endingRoom.setEndingRoom();
+
             }
          }
       }

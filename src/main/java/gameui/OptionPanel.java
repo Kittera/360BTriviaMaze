@@ -6,9 +6,11 @@ import model.Difficulty;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Option panel to be displayed before a game starts.
+ */
 public class OptionPanel extends JPanel {
 
-    private JPanel myPanel;
     private ButtonGroup catButtonGroup = new ButtonGroup();
     private ButtonGroup difButtonGroup = new ButtonGroup();
 
@@ -65,7 +67,6 @@ public class OptionPanel extends JPanel {
             catButtonGroup.add(catButton);
             this.add(catButton);
         }
-
 
 
         JButton startGame = new JButton("Start Game");

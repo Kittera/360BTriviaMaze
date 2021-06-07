@@ -64,6 +64,11 @@ public class QuestionPanel extends JPanel {
         setVisible(true);
     }
 
+    /**
+     * Checks if the answer for the question is correct
+     * @return boolean
+     */
+
     public boolean isCorrectAnswer() {
         boolean temp = false;
         if (mcButtonGroup.getSelection() != null) {
@@ -77,6 +82,10 @@ public class QuestionPanel extends JPanel {
         return temp;
     }
 
+    /**
+     * Takes in a question and creates the buttons based off question Type
+     * @param theQuestion
+     */
     public void setPanelQuestion(Question theQuestion) {
         myShortAnswerPane.setVisible(false);
         myQuestion = theQuestion;
@@ -90,6 +99,9 @@ public class QuestionPanel extends JPanel {
 
     }
 
+    /**
+     * creates a blank panel
+     */
     public void createBlank() {
         clearList();
         myQuestionPane.setText("");

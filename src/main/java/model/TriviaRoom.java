@@ -79,7 +79,11 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    public Optional<MazeDoor> getDoor(Direction theDirection) {
       return Optional.ofNullable(myDoors.get(theDirection));
    }
-   
+
+   public EnumMap<Direction, MazeDoor> getDoors() {
+      return myDoors;
+   }
+
    @Override
    public Point getLocation() {
       return new Point(myColLocation, myRowLocation);

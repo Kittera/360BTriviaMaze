@@ -82,8 +82,8 @@ class QuestionFactory {
         Questions.selectAll()
             .orderBy(Random())
             .first {
-                it[Questions.category].lowercase() == category.name.lowercase()
-                        && it[Questions.difficulty].lowercase() == difficulty.difficulty.lowercase()
+                it[Questions.category].equals(category.title, ignoreCase = true)
+                        && it[Questions.difficulty].equals(difficulty.difficulty, ignoreCase = true)
                         && !pickedList.contains(it[Questions.id].value)
             }
         //"it": a Kotlin keyword that shrinks lambdas

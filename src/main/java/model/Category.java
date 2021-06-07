@@ -24,11 +24,11 @@ public enum Category {
    /**
     * Name of the category in question.
     */
-   public final String name;
+   public final String title;
    
    Category(final int theId, final String theName) {
       categoryID = theId;
-      name = theName;
+      title = theName;
    }
    
    /**
@@ -39,7 +39,7 @@ public enum Category {
    public static Category fromName(final String theName) {
       
       final Optional<Category> result = Arrays.stream(values())
-            .filter(category -> category.name.equals(theName))
+            .filter(category -> category.title.equals(theName))
             .findFirst();
       
       if (result.isEmpty()) {

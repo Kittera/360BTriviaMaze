@@ -3,8 +3,9 @@ package controller;
 import model.MazeRoom;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public interface MazePlayer {
+public interface MazePlayer extends Serializable {
    
    /**
     * Get the room the player is currently in

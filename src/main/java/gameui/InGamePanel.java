@@ -5,23 +5,23 @@ import model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class InGamePanel extends JPanel {
+public class InGamePanel extends JPanel implements Serializable {
+    private static final long serialVersionUID = 12561L;
     TriviaMaze myMaze;
     QuestionPanel myQuestionPanel;
     MazeRoom myRoom;
     Player myPlayer;
     Direction myDirection;
 
-    private JPanel moveButtonPanel;
-    private JButton north;
-    private JButton south;
-    private JButton east;
-    private JButton west;
-    private JButton submitBtn;
-    private GridBagConstraints gbc;
-
+    private transient JPanel moveButtonPanel;
+    private transient JButton north;
+    private transient JButton south;
+    private transient JButton east;
+    private transient JButton west;
+    private transient JButton submitBtn;
+    private transient GridBagConstraints gbc;
 
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
         myMaze = new TriviaMaze(10, 7, theCategory, theDifficulty); //maybe change size based on difficulty?
@@ -39,6 +39,25 @@ public class InGamePanel extends JPanel {
     }
     public InGamePanel() {
         createPanel();
+    }
+
+    public Game InGamePanelSave(){
+        return new Game(myMaze, myQuestionPanel, myRoom, myPlayer, myDirection);
+    }
+
+    public void InGamePanelLoad(Game load){
+        this.myMaze = load.getMyMaze();
+        this.myQuestionPanel = load.getMyQuestionPanel();
+        this.myRoom = load.getMyRoom();
+        this.myPlayer = load.getMyPlayer();
+        this.myDirection = load.getMyDirection();
+
+        createPanel();
+        createMoveButtons();
+        checkDoors();
+        add(myMaze);
+        add(myQuestionPanel, BorderLayout.EAST);
+        add(moveButtonPanel, BorderLayout.SOUTH);
     }
 
 

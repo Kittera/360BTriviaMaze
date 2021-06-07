@@ -1,9 +1,10 @@
 package model;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Random;
 
-public enum Direction {
+public enum Direction implements Serializable {
    EAST, NORTH, WEST, SOUTH, CENTER;
    
    /**

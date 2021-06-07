@@ -2,8 +2,10 @@ package model;
 
 import controller.MazePlayer;
 
+import java.io.Serializable;
 
-public interface Maze {
+
+public interface Maze extends Serializable {
    
    /**
     * Get a specific room from the model.

@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Specifies the contract for interacting with a Door.
  */
-public interface MazeDoor {
+public interface MazeDoor extends Serializable {
    /**
     * Accessor for the Question a door is holding onto.
     * @return stored Question

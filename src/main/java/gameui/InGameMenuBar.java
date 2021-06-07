@@ -4,12 +4,9 @@ package gameui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileReader;
+import java.io.*;
 
-public class InGameMenuBar extends JFrame {
+public class InGameMenuBar extends JFrame implements Serializable {
 
 
     private JOptionPane warningPane;

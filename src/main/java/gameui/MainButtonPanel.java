@@ -4,8 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
-public class MainButtonPanel extends JPanel {
+public class MainButtonPanel extends JPanel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private JButton newGame;

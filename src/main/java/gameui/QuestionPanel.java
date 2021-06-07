@@ -64,7 +64,7 @@ public class QuestionPanel extends JPanel {
         setVisible(true);
     }
     public boolean isCorrectAnswer() {
-        return mcButtonGroup.getSelection().getActionCommand() == myQuestion.getCorrectAnswer().get();
+        return mcButtonGroup.getSelection().getActionCommand().equals(myQuestion.getCorrectAnswer().get());
     }
 
     public void setPanelQuestion(Question theQuestion) {
@@ -80,6 +80,10 @@ public class QuestionPanel extends JPanel {
 
     }
 
+    public void createBlank() {
+        clearList();
+        myQuestionPane.setText("");
+    }
     private void createSAButtons() {
         clearList();
         myQuestionButtons.setVisible(false);
@@ -90,13 +94,14 @@ public class QuestionPanel extends JPanel {
         clearList();
         myQuestionButtons.setVisible(true);
         myQuestionPane.setText(myQuestion.getPrompt());
+
         for (int i = 0; i <= myQuestion.getIncorrectAnswers().size()-1;i ++) {
             JRadioButton rdBtn = new JRadioButton((myQuestion.getIncorrectAnswers().get(i)).get());
             rdBtn.setActionCommand((myQuestion.getIncorrectAnswers().get(i)).get());
             myAnswers.add(rdBtn);
             mcButtonGroup.add(rdBtn);
         }
-        
+
         JRadioButton cAnswer = new JRadioButton(myQuestion.getCorrectAnswer().get());
         cAnswer.setActionCommand(myQuestion.getCorrectAnswer().get());
         myAnswers.add(cAnswer);
@@ -122,6 +127,7 @@ public class QuestionPanel extends JPanel {
         clearList();
         myQuestionPane.setText(myQuestion.getPrompt());
 
+
         JRadioButton trueButton = new JRadioButton("True");
         mcButtonGroup.add(trueButton);
         trueButton.setActionCommand(trueButton.getText());
@@ -143,6 +149,6 @@ public class QuestionPanel extends JPanel {
             myQuestionButtons.remove(myAnswers.get(i));
         }
         myAnswers.removeAll(myAnswers);
-
     }
+
 }

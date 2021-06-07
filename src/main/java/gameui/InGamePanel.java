@@ -5,7 +5,7 @@ import model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 
 public class InGamePanel extends JPanel {
 
@@ -21,7 +21,7 @@ public class InGamePanel extends JPanel {
     private JButton east;
     private JButton west;
     private JButton submitBtn;
-    private GridBagConstraints gbc;
+
 
 
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
@@ -33,6 +33,7 @@ public class InGamePanel extends JPanel {
         createPanel();
         createMoveButtons();
         checkDoors();
+
         add(myMaze);
         add(myQuestionPanel, BorderLayout.EAST);
         add(moveButtonPanel, BorderLayout.SOUTH);
@@ -45,13 +46,10 @@ public class InGamePanel extends JPanel {
         moveButtonPanel = new JPanel();
         moveButtonPanel.setPreferredSize(new Dimension(500, 30));
 
-
         setLayout(new BorderLayout());
         setLocation(0,0);
         setBackground(Color.BLACK);
         setSize(1000, 700);
-
-
     }
 
     private void createMoveButtons() {
@@ -65,22 +63,21 @@ public class InGamePanel extends JPanel {
         west = new JButton("West");
         west.setPreferredSize(new Dimension(100, 30));
 
+        submitBtn = new JButton("Submit");
+        submitBtn.setPreferredSize(new Dimension(100, 30));
+        submitBtn.addActionListener(SubmitAnswer);
+
         north.addActionListener(MoveNorth);
         south.addActionListener(MoveSouth);
         east.addActionListener(MoveEast);
         west.addActionListener(MoveWest);
-
 
         moveButtonPanel.add(north);
         moveButtonPanel.add(south);
         moveButtonPanel.add(east);
         moveButtonPanel.add(west);
 
-        submitBtn = new JButton("Submit");
-        submitBtn.setPreferredSize(new Dimension(100, 30));
-        submitBtn.addActionListener(SubmitAnswer);
-
-        moveButtonPanel.add(submitBtn, gbc);
+        moveButtonPanel.add(submitBtn);
         moveButtonPanel.revalidate();
     }
 
@@ -104,38 +101,59 @@ public class InGamePanel extends JPanel {
     }
 
     private ActionListener MoveNorth = event -> {
-        if ((myPlayer.getCurrentRoom().getDoor(Direction.NORTH)).get().isLocked()) {
-            myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.NORTH).get().getQuestion());
-            myDirection = Direction.NORTH;
-        } else {
-            myMaze.movePlayer(Direction.NORTH);
-        }
+        myPlayer.getCurrentRoom().getDoor(Direction.NORTH).ifPresent(
+                door -> {
+                    if (door.isLocked()) {
+                        myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        myDirection = Direction.NORTH;
+                    } else {
+                        myQuestionPanel.createBlank();
+                        myMaze.movePlayer(Direction.NORTH);
+                    }
+                }
+        );
     };
 
     private ActionListener MoveSouth = event -> {
-        if ((myPlayer.getCurrentRoom().getDoor(Direction.SOUTH)).get().isLocked()) {
-            myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).get().getQuestion());
-            myDirection = Direction.SOUTH;
-        } else {
-            myMaze.movePlayer(Direction.SOUTH);
-        }
+        myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).ifPresent(
+                door -> {
+                    if (door.isLocked()) {
+                        myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        myDirection = Direction.SOUTH;
+                    } else {
+                        myQuestionPanel.createBlank();
+                        myMaze.movePlayer(Direction.SOUTH);
+                    }
+                }
+        );
     };
 
     private ActionListener MoveEast = event -> {
-        if ((myPlayer.getCurrentRoom().getDoor(Direction.EAST)).get().isLocked()) {
-            myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.EAST).get().getQuestion());
-            myDirection = Direction.EAST;
-        } else {
-            myMaze.movePlayer(Direction.EAST);
-        }
+        myPlayer.getCurrentRoom().getDoor(Direction.EAST).ifPresent(
+                door -> {
+                    if (door.isLocked()) {
+                        myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        myDirection = Direction.EAST;
+                    } else {
+                        myQuestionPanel.createBlank();
+                        myMaze.movePlayer(Direction.EAST);
+                    }
+                }
+        );
     };
+
     private ActionListener MoveWest = event -> {
-        if ((myPlayer.getCurrentRoom().getDoor(Direction.WEST)).get().isLocked()) {
-            myQuestionPanel.setPanelQuestion(myPlayer.getCurrentRoom().getDoor(Direction.WEST).get().getQuestion());
-            myDirection = Direction.WEST;
-        } else {
-            myMaze.movePlayer(Direction.WEST);
-        }
+        myPlayer.getCurrentRoom().getDoor(Direction.WEST).ifPresent(
+                door -> {
+                    if (door.isLocked()) {
+                        myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        myDirection = Direction.WEST;
+                    } else {
+                        myQuestionPanel.createBlank();
+                        myMaze.movePlayer(Direction.WEST);
+                    }
+                }
+        );
     };
 
     private ActionListener SubmitAnswer = event -> {
@@ -144,6 +162,7 @@ public class InGamePanel extends JPanel {
             myMaze.movePlayer(myDirection);
             myRoom = myPlayer.getCurrentRoom();
         }
+        myQuestionPanel.createBlank();
         checkDoors();
         revalidate();
     };

@@ -96,8 +96,6 @@ public class OptionPanel extends JPanel {
     ActionListener StartGame = event -> {
         String cat = catButtonGroup.getSelection().getActionCommand();
         String dif = difButtonGroup.getSelection().getActionCommand();
-        System.out.println(cat);
-        System.out.println(dif);
         Category tempcat = Category.fromName(cat);
         Difficulty tempdif = Difficulty.fromName(dif);
         InGamePanel temp = new InGamePanel(

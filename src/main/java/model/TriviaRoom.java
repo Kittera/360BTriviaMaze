@@ -18,19 +18,19 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    //////////  SWING FIELDS  //////////
 
    //colors
-   private static final Color BG_COLOR = new Color(0x0A0A0A);
-   private static final Color STARTING_ROOM_COLOR = new Color(0x284F3D);
-   private static final Color ENDING_ROOM_COLOR = new Color(0x653131);
-   private static final Color UNEXPLORED_ROOM_COLOR = new Color(0x25004F);
-   private static final Color OPEN_DOOR_COLOR = new Color(0x0B0421);
-   private static final Color WALL_COLOR = new Color(0x3700FF);
-   private static final Color PLAYER_COLOR = new Color(0xB700FF);
+   public static final Color BG_COLOR = new Color(0x0A0A0A);
+   public static final Color STARTING_ROOM_COLOR = new Color(0x284F3D);
+   public static final Color ENDING_ROOM_COLOR = new Color(0x653131);
+   public static final Color UNEXPLORED_ROOM_COLOR = new Color(0x312F3C);
+   public static final Color OPEN_DOOR_COLOR = new Color(0x0B0421);
+   public static final Color WALL_COLOR = new Color(0x3700FF);
+   public static final Color PLAYER_COLOR = new Color(0xB700FF);
 
 
    //dimensions
-   private static final Dimension ROOM_DIMENSION = new Dimension(50, 50);
-   private static final int PLAYER_IND_INSET = 10;
-   private static final int WALL_THICKNESS = 4;
+   public static final Dimension ROOM_DIMENSION = new Dimension(60, 60);
+   public static final int WALL_THICKNESS = 4;
+   private static final int PLAYER_IND_INSET = 15;
    private static final int WALL_LINE_PX = WALL_THICKNESS / 2;
 
    //objects

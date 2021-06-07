@@ -91,5 +91,5 @@ class QuestionFactory {
     }
 
 
-    fun reset() = pickedList.clear()
+    private fun reset() = pickedList.clear()
 }

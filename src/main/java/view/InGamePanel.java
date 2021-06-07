@@ -1,4 +1,4 @@
-package gameui;
+package view;
 
 import model.*;
 
@@ -10,13 +10,14 @@ import java.awt.event.ActionListener;
 
 public class InGamePanel extends JPanel {
 
-    private final static String WRONGANSWER = "Choose another direction.";
     private TriviaMaze myMaze;
     private QuestionPanel myQuestionPanel;
     private MazeRoom myRoom;
     private Player myPlayer;
     private Direction myDirection;
     private int myGuesses;
+
+    private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
 
     private JPanel moveButtonPanel;
     private JButton north;
@@ -28,10 +29,11 @@ public class InGamePanel extends JPanel {
 
 
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
-        myMaze = new TriviaMaze(4, 4, theCategory, theDifficulty);
+        myMaze = new TriviaMaze(5, 8, theCategory, theDifficulty);
         myRoom = myMaze.getRoom(1, 1);
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
+
         createPanel();
         createMoveButtons();
         checkDoors();
@@ -39,35 +41,42 @@ public class InGamePanel extends JPanel {
         add(myMaze);
         add(myQuestionPanel, BorderLayout.EAST);
         add(moveButtonPanel, BorderLayout.SOUTH);
-
     }
-    private void createPanel() {
 
+    private void createPanel() {
         myQuestionPanel = new QuestionPanel();
 
         moveButtonPanel = new JPanel();
-        moveButtonPanel.setPreferredSize(new Dimension(500, 30));
+        moveButtonPanel.setPreferredSize(
+                new Dimension(500, MOVE_BUTTON_PANEL_HEIGHT)
+        );
+
+        final Dimension mazeDims = myMaze.getPreferredSize();
 
         setLayout(new BorderLayout());
         setLocation(0,0);
         setBackground(Color.BLACK);
-        setSize(1000, 700);
+
+        int finalHeight = mazeDims.height + moveButtonPanel.getPreferredSize().height;
+        int finalWidth = mazeDims.width + myQuestionPanel.getPreferredSize().width;
+
+        setPreferredSize(new Dimension(finalWidth, finalHeight));
     }
 
 
    private void createMoveButtons() {
-
+        Dimension buttonSize = new Dimension(100, 30);
         north = new JButton("North");
-        north.setPreferredSize(new Dimension(100, 30));
+        north.setPreferredSize(buttonSize);
         south = new JButton("South");
-        south.setPreferredSize(new Dimension(100, 30));
+        south.setPreferredSize(buttonSize);
         east = new JButton("East");
-        east.setPreferredSize(new Dimension(100, 30));
+        east.setPreferredSize(buttonSize);
         west = new JButton("West");
-        west.setPreferredSize(new Dimension(100, 30));
+        west.setPreferredSize(buttonSize);
 
         submitBtn = new JButton("Submit");
-        submitBtn.setPreferredSize(new Dimension(100, 30));
+        submitBtn.setPreferredSize(buttonSize);
         submitBtn.addActionListener(SubmitAnswer);
 
         north.addActionListener(MoveNorth);
@@ -75,37 +84,30 @@ public class InGamePanel extends JPanel {
         east.addActionListener(MoveEast);
         west.addActionListener(MoveWest);
 
+        moveButtonPanel.add(west);
         moveButtonPanel.add(north);
         moveButtonPanel.add(south);
         moveButtonPanel.add(east);
-        moveButtonPanel.add(west);
-
         moveButtonPanel.add(submitBtn);
+
         moveButtonPanel.revalidate();
     }
 
     private void checkDoors() {
-        submitBtn.setVisible(false);
-
+        submitBtn.setEnabled(false);
 
         if (myRoom.getLocation().equals(myMaze.getEndingRoom().getLocation())) {
-            JOptionPane temp = new JOptionPane();
-            temp.showMessageDialog(null, "You Have Won", "No Answer" , JOptionPane.OK_OPTION);
+            JOptionPane.showMessageDialog(
+                    null,
+                    "You Have Won",
+                    "Victory",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         }
-
-        if (!myPlayer.getCurrentRoom().getDoor(Direction.NORTH).isPresent()) {
-            north.setVisible(false);
-        }
-        if (!myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).isPresent()) {
-            south.setVisible(false);
-        }
-        if (!myPlayer.getCurrentRoom().getDoor(Direction.EAST).isPresent()) {
-            east.setVisible(false);
-        }
-        if (!myPlayer.getCurrentRoom().getDoor(Direction.WEST).isPresent()) {
-            west.setVisible(false);
-        }
-
+        north.setEnabled(myPlayer.getCurrentRoom().getDoor(Direction.NORTH).isPresent());
+        south.setEnabled(myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).isPresent());
+        east.setEnabled(myPlayer.getCurrentRoom().getDoor(Direction.EAST).isPresent());
+        west.setEnabled(myPlayer.getCurrentRoom().getDoor(Direction.WEST).isPresent());
         revalidate();
         repaint();
     }
@@ -117,13 +119,13 @@ public class InGamePanel extends JPanel {
                     if (door.isLocked()) {
                         myQuestionPanel.setPanelQuestion(door.getQuestion());
                         myDirection = theDirection;
-                        submitBtn.setVisible(true);
+                        submitBtn.setEnabled(true);
                     } else {
                         myQuestionPanel.createBlank();
                         myMaze.movePlayer(theDirection);
                         setRoomsVisible(true);
                         checkDoors();
-                        submitBtn.setVisible(false);
+                        submitBtn.setEnabled(false);
                     }
                 }
         );
@@ -133,8 +135,7 @@ public class InGamePanel extends JPanel {
     private final ActionListener MoveEast = event -> handleMove(Direction.EAST);
     private final ActionListener MoveWest = event -> handleMove(Direction.WEST);
 
-
-    private ActionListener SubmitAnswer = event -> {
+    private final ActionListener SubmitAnswer = event -> {
         if (myQuestionPanel.isCorrectAnswer()) {
             myRoom.getDoor(myDirection).get().tryAnswer(myRoom.getDoor(myDirection).get().getQuestion().getCorrectAnswer());
             myMaze.movePlayer(myDirection);
@@ -146,11 +147,12 @@ public class InGamePanel extends JPanel {
         checkDoors();
         revalidate();
     };
+
     private void setRoomsVisible(boolean theFlag) {
-        north.setVisible(theFlag);
-        south.setVisible(theFlag);
-        east.setVisible(theFlag);
-        west.setVisible(theFlag);
+        north.setEnabled(theFlag);
+        south.setEnabled(theFlag);
+        east.setEnabled(theFlag);
+        west.setEnabled(theFlag);
     }
 }
 

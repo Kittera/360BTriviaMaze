@@ -7,13 +7,16 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 
+
 public class InGamePanel extends JPanel {
 
+    private final static String WRONGANSWER = "Choose another direction.";
     private TriviaMaze myMaze;
     private QuestionPanel myQuestionPanel;
     private MazeRoom myRoom;
     private Player myPlayer;
     private Direction myDirection;
+    private int myGuesses;
 
     private JPanel moveButtonPanel;
     private JButton north;
@@ -29,7 +32,6 @@ public class InGamePanel extends JPanel {
         myRoom = myMaze.getRoom(1, 1);
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
-
         createPanel();
         createMoveButtons();
         checkDoors();
@@ -82,88 +84,33 @@ public class InGamePanel extends JPanel {
     }
 
     private void checkDoors() {
-
-//        if (!myRoom.getDoor(Direction.NORTH).isPresent()) {
-//            north.setVisible(false);
-//        }
-//        if (!myRoom.getDoor(Direction.EAST).isPresent()) {
-//            east.setVisible(false);
-//        }
-//        if (!myRoom.getDoor(Direction.SOUTH).isPresent()) {
-//            south.setVisible(false);
-//        }
-//        if (!myRoom.getDoor(Direction.WEST).isPresent()) {
-//            west.setVisible(false);
-//        }
         submitBtn.setVisible(false);
         revalidate();
         repaint();
     }
 
-    private ActionListener MoveNorth = event -> {
-        myPlayer.getCurrentRoom().getDoor(Direction.NORTH).ifPresent(
+
+    private void handleMove(Direction theDirection) {
+        myPlayer.getCurrentRoom().getDoor(theDirection).ifPresent(
                 door -> {
                     if (door.isLocked()) {
                         myQuestionPanel.setPanelQuestion(door.getQuestion());
+                        myDirection = theDirection;
                         submitBtn.setVisible(true);
-                        myDirection = Direction.NORTH;
                     } else {
                         myQuestionPanel.createBlank();
-                        myMaze.movePlayer(Direction.NORTH);
+                        myMaze.movePlayer(theDirection);
                         submitBtn.setVisible(false);
                     }
                 }
         );
+    }
 
-    };
+    private final ActionListener MoveNorth = event -> handleMove(Direction.NORTH);
+    private final ActionListener MoveSouth = event -> handleMove(Direction.SOUTH);
+    private final ActionListener MoveEast = event -> handleMove(Direction.EAST);
+    private final ActionListener MoveWest = event -> handleMove(Direction.WEST);
 
-    private ActionListener MoveSouth = event -> {
-        myPlayer.getCurrentRoom().getDoor(Direction.SOUTH).ifPresent(
-                door -> {
-                    if (door.isLocked()) {
-                        myQuestionPanel.setPanelQuestion(door.getQuestion());
-                        submitBtn.setVisible(true);
-                        myDirection = Direction.SOUTH;
-                    } else {
-                        myQuestionPanel.createBlank();
-                        myMaze.movePlayer(Direction.SOUTH);
-                        submitBtn.setVisible(false);
-                    }
-                }
-        );
-    };
-
-    private ActionListener MoveEast = event -> {
-        myPlayer.getCurrentRoom().getDoor(Direction.EAST).ifPresent(
-                door -> {
-                    if (door.isLocked()) {
-                        myQuestionPanel.setPanelQuestion(door.getQuestion());
-                        submitBtn.setVisible(true);
-                        myDirection = Direction.EAST;
-                    } else {
-                        myQuestionPanel.createBlank();
-                        myMaze.movePlayer(Direction.EAST);
-                        submitBtn.setVisible(false);
-                    }
-                }
-        );
-    };
-
-    private ActionListener MoveWest = event -> {
-        myPlayer.getCurrentRoom().getDoor(Direction.WEST).ifPresent(
-                door -> {
-                    if (door.isLocked()) {
-                        myQuestionPanel.setPanelQuestion(door.getQuestion());
-                        submitBtn.setVisible(true);
-                        myDirection = Direction.WEST;
-                    } else {
-                        myQuestionPanel.createBlank();
-                        myMaze.movePlayer(Direction.WEST);
-                        submitBtn.setVisible(false);
-                    }
-                }
-        );
-    };
 
     private ActionListener SubmitAnswer = event -> {
         if (myQuestionPanel.isCorrectAnswer()) {
@@ -176,3 +123,4 @@ public class InGamePanel extends JPanel {
         revalidate();
     };
 }
+

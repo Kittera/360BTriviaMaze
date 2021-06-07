@@ -1,6 +1,5 @@
 package gameui;
 
-import model.Answer;
 import model.Question;
 import model.QuestionType;
 
@@ -14,6 +13,7 @@ import java.util.Random;
 public class QuestionPanel extends JPanel {
     private final ButtonGroup mcButtonGroup = new ButtonGroup();
 
+    private JOptionPane myPopUp;
 
     private JPanel mainPanel;
 
@@ -63,8 +63,18 @@ public class QuestionPanel extends JPanel {
         setBackground(Color.BLUE);
         setVisible(true);
     }
+
     public boolean isCorrectAnswer() {
-        return mcButtonGroup.getSelection().getActionCommand().equals(myQuestion.getCorrectAnswer().get());
+        boolean temp = false;
+        if (mcButtonGroup.getSelection() != null) {
+            temp = mcButtonGroup.getSelection().getActionCommand().equals(myQuestion.getCorrectAnswer().get());
+        } else {
+            myPopUp.showMessageDialog(null, "Please Choose an answer", "No Answer" , JOptionPane.OK_OPTION);
+        }
+        if (!temp && mcButtonGroup.getSelection() != null) {
+            myPopUp.showMessageDialog(null, "", "Incorrect Answer" , JOptionPane.OK_OPTION);
+        }
+        return temp;
     }
 
     public void setPanelQuestion(Question theQuestion) {
@@ -126,7 +136,6 @@ public class QuestionPanel extends JPanel {
     private void createTFButtons() {
         clearList();
         myQuestionPane.setText(myQuestion.getPrompt());
-
 
         JRadioButton trueButton = new JRadioButton("True");
         mcButtonGroup.add(trueButton);

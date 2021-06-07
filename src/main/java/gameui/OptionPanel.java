@@ -105,6 +105,7 @@ public class OptionPanel extends JPanel {
                 tempcat,
                 tempdif);
         getRootPane().setContentPane(temp);
+
     };
 
     ActionListener Back = event -> {

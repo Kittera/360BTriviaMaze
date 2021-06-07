@@ -8,9 +8,10 @@ import java.awt.event.ActionListener;
 
 
 
-public class InGamePanel extends JPanel {
+public class InGamePanel extends JFrame {
 
     private final static String WRONGANSWER = "Choose another direction.";
+    InGameMenuBar menuBar;
     private TriviaMaze myMaze;
     private QuestionPanel myQuestionPanel;
     private MazeRoom myRoom;
@@ -39,7 +40,36 @@ public class InGamePanel extends JPanel {
         add(myMaze);
         add(myQuestionPanel, BorderLayout.EAST);
         add(moveButtonPanel, BorderLayout.SOUTH);
+        menuBar.setCurrentGame(InGamePanelSave());
+        InGameMenuBar myMenu = new InGameMenuBar();
+        myMenu.setCurrentGame(InGamePanelSave());
+        setJMenuBar(myMenu.getBar());
 
+
+
+    }
+
+    public InGamePanel() {
+
+    }
+
+    public void InGamePanelLoad(Game load){
+        this.myMaze = load.getMyMaze();
+        this.myQuestionPanel = load.getMyQuestionPanel();
+        this.myRoom = load.getMyRoom();
+        this.myPlayer = load.getMyPlayer();
+        this.myDirection = load.getMyDirection();
+
+
+        createPanel();
+        createMoveButtons();
+        checkDoors();
+        add(myMaze);
+        add(myQuestionPanel, BorderLayout.EAST);
+        add(moveButtonPanel, BorderLayout.SOUTH);
+    }
+    public Game InGamePanelSave(){
+        return new Game(myMaze, myQuestionPanel, myRoom, myPlayer, myDirection);
     }
     private void createPanel() {
 
@@ -121,6 +151,8 @@ public class InGamePanel extends JPanel {
         myQuestionPanel.createBlank();
         checkDoors();
         revalidate();
+        menuBar.setCurrentGame(InGamePanelSave());
+        setJMenuBar(menuBar.getBar());
     };
 }
 

@@ -1,5 +1,7 @@
 package gameui;
 
+import model.Game;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -8,7 +10,7 @@ import java.awt.event.WindowEvent;
 
 public class GamePanel extends JFrame {
     private static final long serialVersionUID = 1321L;
-
+    public InGameMenuBar menuBar;
 
     public GamePanel() {
         super("360 Trivia Maze");
@@ -20,6 +22,7 @@ public class GamePanel extends JFrame {
 
         InGameMenuBar myMenu = new InGameMenuBar();
         setJMenuBar(myMenu.getBar());
+        menuBar = myMenu;
 
         pack();
         setLocation(70, 10); //centers the frame to windows screen
@@ -43,6 +46,9 @@ public class GamePanel extends JFrame {
                 }
             }
         });
+    }
+    public void load(Game save){
+
     }
 
     /**

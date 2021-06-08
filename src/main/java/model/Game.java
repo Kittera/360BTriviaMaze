@@ -1,10 +1,14 @@
 package model;
 
+import view.InGameMenuBar;
+import view.InGamePanel;
 import view.QuestionPanel;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Game implements Serializable {
+    @Serial
     private static final long serialVersionUID = 12532321L;
     public Game(TriviaMaze myMaze, QuestionPanel myQuestionPanel, MazeRoom myRoom, Player myPlayer, Direction myDirection) {
         this.myMaze = myMaze;
@@ -39,5 +43,24 @@ public class Game implements Serializable {
     MazeRoom myRoom;
     Player myPlayer;
     Direction myDirection;
+
+    public InGamePanel getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(InGamePanel currentState) {
+        this.currentState = currentState;
+    }
+
+    public InGameMenuBar getBar() {
+        return bar;
+    }
+
+    public void setBar(InGameMenuBar bar) {
+        this.bar = bar;
+    }
+
+    transient InGamePanel currentState;
+    transient InGameMenuBar bar;
 
 }

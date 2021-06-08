@@ -22,6 +22,16 @@ public class InGameMenuBar extends JFrame {
 
     private JOptionPane warningPane;
 
+    public Game getCurrentGame() {
+        return currentGame;
+    }
+
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
+    }
+
+    private Game currentGame;
+
     JMenuBar mainMenu;
     JMenu myFile, myHelp;
     JMenuItem mySaveGame, myLoadGame, myCloseGame, myAbout, myOptions;
@@ -72,8 +82,8 @@ public class InGameMenuBar extends JFrame {
 
     ActionListener SaveGame = event -> {
         //todo save game
-        InGamePanel game = new InGamePanel(Category.MYTHOLOGY, Difficulty.EASY);
-        Game saveFile = game.InGamePanelSave();
+
+        Game saveFile = currentGame;
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Save Game");
         chooser.setCurrentDirectory(new File("/Desktop"));
@@ -85,8 +95,6 @@ public class InGameMenuBar extends JFrame {
                 out.writeObject(saveFile);
                 out.close();
                 file.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }

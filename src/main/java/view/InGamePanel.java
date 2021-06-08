@@ -16,6 +16,7 @@ public class InGamePanel extends JPanel {
     private Player myPlayer;
     private Direction myDirection;
     private int myGuesses;
+    Game currentGame;
 
     private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
 
@@ -25,6 +26,7 @@ public class InGamePanel extends JPanel {
     private JButton east;
     private JButton west;
     private JButton submitBtn;
+    private InGameMenuBar bar;
 
 
 
@@ -46,6 +48,7 @@ public class InGamePanel extends JPanel {
     public InGamePanel() {
 
     }
+
     public Game InGamePanelSave(){
         return new Game(myMaze, myQuestionPanel, myRoom, myPlayer, myDirection);
     }
@@ -63,6 +66,7 @@ public class InGamePanel extends JPanel {
         add(myMaze);
         add(myQuestionPanel, BorderLayout.EAST);
         add(moveButtonPanel, BorderLayout.SOUTH);
+
     }
     private void createPanel() {
         myQuestionPanel = new QuestionPanel();
@@ -167,6 +171,11 @@ public class InGamePanel extends JPanel {
         setRoomsVisible(true);
         checkDoors();
         revalidate();
+        currentGame = InGamePanelSave();
+        bar = new InGameMenuBar();
+        bar.setCurrentGame(currentGame);
+        this.getRootPane().setJMenuBar(bar.getBar());
+
     };
 
     private void setRoomsVisible(boolean theFlag) {

@@ -2,6 +2,7 @@ package view;
 
 import model.Category;
 import model.Difficulty;
+import model.Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +15,16 @@ public class OptionPanel extends JPanel {
 
     private ButtonGroup catButtonGroup = new ButtonGroup();
     private ButtonGroup difButtonGroup = new ButtonGroup();
+
+    public Game getCurrentGame() {
+        return CurrentGame;
+    }
+
+    public void setCurrentGame(Game currentGame) {
+        CurrentGame = currentGame;
+    }
+
+   Game CurrentGame;
 
     public OptionPanel() {
         createPanel();
@@ -108,7 +119,9 @@ public class OptionPanel extends JPanel {
         Difficulty tempDif = Difficulty.fromName(dif);
 
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        getRootPane().setContentPane(new InGamePanel(tempCat, tempDif));
+        InGamePanel game = new InGamePanel(tempCat, tempDif);
+        setCurrentGame(game.InGamePanelSave());
+        getRootPane().setContentPane(game);
         topFrame.pack();
         topFrame.setLocationRelativeTo(null);
     };

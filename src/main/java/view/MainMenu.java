@@ -1,5 +1,7 @@
 package view;
 
+import model.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serial;
@@ -9,7 +11,6 @@ public class MainMenu extends JPanel {
 
     @Serial
     private static final long serialVersionUID = 123215456L;
-
 
     private Image myPic;
 

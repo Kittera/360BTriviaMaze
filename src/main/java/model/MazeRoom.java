@@ -37,9 +37,7 @@ public interface MazeRoom {
     * @return 2D java.awt.Point containing row and col indexes
     */
    Point getLocation();
-
-   EnumMap<Direction, MazeDoor> getDoors();
-
+   
    /**
     * Used for maze generation, this provides information on whether the algorithm has
     * "visited" this room already.

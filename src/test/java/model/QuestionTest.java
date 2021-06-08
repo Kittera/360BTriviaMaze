@@ -37,27 +37,27 @@ class QuestionTest {
    void getAttemptCount() {
       testQuestion.tryAnswer(ans2);
       assertEquals(
-            1,
+            2,
             testQuestion.getAttemptCount(),
-            "First attempt, counter should now be 1"
+            "First attempt, counter should now be 2"
       );
       testQuestion.tryAnswer(ans1);
       assertEquals(
-            2,
+            3,
             testQuestion.getAttemptCount(),
-            "Second attempt, also with correct answer, counter should now be 2"
+            "Second attempt, also with correct answer, counter should now be 3"
       );
       testQuestion.tryAnswer(ans3);
       assertEquals(
-            3,
+            4,
             testQuestion.getAttemptCount(),
-            "Third attempt, counter should now be 3"
+            "Third attempt, counter should now be 4"
       );
    }
    
    @Test
    void getIncorrectAnswers() {
-      List<String> testAnswers = testQuestion.getIncorrectAnswers();
+      List<Answer> testAnswers = testQuestion.getIncorrectAnswers();
       assertNotNull(testAnswers);
       assertFalse(
             testAnswers.contains(testQuestion.getCorrectAnswer()),

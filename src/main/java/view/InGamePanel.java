@@ -43,6 +43,10 @@ public class InGamePanel extends JPanel {
         add(moveButtonPanel, BorderLayout.SOUTH);
     }
 
+    public InGamePanel() {
+
+    }
+
     private void createPanel() {
         myQuestionPanel = new QuestionPanel();
 

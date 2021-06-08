@@ -1,6 +1,9 @@
 package view;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import javax.swing.*;
@@ -13,7 +16,7 @@ import java.util.stream.Stream;
  * This class creates a menu bar for the maze panel.
  */
 
-public class InGameMenuBar extends JFrame {
+public class InGameMenuBar<Game> extends JFrame {
 
 
     private JOptionPane warningPane;
@@ -72,6 +75,29 @@ public class InGameMenuBar extends JFrame {
 
     ActionListener LoadGame = event -> {
         //todo load game
+        InGamePanel loading = new InGamePanel();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("/Desktop"));
+        int returnValue = chooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                File saveFile = chooser.getSelectedFile();
+                FileInputStream file = new FileInputStream(saveFile);
+                ObjectInputStream in = new ObjectInputStream(file);
+                Game state = (Game) in.readObject();
+                loading.InGamePanelLoad(state);
+                GamePanel frame = new GamePanel();
+                frame.load(state);
+                in.close();
+                file.close();
+
+            } catch (IOException ex) {
+                System.out.println("IOException is caught");
+            } catch (ClassNotFoundException ex) {
+                System.out.println("ClassNotFoundException" +
+                        " is caught");
+            }
+        }
     };
 
 

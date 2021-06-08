@@ -101,8 +101,8 @@ public class InGameMenuBar extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            InGamePanel loading = new InGamePanel();
             //todo load game
+            InGamePanel loading = new InGamePanel();
             JFileChooser chooser = new JFileChooser();
             chooser.setCurrentDirectory(new File("/Desktop"));
             int returnValue = chooser.showOpenDialog(null);

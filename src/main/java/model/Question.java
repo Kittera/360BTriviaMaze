@@ -78,7 +78,7 @@ public class Question extends Observable {
       myPrompt = theQuestion;
       myCorrectAnswer = theCorrectAnswer;
       myIncorrectAnswers = theIncorrectAnswers;
-      myAttemptCounter = 0;
+      myAttemptCounter = 1;
       myAnswered = false;
    }
    
@@ -90,7 +90,12 @@ public class Question extends Observable {
    public int getAttemptCount() {
       return myAttemptCounter;
    }
-   
+
+   public int updateAttemptCount(){
+      myAttemptCounter++;
+      notifyObservers(this);
+      return myAttemptCounter;
+   }
    /**
     * Accessor for a list of possible answer choices.
     *
@@ -153,7 +158,7 @@ public class Question extends Observable {
     */
    public boolean tryAnswer(Answer theAnswer) {
       myAttemptCounter++;
-      boolean result = theAnswer == myCorrectAnswer;
+      boolean result = theAnswer.get().equalsIgnoreCase(myCorrectAnswer.get());
       if (result) {
          myAnswered = true;
       }

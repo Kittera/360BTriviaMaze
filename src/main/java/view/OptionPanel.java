@@ -113,5 +113,10 @@ public class OptionPanel extends JPanel {
         topFrame.setLocationRelativeTo(null);
     };
 
-    ActionListener Back = event -> getRootPane().setContentPane(new MainMenu());
+    ActionListener Back = event -> {
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        getRootPane().setContentPane(new MainMenu());
+        topFrame.pack();
+        topFrame.setLocationRelativeTo(null);
+    };
 }

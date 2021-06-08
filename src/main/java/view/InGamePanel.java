@@ -10,12 +10,15 @@ import java.awt.event.ActionListener;
 
 public class InGamePanel extends JPanel {
 
+    private static final int TF_GUESS_LIMIT = 1;
+    private static final int MC_GUESS_LIMIT = 3;
+    private static final int SA_GUESS_LIMIT = 3;
+
     private TriviaMaze myMaze;
     private QuestionPanel myQuestionPanel;
     private MazeRoom myRoom;
     private Player myPlayer;
     private Direction myDirection;
-    private int myGuesses;
 
     private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
 
@@ -34,6 +37,7 @@ public class InGamePanel extends JPanel {
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
 
+//        myFlag = false;
         createPanel();
         createMoveButtons();
         checkDoors();
@@ -95,7 +99,7 @@ public class InGamePanel extends JPanel {
 
     private void checkDoors() {
         submitBtn.setEnabled(false);
-
+        //if (!myMaze.path())
         if (myRoom.getLocation().equals(myMaze.getEndingRoom().getLocation())) {
             JOptionPane.showMessageDialog(
                     null,
@@ -117,8 +121,9 @@ public class InGamePanel extends JPanel {
         myPlayer.getCurrentRoom().getDoor(theDirection).ifPresent(
                 door -> {
                     if (door.isLocked()) {
-                        myQuestionPanel.setPanelQuestion(door.getQuestion());
                         myDirection = theDirection;
+                        checkGuessesRem();
+                        myQuestionPanel.setPanelQuestion(door.getQuestion());
                         submitBtn.setEnabled(true);
                     } else {
                         myQuestionPanel.createBlank();
@@ -136,17 +141,48 @@ public class InGamePanel extends JPanel {
     private final ActionListener MoveWest = event -> handleMove(Direction.WEST);
 
     private final ActionListener SubmitAnswer = event -> {
-        if (myQuestionPanel.isCorrectAnswer()) {
-            myRoom.getDoor(myDirection).get().tryAnswer(myRoom.getDoor(myDirection).get().getQuestion().getCorrectAnswer());
-            myMaze.movePlayer(myDirection);
-            myRoom = myPlayer.getCurrentRoom();
-
+        if (!myQuestionPanel.isCorrectAnswer().get().equalsIgnoreCase("Wrong")) {
+            if (myRoom.getDoor(myDirection).get().tryAnswer(myQuestionPanel.isCorrectAnswer())) {
+                myMaze.movePlayer(myDirection);
+                myRoom = myPlayer.getCurrentRoom();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "The door did not unlock.",
+                        "Incorrect Answer" ,
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
         myQuestionPanel.createBlank();
         setRoomsVisible(true);
         checkDoors();
         revalidate();
     };
+
+    private void checkGuessesRem() {
+        switch (myRoom.getDoor(myDirection).get().getQuestion().getType()) {
+            case TRUE_FALSE -> checkForLoss((TF_GUESS_LIMIT -
+                    myRoom.getDoor(myDirection).get().getQuestion().getAttemptCount()));
+            case MULTI_CHOICE -> checkForLoss((MC_GUESS_LIMIT -
+                    myRoom.getDoor(myDirection).get().getQuestion().getAttemptCount()));
+            case SHORT_ANSWER -> checkForLoss((SA_GUESS_LIMIT -
+                    myRoom.getDoor(myDirection).get().getQuestion().getAttemptCount()));
+        }
+    }
+
+    private void checkForLoss(final int theInt) {
+        if(theInt < 0 ) {
+            JOptionPane.showMessageDialog(null,
+                    "You have ran out of attempts! Game Over!",
+                    "Incorrect Answer" ,
+                    JOptionPane.ERROR_MESSAGE);
+            //getRootPane().removeAll();
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.remove(this);
+            topFrame.setContentPane(new MainMenu());
+            topFrame.pack();
+            topFrame.setLocationRelativeTo(null);
+        }
+    }
 
     private void setRoomsVisible(boolean theFlag) {
         north.setEnabled(theFlag);

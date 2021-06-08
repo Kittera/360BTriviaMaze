@@ -22,6 +22,6 @@ public class Answer {
    }
    
    public boolean equals(Answer other) {
-      return other.get().equals(get());
+      return other.get()== get();
    }
 }

@@ -1,5 +1,6 @@
 package view;
 
+import model.Answer;
 import model.Question;
 
 import javax.swing.*;
@@ -10,6 +11,8 @@ import java.util.Collections;
 import java.util.Random;
 
 public class QuestionPanel extends JPanel {
+
+
     private final ButtonGroup mcButtonGroup = new ButtonGroup();
 
     private final JPanel myQuestionButtons;
@@ -66,20 +69,21 @@ public class QuestionPanel extends JPanel {
      * @return boolean
      */
 
-    public boolean isCorrectAnswer() {
-        boolean temp = false;
+    public Answer isCorrectAnswer() {
+        Answer temp;
         if (mcButtonGroup.getSelection() != null) {
-            temp = mcButtonGroup.getSelection().getActionCommand().equals(myQuestion.getCorrectAnswer().get());
+            temp = new Answer(mcButtonGroup.getSelection().getActionCommand());
         } else {
+            temp = new Answer("Wrong");
             JOptionPane.showMessageDialog(
                     null,
                     "Please Choose an answer",
                     "No Answer",
                     JOptionPane.INFORMATION_MESSAGE);
         }
-        if (!temp && mcButtonGroup.getSelection() != null) {
-            JOptionPane.showMessageDialog(null, "The door did not unlock.", "Incorrect Answer" , JOptionPane.ERROR_MESSAGE);
-        }
+//        if (!temp && mcButtonGroup.getSelection() != null) {
+//            JOptionPane.showMessageDialog(null, "The door did not unlock.", "Incorrect Answer" , JOptionPane.ERROR_MESSAGE);
+//        }
         return temp;
     }
 
@@ -88,6 +92,7 @@ public class QuestionPanel extends JPanel {
      * @param theQuestion question to be displayed
      */
     public void setPanelQuestion(Question theQuestion) {
+
         myShortAnswerPane.setVisible(false);
         myQuestion = theQuestion;
         switch (myQuestion.getType()) {
@@ -95,8 +100,8 @@ public class QuestionPanel extends JPanel {
             case MULTI_CHOICE -> createMCButtons();
             case SHORT_ANSWER -> createSAButtons();
         }
-
     }
+
 
     /**
      * creates a blank panel
@@ -160,6 +165,21 @@ public class QuestionPanel extends JPanel {
         myQuestionButtons.add(falseButton, BorderLayout.SOUTH);
         myAnswers.add(falseButton);
         add(myQuestionButtons, BorderLayout.SOUTH);
+    }
+
+//        private void checkGuessesRem(Question theQuestion) {
+//        switch (theQuestion.getType()) {
+//            case TRUE_FALSE -> checkForLoss((TF_GUESS_LIMIT - theQuestion.getAttemptCount()));
+//            case MULTI_CHOICE -> checkForLoss(MC_GUESS_LIMIT - theQuestion.getAttemptCount());
+//            case SHORT_ANSWER -> checkForLoss(SA_GUESS_LIMIT - theQuestion.getAttemptCount());
+//        }
+//    }
+
+        private void checkForLoss(final int theInt) {
+        if(theInt < 0 ) {
+            System.out.println("You Lose!");
+        }
+
     }
 
     private void clearList() {

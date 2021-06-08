@@ -1,12 +1,13 @@
-package gameui;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serial;
 
 
+public class MainMenu extends JPanel {
 
-public class MainMenu extends JPanel{
-
+    @Serial
     private static final long serialVersionUID = 123215456L;
 
 
@@ -20,8 +21,14 @@ public class MainMenu extends JPanel{
     private void buildMyMenu() {
         setLayout(new BorderLayout(10,10));
 
-        setSize(800, 740);
         myPic = new ImageIcon("src/main/resources/MyPost.png").getImage();
+
+        setPreferredSize(
+                new Dimension(
+                        myPic.getWidth(null),
+                        myPic.getHeight(null)
+                )
+        );
         add(new MainButtonPanel(), BorderLayout.SOUTH);
         setVisible(true);
     }
@@ -31,6 +38,4 @@ public class MainMenu extends JPanel{
         super.paintComponent(g);
         g.drawImage(myPic, 0, 0, null);
     }
-
-
 }

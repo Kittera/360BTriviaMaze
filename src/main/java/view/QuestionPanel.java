@@ -1,8 +1,6 @@
-package gameui;
+package view;
 
-import model.Answer;
 import model.Question;
-import model.QuestionType;
 
 import javax.swing.*;
 
@@ -14,31 +12,29 @@ import java.util.Random;
 public class QuestionPanel extends JPanel {
     private final ButtonGroup mcButtonGroup = new ButtonGroup();
 
-    private JOptionPane myPopUp;
+    private final JPanel myQuestionButtons;
 
-    private JPanel mainPanel;
-
-    private JPanel myQuestionButtons;
+    public static final int QUESTION_PANEL_WIDTH = 300;
 
     private Question myQuestion;
 
-    private JTextPane myQuestionPane;
+    private final JTextPane myQuestionPane;
 
-    private ArrayList<JRadioButton> myAnswers;
+    private final ArrayList<JRadioButton> myAnswers;
 
-    private JTextPane myShortAnswerPane;
+    private final JTextPane myShortAnswerPane;
 
     public QuestionPanel() {
 
         //initialize fields
-        myAnswers = new ArrayList();
-        mainPanel = new JPanel();
+        myAnswers = new ArrayList<>();
+        JPanel mainPanel = new JPanel();
 
         // set Layouts
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
         setLayout(new BorderLayout());
 
-        setPreferredSize(new Dimension(300, 700));
+        setPreferredSize(new Dimension(QUESTION_PANEL_WIDTH, 700));
 
         myQuestionPane = new JTextPane();
         myQuestionPane.setPreferredSize(new Dimension(300, 100));
@@ -75,48 +71,29 @@ public class QuestionPanel extends JPanel {
         if (mcButtonGroup.getSelection() != null) {
             temp = mcButtonGroup.getSelection().getActionCommand().equals(myQuestion.getCorrectAnswer().get());
         } else {
-            myPopUp.showMessageDialog(null, "Please Choose an answer", "No Answer" , JOptionPane.OK_OPTION);
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Please Choose an answer",
+                    "No Answer",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
         if (!temp && mcButtonGroup.getSelection() != null) {
-            myPopUp.showMessageDialog(null, "", "Incorrect Answer" , JOptionPane.OK_OPTION);
+            JOptionPane.showMessageDialog(null, "The door did not unlock.", "Incorrect Answer" , JOptionPane.ERROR_MESSAGE);
         }
         return temp;
     }
 
-
-//    public boolean isCorrectAnswer() {
-//        Answer temp;
-//        boolean myAnswer = false;
-//        if (mcButtonGroup.getSelection() != null) {
-//            System.out.println("we got here");
-//            temp = new Answer(mcButtonGroup.getSelection().getActionCommand());
-//        } else {
-//            temp = new Answer("Wrong");
-//            myPopUp.showMessageDialog(null, "Please Choose an answer", "No Answer" , JOptionPane.OK_OPTION);
-//        }
-//        System.out.println(temp.get());
-//        System.out.println(myQuestion.getCorrectAnswer().get());
-//        System.out.println(myAnswer);
-//        myAnswer = myQuestion.tryAnswer(temp);
-//        if (!myAnswer && mcButtonGroup.getSelection() != null) {
-//            myPopUp.showMessageDialog(null, "", "Incorrect Answer" , JOptionPane.OK_OPTION);
-//        }
-//        return myAnswer;
-//    }
-
     /**
      * Takes in a question and creates the buttons based off question Type
-     * @param theQuestion
+     * @param theQuestion question to be displayed
      */
     public void setPanelQuestion(Question theQuestion) {
         myShortAnswerPane.setVisible(false);
         myQuestion = theQuestion;
-        if (myQuestion.getType() == QuestionType.TRUE_FALSE) {
-            createTFButtons();
-        } else if (myQuestion.getType() == QuestionType.MULTI_CHOICE) {
-            createMCButtons();
-        } else if (myQuestion.getType() == QuestionType.SHORT_ANSWER) {
-            createSAButtons();
+        switch (myQuestion.getType()) {
+            case TRUE_FALSE -> createTFButtons();
+            case MULTI_CHOICE -> createMCButtons();
+            case SHORT_ANSWER -> createSAButtons();
         }
 
     }
@@ -186,12 +163,12 @@ public class QuestionPanel extends JPanel {
     }
 
     private void clearList() {
-        for (int i = 0;i <= myAnswers.size()-1;i++){
-            mcButtonGroup.remove(myAnswers.get(i));
-            myAnswers.get(i).setVisible(false);
-            myQuestionButtons.remove(myAnswers.get(i));
+        for (JRadioButton answer : myAnswers) {
+            mcButtonGroup.remove(answer);
+            answer.setVisible(false);
+            myQuestionButtons.remove(answer);
         }
-        myAnswers.removeAll(myAnswers);
+        myAnswers.clear();
     }
 
 }

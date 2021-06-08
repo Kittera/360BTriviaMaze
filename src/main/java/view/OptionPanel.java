@@ -1,9 +1,10 @@
-package gameui;
+package view;
 
 import model.Category;
 import model.Difficulty;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
@@ -20,7 +21,7 @@ public class OptionPanel extends JPanel {
 
     private void createPanel() {
         setLayout(null);
-        setSize(1000, 740);
+        setPreferredSize(new Dimension(800, 500));
         createLabels();
         createButtons();
         setVisible(true);
@@ -56,6 +57,9 @@ public class OptionPanel extends JPanel {
         int count = 0;
         for (Category c : Category.values()) {
             JCheckBox catButton = new JCheckBox(c.title);
+            if (catButton.getText().equals("All Categories")) {
+                catButton.setSelected(true);
+            }
             catButton.setActionCommand( String.valueOf(c.title));
             catButton.setBounds(
                     categoryListX,
@@ -70,12 +74,12 @@ public class OptionPanel extends JPanel {
 
 
         JButton startGame = new JButton("Start Game");
-        startGame.setBounds(600, 620, 100, 25);
+        startGame.setBounds(600, 420, 100, 25);
         startGame.addActionListener(StartGame);
         add(startGame);
 
         JButton mainMenu = new JButton("Back");
-        mainMenu.setBounds(100, 620, 100, 25);
+        mainMenu.setBounds(100, 420, 100, 25);
         mainMenu.addActionListener(Back);
         add(mainMenu);
         revalidate();
@@ -100,15 +104,14 @@ public class OptionPanel extends JPanel {
         String cat = catButtonGroup.getSelection().getActionCommand();
         String dif = difButtonGroup.getSelection().getActionCommand();
         System.out.println(cat);
-        Category tempcat = Category.fromName(cat);
-        Difficulty tempdif = Difficulty.fromName(dif);
-        InGamePanel temp = new InGamePanel(
-                tempcat,
-                tempdif);
-        getRootPane().setContentPane(temp);
+        Category tempCat = Category.fromName(cat);
+        Difficulty tempDif = Difficulty.fromName(dif);
+
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        getRootPane().setContentPane(new InGamePanel(tempCat, tempDif));
+        topFrame.pack();
+        topFrame.setLocationRelativeTo(null);
     };
 
-    ActionListener Back = event -> {
-        getRootPane().setContentPane(new MainMenu());
-    };
+    ActionListener Back = event -> getRootPane().setContentPane(new MainMenu());
 }

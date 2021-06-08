@@ -28,7 +28,6 @@ public class TriviaMaze extends JPanel implements Maze {
     * Largest value that can be assigned to any dimensions of the maze.
     */
    public static final int MAX_DIM = 30;
-   private static final int ROOM_SIZE = 50;
    
    private int myRows;
    private int myCols;
@@ -182,10 +181,11 @@ public class TriviaMaze extends JPanel implements Maze {
             myGridPanel.add(newRoom);
             if (row == 1 && col == 1) {
                newRoom.setStartingRoom();
+               System.out.println("Starting Room.");
             } else if (row == myRows && col == myCols) {
                endingRoom = newRoom;
                endingRoom.setEndingRoom();
-
+               System.out.println("Ending Room.");
             }
          }
       }
@@ -253,6 +253,7 @@ public class TriviaMaze extends JPanel implements Maze {
             mazeStack.push(chosenRoom);
          }
       }
+      System.out.println("Doors.");
    }
    
    private List<MazeRoom> findUnexploredNeighbors(
@@ -312,7 +313,8 @@ public class TriviaMaze extends JPanel implements Maze {
    private void initSwingGraphics() {
       setLayout(new BorderLayout());
       setBackground(Color.BLACK);
-      setPreferredSize(new Dimension(ROOM_SIZE * myCols, ROOM_SIZE * myRows));
+      Dimension roomSize = TriviaRoom.ROOM_DIMENSION;
+      setPreferredSize(new Dimension(roomSize.width * myCols, roomSize.height * myRows));
       add(myGridPanel, BorderLayout.CENTER);
       revalidate();
    }

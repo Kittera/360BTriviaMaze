@@ -1,4 +1,4 @@
-package gameui;
+package view;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -66,42 +66,26 @@ public class InGameMenuBar extends JFrame {
         return mainMenu;
     }
 
-    ActionListener SaveGame = new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            //todo save game
-        }
+    ActionListener SaveGame = event -> {
+        //todo save game
     };
 
-    ActionListener LoadGame = new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            //todo load game
-        }
+    ActionListener LoadGame = event -> {
+        //todo load game
     };
 
 
-    ActionListener ExitGame = new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            String closeMessage = "Warning: Any game data not saved will be lost on exit.";
-            int reply = warningPane.showConfirmDialog(null, closeMessage,
-                    "warning", JOptionPane.YES_NO_OPTION );
-            if(reply == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            } else {
-
-            }
+    ActionListener ExitGame = event -> {
+        String closeMessage = "Warning: Any game data not saved will be lost on exit.";
+        int reply = JOptionPane.showConfirmDialog(null, closeMessage,
+                "warning", JOptionPane.YES_NO_OPTION );
+        if(reply == JOptionPane.YES_OPTION) {
+            System.exit(0);
         }
     };
 
     private final ActionListener OptionsMenu = event -> handleMessage("src/main/resources/GameInstructions");
     private final ActionListener AboutGame = event -> handleMessage("src/main/resources/About");
-
-
 
     private void handleMessage(String thePath) {
 
@@ -112,7 +96,7 @@ public class InGameMenuBar extends JFrame {
         } catch (IOException e){
             e.printStackTrace();
         }
-        warningPane.showMessageDialog(null, messageString.toString(),
+        JOptionPane.showMessageDialog(null, messageString.toString(),
                 "This", JOptionPane.INFORMATION_MESSAGE );
     }
 

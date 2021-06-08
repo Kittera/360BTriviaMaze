@@ -53,7 +53,9 @@ public class GamePanel extends JFrame {
      */
     public static void main(final String[] theArgs) {
         EventQueue.invokeLater(() -> {
+            ImageIcon img = new ImageIcon("src/main/resources/PanelIcon.png");
             final GamePanel frame = new GamePanel();
+            frame.setIconImage(img.getImage());
             frame.start();
         });
     }

@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 
-
 public class InGamePanel extends JPanel {
 
     private static final int TF_GUESS_LIMIT = 1;
@@ -20,6 +19,7 @@ public class InGamePanel extends JPanel {
     private Player myPlayer;
     private Direction myDirection;
 
+    private int myGuesses;
     private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
 
     private JPanel moveButtonPanel;
@@ -36,8 +36,7 @@ public class InGamePanel extends JPanel {
         myRoom = myMaze.getRoom(1, 1);
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
-
-//        myFlag = false;
+        myGuesses = 0;
         createPanel();
         createMoveButtons();
         checkDoors();
@@ -147,7 +146,7 @@ public class InGamePanel extends JPanel {
                 myRoom = myPlayer.getCurrentRoom();
             } else {
                 JOptionPane.showMessageDialog(null,
-                        "The door did not unlock.",
+                        "The door did not unlock. Guesses Remaining: " + myGuesses,
                         "Incorrect Answer" ,
                         JOptionPane.ERROR_MESSAGE);
             }
@@ -160,16 +159,32 @@ public class InGamePanel extends JPanel {
 
     private void checkGuessesRem() {
         switch (myRoom.getDoor(myDirection).get().getQuestion().getType()) {
-            case TRUE_FALSE -> checkForLoss((TF_GUESS_LIMIT -
-                    myRoom.getDoor(myDirection).get().getQuestion().getAttemptCount()));
-            case MULTI_CHOICE -> checkForLoss((MC_GUESS_LIMIT -
-                    myRoom.getDoor(myDirection).get().getQuestion().getAttemptCount()));
-            case SHORT_ANSWER -> checkForLoss((SA_GUESS_LIMIT -
-                    myRoom.getDoor(myDirection).get().getQuestion().getAttemptCount()));
+            case TRUE_FALSE -> {
+                checkForLoss((TF_GUESS_LIMIT -
+                        myRoom.getDoor(myDirection)
+                                .get()
+                                .getQuestion()
+                                .getAttemptCount()));
+            }
+            case MULTI_CHOICE -> {
+                checkForLoss((MC_GUESS_LIMIT -
+                        myRoom.getDoor(myDirection)
+                                .get()
+                                .getQuestion()
+                                .getAttemptCount()));
+            }
+            case SHORT_ANSWER -> {
+                checkForLoss((SA_GUESS_LIMIT -
+                        myRoom.getDoor(myDirection)
+                                .get()
+                                .getQuestion()
+                                .getAttemptCount()));
+            }
         }
     }
 
     private void checkForLoss(final int theInt) {
+        myGuesses = theInt;
         if(theInt < 0 ) {
             JOptionPane.showMessageDialog(null,
                     "You have ran out of attempts! Game Over!",
@@ -177,7 +192,9 @@ public class InGamePanel extends JPanel {
                     JOptionPane.ERROR_MESSAGE);
             //getRootPane().removeAll();
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            topFrame.remove(this);
+            remove(myMaze);
+            //topFrame.remove(this);
+
             topFrame.setContentPane(new MainMenu());
             topFrame.pack();
             topFrame.setLocationRelativeTo(null);

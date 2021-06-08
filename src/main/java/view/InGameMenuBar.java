@@ -1,9 +1,10 @@
 package view;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import model.Category;
+import model.Difficulty;
+import model.Game;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import javax.swing.*;
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
  * This class creates a menu bar for the maze panel.
  */
 
-public class InGameMenuBar<Game> extends JFrame {
+public class InGameMenuBar extends JFrame {
 
 
     private JOptionPane warningPane;
@@ -71,6 +72,25 @@ public class InGameMenuBar<Game> extends JFrame {
 
     ActionListener SaveGame = event -> {
         //todo save game
+        InGamePanel game = new InGamePanel(Category.MYTHOLOGY, Difficulty.EASY);
+        Game saveFile = game.InGamePanelSave();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Save Game");
+        chooser.setCurrentDirectory(new File("/Desktop"));
+        int user = chooser.showSaveDialog(null);
+        if(user == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileOutputStream file = new FileOutputStream(chooser.getSelectedFile() + ".ser");
+                ObjectOutputStream out = new ObjectOutputStream(file);
+                out.writeObject(saveFile);
+                out.close();
+                file.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     };
 
     ActionListener LoadGame = event -> {

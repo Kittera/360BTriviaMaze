@@ -46,7 +46,24 @@ public class InGamePanel extends JPanel {
     public InGamePanel() {
 
     }
+    public Game InGamePanelSave(){
+        return new Game(myMaze, myQuestionPanel, myRoom, myPlayer, myDirection);
+    }
+    public void InGamePanelLoad(Game load){
+        this.myMaze = load.getMyMaze();
+        this.myQuestionPanel = load.getMyQuestionPanel();
+        this.myRoom = load.getMyRoom();
+        this.myPlayer = load.getMyPlayer();
+        this.myDirection = load.getMyDirection();
 
+
+        createPanel();
+        createMoveButtons();
+        checkDoors();
+        add(myMaze);
+        add(myQuestionPanel, BorderLayout.EAST);
+        add(moveButtonPanel, BorderLayout.SOUTH);
+    }
     private void createPanel() {
         myQuestionPanel = new QuestionPanel();
 

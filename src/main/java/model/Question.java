@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Observable;
 
@@ -11,7 +12,7 @@ import java.util.Observable;
  * @version 2021.05.26.03.36
  */
 @SuppressWarnings("deprecation")
-public class Question extends Observable {
+public class Question extends Observable implements Serializable{
    
    /**
     * Enumerated question category.

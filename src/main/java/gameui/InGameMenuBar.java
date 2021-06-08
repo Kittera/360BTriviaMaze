@@ -1,6 +1,8 @@
 package gameui;
 
 
+import model.Category;
+import model.Difficulty;
 import model.Game;
 
 import javax.swing.*;
@@ -72,26 +74,26 @@ public class InGameMenuBar extends JPanel {
         @Override
         public void actionPerformed(ActionEvent event) {
             //todo save game
-            String filename = "file.ser";
-            try {
-                FileOutputStream file = new FileOutputStream(filename);
-                ObjectOutputStream out = new ObjectOutputStream(file);
-                out.writeObject(currentGame);
-                out.close();
-                file.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            //temp save file need to find way to grab current game
+            InGamePanel game = new InGamePanel(Category.MYTHOLOGY, Difficulty.EASY);
+            Game saveFile = game.InGamePanelSave();
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Save Game");
+            chooser.setCurrentDirectory(new File("/Desktop"));
+            int user = chooser.showSaveDialog(null);
+            if(user == JFileChooser.APPROVE_OPTION) {
+                try {
+                    FileOutputStream file = new FileOutputStream(chooser.getSelectedFile() + ".ser");
+                    ObjectOutputStream out = new ObjectOutputStream(file);
+                    out.writeObject(saveFile);
+                    out.close();
+                    file.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            ///JFileChooser fs = new JFileChooser((new File("360BTriviaMaze\saveFiles")));
-            ///fs.setDialogTitle("Save Game");
-            //fs.setFileFilter((new FileFilter(".txt", "Text File")));
-            ///int result = fs.showSaveDialog(null);
-            ///if(result == JFileChooser.APPROVE_OPTION){
-                //String content = textContent.getText
-
-            ///}
         }
     };
 
@@ -101,39 +103,27 @@ public class InGameMenuBar extends JPanel {
         public void actionPerformed(ActionEvent event) {
             InGamePanel loading = new InGamePanel();
             //todo load game
-            ///JFileChooser fs = new JFileChooser(new File("\360BTriviaMaze"));
-            ///fs.setDialogTitle("Load Game");
-            ///int result = fs.showOpenDialog((null));
-            ///if (result == JFileChooser.APPROVE_OPTION) {
-               /// try{ File file = fs.getSelectedFile();
-                  ///  BufferedReader bRead = new BufferedReader(new FileReader(file.getPath()));
-                   /// String space = "";
-                    ///String space2 = "";
-                    ///while ((space2 = bRead.readLine()) != null) {
-                      ///  space += space2;
-                    ///}
-                    ///if (bRead != null) bRead.close();
-                ///} catch (Exception e2) {
-                   /// JOptionPane.showMessageDialog(null, e2.getMessage());
-               /// }
-            ///}
-            try {
-                FileInputStream file = new FileInputStream("file.ser");
-                ObjectInputStream in = new ObjectInputStream(file);
-                Game state = (Game) in.readObject();
-                loading.InGamePanelLoad(state);
-                GamePanel frame = new GamePanel();
-                frame.load(state);
-                in.close();
-                file.close();
+            JFileChooser chooser = new JFileChooser();
+            chooser.setCurrentDirectory(new File("/Desktop"));
+            int returnValue = chooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File saveFile = chooser.getSelectedFile();
+                    FileInputStream file = new FileInputStream(saveFile);
+                    ObjectInputStream in = new ObjectInputStream(file);
+                    Game state = (Game) in.readObject();
+                    loading.InGamePanelLoad(state);
+                    GamePanel frame = new GamePanel();
+                    frame.load(state);
+                    in.close();
+                    file.close();
 
-            }
-            catch (IOException ex) {
-                System.out.println("IOException is caught");
-            }
-            catch (ClassNotFoundException ex) {
-                System.out.println("ClassNotFoundException" +
-                        " is caught");
+                } catch (IOException ex) {
+                    System.out.println("IOException is caught");
+                } catch (ClassNotFoundException ex) {
+                    System.out.println("ClassNotFoundException" +
+                            " is caught");
+                }
             }
         }
     };

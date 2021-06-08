@@ -40,9 +40,15 @@ public class InGamePanel extends JPanel {
         add(myMaze);
         add(myQuestionPanel, BorderLayout.EAST);
         add(moveButtonPanel, BorderLayout.SOUTH);
-        menuBar.setCurrentGame(InGamePanelSave());
-        InGameMenuBar myMenu = new InGameMenuBar();
-        myMenu.setCurrentGame(InGamePanelSave());
+
+
+        Game state = InGamePanelSave();
+        InGameMenuBar replace = new InGameMenuBar();
+        replace.setCurrentGame(state);
+        menuBar = replace;
+
+        //InGameMenuBar myMenu = new InGameMenuBar();
+        //myMenu.setCurrentGame(InGamePanelSave());
         //setJMenuBar(myMenu.getBar());
 
 

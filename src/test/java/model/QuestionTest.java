@@ -57,7 +57,7 @@ class QuestionTest {
    
    @Test
    void getIncorrectAnswers() {
-      List<String> testAnswers = testQuestion.getIncorrectAnswers();
+      List<Answer> testAnswers = testQuestion.getIncorrectAnswers();
       assertNotNull(testAnswers);
       assertFalse(
             testAnswers.contains(testQuestion.getCorrectAnswer()),

@@ -13,7 +13,12 @@ public class MockRoom implements MazeRoom {
    public Point getLocation() {
       return null;
    }
-   
+
+   @Override
+   public EnumMap<Direction, MazeDoor> getDoors() {
+      return null;
+   }
+
    @Override
    public boolean isVisited() {
       return false;

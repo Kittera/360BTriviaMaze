@@ -32,7 +32,7 @@ public class InGamePanel extends JPanel {
     private Player myPlayer;
     private Direction myDirection;
     private InGameMenuBar bar;
-    Game currentGame;
+    private Game currentGame;
 
     private int myGuesses;
     private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
@@ -242,7 +242,6 @@ public class InGamePanel extends JPanel {
             }
         }
     }
-
     private void checkForLoss(final int theInt) {
         myGuesses = theInt;
         if(theInt < 0 ) {
@@ -254,7 +253,6 @@ public class InGamePanel extends JPanel {
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             remove(myMaze);
             //topFrame.remove(this);
-
             topFrame.setContentPane(new MainMenu());
             topFrame.pack();
             topFrame.setLocationRelativeTo(null);

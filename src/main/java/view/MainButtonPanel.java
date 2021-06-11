@@ -24,7 +24,8 @@ public class MainButtonPanel extends JPanel {
             };
 
     private final ActionListener LoadGame = event -> {
-        //todo load function for serialization
+        //load function for serialization
+        JFrame topFrame = (JFrame) SwingUtilities.windowForComponent(this);
         InGamePanel loading = new InGamePanel();
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("/Desktop"));
@@ -40,6 +41,7 @@ public class MainButtonPanel extends JPanel {
                 frame.load(state);
                 in.close();
                 file.close();
+                topFrame.dispose();
 
             } catch (IOException ex) {
                 System.out.println("IOException is caught");

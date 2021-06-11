@@ -2,6 +2,8 @@ package view;
 
 import model.Game;
 
+import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -61,8 +63,10 @@ public class InGameMenuBar extends JFrame {
         }
     };
 
+
     ActionListener LoadGame = event -> {
         //todo load game
+
         InGamePanel loading = new InGamePanel();
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("/Desktop"));
@@ -78,6 +82,7 @@ public class InGameMenuBar extends JFrame {
                 frame.load(state);
                 in.close();
                 file.close();
+
 
             } catch (IOException ex) {
                 System.out.println("IOException is caught");

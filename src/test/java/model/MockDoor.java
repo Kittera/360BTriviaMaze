@@ -35,10 +35,7 @@ public class MockDoor implements MazeDoor {
    public void linkOtherSide(MazeDoor theDoor) {
    
    }
-   @Override
-   public void setJammed(boolean theBoolean){
 
-   }
 
    @Override
    public void twinUnlocked(MazeDoor theCaller) {

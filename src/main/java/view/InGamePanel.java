@@ -31,6 +31,8 @@ public class InGamePanel extends JPanel {
     private MazeRoom myRoom;
     private Player myPlayer;
     private Direction myDirection;
+    private InGameMenuBar bar;
+    private Game currentGame;
 
     private int myGuesses;
     private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
@@ -186,8 +188,35 @@ public class InGamePanel extends JPanel {
         setRoomsVisible(true);
         checkDoors();
         revalidate();
+        currentGame = InGamePanelSave();
+        bar = new InGameMenuBar();
+        bar.setCurrentGame(currentGame);
+        this.getRootPane().setJMenuBar(bar.getBar());
     };
 
+
+    public InGamePanel() {
+
+    }
+    public Game InGamePanelSave(){
+        return new Game(myMaze, myQuestionPanel, myRoom, myPlayer, myDirection, myGuesses);
+    }
+    public void InGamePanelLoad(Game load){
+        this.myMaze = load.getMyMaze();
+        this.myQuestionPanel = load.getMyQuestionPanel();
+        this.myRoom = load.getMyRoom();
+        this.myPlayer = load.getMyPlayer();
+        this.myDirection = load.getMyDirection();
+        this.myGuesses = load.getMyGuesses();
+
+        createPanel();
+        createMoveButtons();
+        checkDoors();
+        add(myMaze);
+        add(myQuestionPanel, BorderLayout.EAST);
+        add(moveButtonPanel, BorderLayout.SOUTH);
+
+    }
     private void checkGuessesRem() {
         switch (myRoom.getDoor(myDirection).get().getQuestion().getType()) {
             case TRUE_FALSE -> {
@@ -213,7 +242,6 @@ public class InGamePanel extends JPanel {
             }
         }
     }
-
     private void checkForLoss(final int theInt) {
         myGuesses = theInt;
         if(theInt < 0 ) {
@@ -225,7 +253,6 @@ public class InGamePanel extends JPanel {
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             remove(myMaze);
             //topFrame.remove(this);
-
             topFrame.setContentPane(new MainMenu());
             topFrame.pack();
             topFrame.setLocationRelativeTo(null);

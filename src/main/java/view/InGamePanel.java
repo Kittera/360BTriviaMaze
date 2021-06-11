@@ -31,6 +31,7 @@ public class InGamePanel extends JPanel {
     private MazeRoom myRoom;
     private Player myPlayer;
     private Direction myDirection;
+    private InGameMenuBar bar;
 
     private int myGuesses;
     private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;

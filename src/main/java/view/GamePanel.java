@@ -1,5 +1,7 @@
 package view;
 
+import model.Game;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -52,6 +54,15 @@ public class GamePanel extends JFrame {
                 }
             }
         });
+    }
+    public void load(Game save){
+        InGamePanel resume = new InGamePanel();
+        resume.InGamePanelLoad(save);
+        getRootPane().setContentPane(resume);
+        pack();
+        setResizable(true);
+        setVisible(true);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     /**

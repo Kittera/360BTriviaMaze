@@ -71,7 +71,7 @@ public class TriviaDoor implements MazeDoor {
       return roomBehindMe;
    }
 
-   @Override
+
    public void setJammed(boolean theBoolean) {
       isJammed = true;
    }

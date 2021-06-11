@@ -80,10 +80,6 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       return Optional.ofNullable(myDoors.get(theDirection));
    }
 
-   public EnumMap<Direction, MazeDoor> getDoors() {
-      return myDoors;
-   }
-
    @Override
    public Point getLocation() {
       return new Point(myColLocation, myRowLocation);
@@ -114,6 +110,8 @@ public class TriviaRoom extends JPanel implements MazeRoom {
       repaint();
    }
 
+   //////////////////  SWING CODE  //////////////////
+
    void setStartingRoom() {
       setBackground(STARTING_ROOM_COLOR);
    }
@@ -121,9 +119,7 @@ public class TriviaRoom extends JPanel implements MazeRoom {
    void setEndingRoom() {
       setBackground(ENDING_ROOM_COLOR);
    }
-   
-   //////////////////  SWING CODE  //////////////////
-   
+
    private void initSwingGraphics() {
       setLayout(new BorderLayout());
       setBackground(BG_COLOR);

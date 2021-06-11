@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Represents an Answer to be used by
  */
-public class Answer {
+public class Answer implements Serializable {
    /**
     * The Answer's content.
     */

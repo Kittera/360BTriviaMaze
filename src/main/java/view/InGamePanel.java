@@ -32,6 +32,7 @@ public class InGamePanel extends JPanel {
     private Player myPlayer;
     private Direction myDirection;
     private InGameMenuBar bar;
+    Game currentGame;
 
     private int myGuesses;
     private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
@@ -187,8 +188,12 @@ public class InGamePanel extends JPanel {
         setRoomsVisible(true);
         checkDoors();
         revalidate();
+        currentGame = InGamePanelSave();
+        bar = new InGameMenuBar();
+        bar.setCurrentGame(currentGame);
+        this.getRootPane().setJMenuBar(bar.getBar());
     };
-    Game currentGame;
+
 
     public InGamePanel() {
 

@@ -72,9 +72,6 @@ public class TriviaDoor implements MazeDoor {
    }
 
 
-   public void setJammed(boolean theBoolean) {
-      isJammed = true;
-   }
    
    @Override
    public boolean tryAnswer(Answer theAnswer) {

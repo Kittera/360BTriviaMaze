@@ -3,11 +3,12 @@ package model;
 import controller.MazePlayer;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Optional;
 
-public interface MazeRoom {
+public interface MazeRoom extends Serializable {
    
    /**
     * Minimum of one door allows dead ends

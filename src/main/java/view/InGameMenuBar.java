@@ -1,6 +1,8 @@
 package view;
 
-import java.io.IOException;
+import model.Game;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import javax.swing.*;
@@ -21,7 +23,10 @@ public class InGameMenuBar extends JFrame {
     JMenu myFile, myHelp;
     JMenuItem mySaveGame, myLoadGame, myCloseGame, myAbout, myOptions;
 
-
+    private Game currentGame;
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
+    }
     public InGameMenuBar() {
         buildMenu();
     }
@@ -38,10 +43,49 @@ public class InGameMenuBar extends JFrame {
 
     ActionListener SaveGame = event -> {
         //todo save game
+        Game saveFile = currentGame;
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Save Game");
+        chooser.setCurrentDirectory(new File("/Desktop"));
+        int user = chooser.showSaveDialog(null);
+        if(user == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileOutputStream file = new FileOutputStream(chooser.getSelectedFile() + ".ser");
+                ObjectOutputStream out = new ObjectOutputStream(file);
+                out.writeObject(saveFile);
+                out.close();
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     };
 
     ActionListener LoadGame = event -> {
         //todo load game
+        InGamePanel loading = new InGamePanel();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("/Desktop"));
+        int returnValue = chooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                File saveFile = chooser.getSelectedFile();
+                FileInputStream file = new FileInputStream(saveFile);
+                ObjectInputStream in = new ObjectInputStream(file);
+                Game state = (Game) in.readObject();
+                loading.InGamePanelLoad(state);
+                GamePanel frame = new GamePanel();
+                frame.load(state);
+                in.close();
+                file.close();
+
+            } catch (IOException ex) {
+                System.out.println("IOException is caught");
+            } catch (ClassNotFoundException ex) {
+                System.out.println("ClassNotFoundException" +
+                        " is caught");
+            }
+        }
     };
 
     private void buildMenu() {

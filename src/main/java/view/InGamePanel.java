@@ -187,7 +187,30 @@ public class InGamePanel extends JPanel {
         checkDoors();
         revalidate();
     };
+    Game currentGame;
 
+    public InGamePanel() {
+
+    }
+    public Game InGamePanelSave(){
+        return new Game(myMaze, myQuestionPanel, myRoom, myPlayer, myDirection, myGuesses);
+    }
+    public void InGamePanelLoad(Game load){
+        this.myMaze = load.getMyMaze();
+        this.myQuestionPanel = load.getMyQuestionPanel();
+        this.myRoom = load.getMyRoom();
+        this.myPlayer = load.getMyPlayer();
+        this.myDirection = load.getMyDirection();
+        this.myGuesses = load.getMyGuesses();
+
+        createPanel();
+        createMoveButtons();
+        checkDoors();
+        add(myMaze);
+        add(myQuestionPanel, BorderLayout.EAST);
+        add(moveButtonPanel, BorderLayout.SOUTH);
+
+    }
     private void checkGuessesRem() {
         switch (myRoom.getDoor(myDirection).get().getQuestion().getType()) {
             case TRUE_FALSE -> {

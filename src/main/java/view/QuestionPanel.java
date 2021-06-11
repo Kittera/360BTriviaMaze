@@ -6,11 +6,12 @@ import model.Question;
 import javax.swing.*;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class QuestionPanel extends JPanel {
+public class QuestionPanel extends JPanel implements Serializable {
 
 
     private final ButtonGroup mcButtonGroup = new ButtonGroup();

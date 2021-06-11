@@ -1,9 +1,11 @@
 package view;
 
+import model.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.Serial;
+import java.io.*;
 
 public class MainButtonPanel extends JPanel {
 
@@ -23,6 +25,29 @@ public class MainButtonPanel extends JPanel {
 
     private final ActionListener LoadGame = event -> {
         //todo load function for serialization
+        InGamePanel loading = new InGamePanel();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("/Desktop"));
+        int returnValue = chooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                File saveFile = chooser.getSelectedFile();
+                FileInputStream file = new FileInputStream(saveFile);
+                ObjectInputStream in = new ObjectInputStream(file);
+                Game state = (Game) in.readObject();
+                loading.InGamePanelLoad(state);
+                GamePanel frame = new GamePanel();
+                frame.load(state);
+                in.close();
+                file.close();
+
+            } catch (IOException ex) {
+                System.out.println("IOException is caught");
+            } catch (ClassNotFoundException ex) {
+                System.out.println("ClassNotFoundException" +
+                        " is caught");
+            }
+        }
     };
 
     public MainButtonPanel() {

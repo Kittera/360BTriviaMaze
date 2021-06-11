@@ -44,7 +44,7 @@ public class InGameMenuBar extends JFrame {
     }
 
     ActionListener SaveGame = event -> {
-        //todo save game
+        //save game
         Game saveFile = currentGame;
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Save Game");
@@ -65,8 +65,9 @@ public class InGameMenuBar extends JFrame {
 
 
     ActionListener LoadGame = event -> {
-        //todo load game
+        //Load Game
 
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainMenu);
         InGamePanel loading = new InGamePanel();
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("/Desktop"));
@@ -82,7 +83,7 @@ public class InGameMenuBar extends JFrame {
                 frame.load(state);
                 in.close();
                 file.close();
-
+                topFrame.dispose();
 
             } catch (IOException ex) {
                 System.out.println("IOException is caught");

@@ -21,11 +21,12 @@ public class InGameMenuBar extends JFrame {
     JMenu myFile, myHelp;
     JMenuItem mySaveGame, myLoadGame, myCloseGame, myAbout, myOptions;
 
-
+    /**
+     * Constructor for the InGameMenuBar class.
+     */
     public InGameMenuBar() {
         buildMenu();
     }
-
 
 
     /**
@@ -56,6 +57,8 @@ public class InGameMenuBar extends JFrame {
 
         mainMenu.add(myFile);
         mainMenu.add(myHelp);
+
+
 
         myOptions = new JMenuItem("Game Instructions");
         myOptions.addActionListener(OptionsMenu);
@@ -92,6 +95,7 @@ public class InGameMenuBar extends JFrame {
 
     private final ActionListener OptionsMenu = event -> handleMessage("src/main/resources/GameInstructions");
     private final ActionListener AboutGame = event -> handleMessage("src/main/resources/About");
+
 
     private void handleMessage(String thePath) {
 

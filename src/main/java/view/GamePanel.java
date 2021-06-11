@@ -7,17 +7,25 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serial;
 
+
+/**
+ * This is the main game frame that houses all of the GUI panels for the trivia game.
+ *
+ */
 public class GamePanel extends JFrame {
     @Serial
     private static final long serialVersionUID = 1321L;
 
-
+    /**
+     * Basic Constructor that starts the maze frame.
+     */
     public GamePanel() {
         super("360 Trivia Maze");
         start();
     }
 
-    public void start() {
+
+    private void start() {
         setContentPane(new MainMenu());
 
         InGameMenuBar myMenu = new InGameMenuBar();
@@ -53,8 +61,10 @@ public class GamePanel extends JFrame {
      */
     public static void main(final String[] theArgs) {
         EventQueue.invokeLater(() -> {
+            ImageIcon img = new ImageIcon("src/main/resources/PanelIcon.png");
             final GamePanel frame = new GamePanel();
-            frame.start();
+            frame.setIconImage(img.getImage());
+            //frame.start();
         });
     }
 }

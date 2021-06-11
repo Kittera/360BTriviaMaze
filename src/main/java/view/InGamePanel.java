@@ -6,17 +6,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-
+/**
+ * This class creates a JPanel obect that containes the other panels needed for
+ * the trivia game to run.
+ */
 
 public class InGamePanel extends JPanel {
 
+    /**
+     * Fields for guess limits
+     */
+    private static final int TF_GUESS_LIMIT = 1;
+    private static final int MC_GUESS_LIMIT = 3;
+    private static final int SA_GUESS_LIMIT = 3;
+
+    /**
+     * Maze object/panel to display
+     */
     private TriviaMaze myMaze;
+    /**
+     * Question panel that displays different question types
+     */
     private QuestionPanel myQuestionPanel;
     private MazeRoom myRoom;
     private Player myPlayer;
     private Direction myDirection;
-    private int myGuesses;
 
+    private int myGuesses;
     private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
 
     private JPanel moveButtonPanel;
@@ -27,13 +43,18 @@ public class InGamePanel extends JPanel {
     private JButton submitBtn;
 
 
-
+    /**
+     * Parametarized constructor for the class
+     * @param theCategory category Enum type
+     * @param theDifficulty Difficulty Enum
+     */
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
-        myMaze = new TriviaMaze(5, 8, theCategory, theDifficulty);
+
+        myMaze = new TriviaMaze(4, 4, theCategory, theDifficulty);
         myRoom = myMaze.getRoom(1, 1);
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
-
+        myGuesses = 0;
         createPanel();
         createMoveButtons();
         checkDoors();
@@ -43,6 +64,9 @@ public class InGamePanel extends JPanel {
         add(moveButtonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Creates panel to be displayed
+     */
     private void createPanel() {
         myQuestionPanel = new QuestionPanel();
 
@@ -63,7 +87,9 @@ public class InGamePanel extends JPanel {
         setPreferredSize(new Dimension(finalWidth, finalHeight));
     }
 
-
+    /**
+     * creates movement buttons
+     */
    private void createMoveButtons() {
         Dimension buttonSize = new Dimension(100, 30);
         north = new JButton("North");
@@ -95,7 +121,7 @@ public class InGamePanel extends JPanel {
 
     private void checkDoors() {
         submitBtn.setEnabled(false);
-
+        //if (!myMaze.path())
         if (myRoom.getLocation().equals(myMaze.getEndingRoom().getLocation())) {
             JOptionPane.showMessageDialog(
                     null,
@@ -117,8 +143,9 @@ public class InGamePanel extends JPanel {
         myPlayer.getCurrentRoom().getDoor(theDirection).ifPresent(
                 door -> {
                     if (door.isLocked()) {
-                        myQuestionPanel.setPanelQuestion(door.getQuestion());
                         myDirection = theDirection;
+                        checkGuessesRem();
+                        myQuestionPanel.setPanelQuestion(door.getQuestion());
                         submitBtn.setEnabled(true);
                     } else {
                         myQuestionPanel.createBlank();
@@ -130,23 +157,80 @@ public class InGamePanel extends JPanel {
                 }
         );
     }
+
+    /**
+     * Movements Action listeners
+     */
     private final ActionListener MoveNorth = event -> handleMove(Direction.NORTH);
     private final ActionListener MoveSouth = event -> handleMove(Direction.SOUTH);
     private final ActionListener MoveEast = event -> handleMove(Direction.EAST);
     private final ActionListener MoveWest = event -> handleMove(Direction.WEST);
 
-    private final ActionListener SubmitAnswer = event -> {
-        if (myQuestionPanel.isCorrectAnswer()) {
-            myRoom.getDoor(myDirection).get().tryAnswer(myRoom.getDoor(myDirection).get().getQuestion().getCorrectAnswer());
-            myMaze.movePlayer(myDirection);
-            myRoom = myPlayer.getCurrentRoom();
 
+    /**
+     * Submit Button Action listner
+     */
+    private final ActionListener SubmitAnswer = event -> {
+        if (!myQuestionPanel.isCorrectAnswer().get().equalsIgnoreCase("Wrong")) {
+            if (myRoom.getDoor(myDirection).get().tryAnswer(myQuestionPanel.isCorrectAnswer())) {
+                myMaze.movePlayer(myDirection);
+                myRoom = myPlayer.getCurrentRoom();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "The door did not unlock. Guesses Remaining: " + myGuesses,
+                        "Incorrect Answer" ,
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
         myQuestionPanel.createBlank();
         setRoomsVisible(true);
         checkDoors();
         revalidate();
     };
+
+    private void checkGuessesRem() {
+        switch (myRoom.getDoor(myDirection).get().getQuestion().getType()) {
+            case TRUE_FALSE -> {
+                checkForLoss((TF_GUESS_LIMIT -
+                        myRoom.getDoor(myDirection)
+                                .get()
+                                .getQuestion()
+                                .getAttemptCount()));
+            }
+            case MULTI_CHOICE -> {
+                checkForLoss((MC_GUESS_LIMIT -
+                        myRoom.getDoor(myDirection)
+                                .get()
+                                .getQuestion()
+                                .getAttemptCount()));
+            }
+            case SHORT_ANSWER -> {
+                checkForLoss((SA_GUESS_LIMIT -
+                        myRoom.getDoor(myDirection)
+                                .get()
+                                .getQuestion()
+                                .getAttemptCount()));
+            }
+        }
+    }
+
+    private void checkForLoss(final int theInt) {
+        myGuesses = theInt;
+        if(theInt < 0 ) {
+            JOptionPane.showMessageDialog(null,
+                    "You have ran out of attempts! Game Over!",
+                    "Incorrect Answer" ,
+                    JOptionPane.ERROR_MESSAGE);
+            //getRootPane().removeAll();
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            remove(myMaze);
+            //topFrame.remove(this);
+
+            topFrame.setContentPane(new MainMenu());
+            topFrame.pack();
+            topFrame.setLocationRelativeTo(null);
+        }
+    }
 
     private void setRoomsVisible(boolean theFlag) {
         north.setEnabled(theFlag);

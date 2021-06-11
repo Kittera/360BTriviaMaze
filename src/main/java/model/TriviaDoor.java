@@ -70,11 +70,16 @@ public class TriviaDoor implements MazeDoor {
    public MazeRoom roomBehind() {
       return roomBehindMe;
    }
+
+   @Override
+   public void setJammed(boolean theBoolean) {
+      isJammed = true;
+   }
    
    @Override
    public boolean tryAnswer(Answer theAnswer) {
       boolean correct = myQuestion.tryAnswer(theAnswer);
-      if (!correct && myQuestion.getAttemptCount() >= MAX_ATTEMPTS && this.isLocked) {
+      if (!correct && myQuestion.getAttemptCount() > MAX_ATTEMPTS && this.isLocked) {
          this.isJammed = true;
          Optional.ofNullable(myOtherSide)
                .ifPresent(otherSide -> otherSide.twinJammed(this));

@@ -12,6 +12,14 @@ public class MainButtonPanel extends JPanel {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * the Default constructor for the class
+     */
+    public MainButtonPanel() {
+
+        buildPanel();
+    }
+
     private final ActionListener ExitGame =
             event -> System.exit(0);
 
@@ -51,11 +59,6 @@ public class MainButtonPanel extends JPanel {
             }
         }
     };
-
-    public MainButtonPanel() {
-
-        buildPanel();
-    }
     
     private void buildPanel() {
         setBackground(Color.BLACK);

@@ -13,21 +13,39 @@ import java.util.Random;
 
 public class QuestionPanel extends JPanel implements Serializable {
 
-
-    private final ButtonGroup mcButtonGroup = new ButtonGroup();
-
-    private final JPanel myQuestionButtons;
-
+    /**
+     * Panel width
+     */
     public static final int QUESTION_PANEL_WIDTH = 300;
 
+    /**
+     * Buttongroup for choosing answers
+     */
+    private final ButtonGroup mcButtonGroup = new ButtonGroup();
+    /**
+     * Question panel for buttons
+     */
+    private final JPanel myQuestionButtons;
+    /**
+     * Question to be displayed
+     */
     private Question myQuestion;
-
+    /**
+     * Question text
+     */
     private final JTextPane myQuestionPane;
-
+    /**
+     * Arraylist of buttons to add/remove
+     */
     private final ArrayList<JRadioButton> myAnswers;
-
+    /**
+     * text pane for short answers
+     */
     private final JTextPane myShortAnswerPane;
 
+    /**
+     * Default Constructor
+     */
     public QuestionPanel() {
 
         //initialize fields
@@ -82,9 +100,6 @@ public class QuestionPanel extends JPanel implements Serializable {
                     "No Answer",
                     JOptionPane.INFORMATION_MESSAGE);
         }
-//        if (!temp && mcButtonGroup.getSelection() != null) {
-//            JOptionPane.showMessageDialog(null, "The door did not unlock.", "Incorrect Answer" , JOptionPane.ERROR_MESSAGE);
-//        }
         return temp;
     }
 
@@ -111,6 +126,7 @@ public class QuestionPanel extends JPanel implements Serializable {
         clearList();
         myQuestionPane.setText("");
     }
+
     private void createSAButtons() {
         clearList();
         myQuestionButtons.setVisible(false);
@@ -166,21 +182,6 @@ public class QuestionPanel extends JPanel implements Serializable {
         myQuestionButtons.add(falseButton, BorderLayout.SOUTH);
         myAnswers.add(falseButton);
         add(myQuestionButtons, BorderLayout.SOUTH);
-    }
-
-//        private void checkGuessesRem(Question theQuestion) {
-//        switch (theQuestion.getType()) {
-//            case TRUE_FALSE -> checkForLoss((TF_GUESS_LIMIT - theQuestion.getAttemptCount()));
-//            case MULTI_CHOICE -> checkForLoss(MC_GUESS_LIMIT - theQuestion.getAttemptCount());
-//            case SHORT_ANSWER -> checkForLoss(SA_GUESS_LIMIT - theQuestion.getAttemptCount());
-//        }
-//    }
-
-        private void checkForLoss(final int theInt) {
-        if(theInt < 0 ) {
-            System.out.println("You Lose!");
-        }
-
     }
 
     private void clearList() {

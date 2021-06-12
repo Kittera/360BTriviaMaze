@@ -19,6 +19,10 @@ public class InGamePanel extends JPanel {
     private static final int TF_GUESS_LIMIT = 1;
     private static final int MC_GUESS_LIMIT = 3;
     private static final int SA_GUESS_LIMIT = 3;
+    /**
+     * Panel Height
+     */
+    private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
 
     /**
      * Maze object/panel to display
@@ -28,20 +32,47 @@ public class InGamePanel extends JPanel {
      * Question panel that displays different question types
      */
     private QuestionPanel myQuestionPanel;
+    /**
+     * The Room the player is currently in
+     */
     private MazeRoom myRoom;
+    /**
+     * Current player in the maze
+     */
     private Player myPlayer;
+    /**
+     * The chosen direction the player wishes to move
+     */
     private Direction myDirection;
+    /**
+     * The menubar for the frame.
+     */
     private InGameMenuBar bar;
+
+    /**
+     * The current game
+     */
     private Game currentGame;
 
+    /**
+     * The number of guesses
+     */
     private int myGuesses;
-    private static final int MOVE_BUTTON_PANEL_HEIGHT = 45;
 
+    /**
+     * Button Panel
+     */
     private JPanel moveButtonPanel;
+    /**
+     * movement directions
+     */
     private JButton north;
     private JButton south;
     private JButton east;
     private JButton west;
+    /**
+     * Submit Button
+     */
     private JButton submitBtn;
 
 
@@ -52,7 +83,7 @@ public class InGamePanel extends JPanel {
      */
     public InGamePanel(Category theCategory, Difficulty theDifficulty) {
 
-        myMaze = new TriviaMaze(4, 4, theCategory, theDifficulty);
+        myMaze = new TriviaMaze(7, 10, theCategory, theDifficulty);
         myRoom = myMaze.getRoom(1, 1);
         myPlayer = new Player(myRoom);
         myMaze.addPlayer(myPlayer);
@@ -67,7 +98,43 @@ public class InGamePanel extends JPanel {
     }
 
     /**
-     * Creates panel to be displayed
+     * empty constructor
+     */
+    public InGamePanel() {
+
+    }
+
+    /**
+     * This is the method to save a game from the panel
+     * @return a new game.
+     */
+    public Game InGamePanelSave(){
+        return new Game(myMaze, myQuestionPanel, myRoom, myPlayer, myDirection, myGuesses);
+    }
+
+    /**
+     * This method loads a game from a load file
+     * @param load the game be passed in
+     */
+    public void InGamePanelLoad(Game load){
+        this.myMaze = load.getMyMaze();
+        this.myQuestionPanel = load.getMyQuestionPanel();
+        this.myRoom = load.getMyRoom();
+        this.myPlayer = load.getMyPlayer();
+        this.myDirection = load.getMyDirection();
+        this.myGuesses = load.getMyGuesses();
+
+        createPanel();
+        createMoveButtons();
+        checkDoors();
+        add(myMaze);
+        add(myQuestionPanel, BorderLayout.EAST);
+        add(moveButtonPanel, BorderLayout.SOUTH);
+
+    }
+
+    /**
+     * Creates panel to be displayed for the trivia maze.
      */
     private void createPanel() {
         myQuestionPanel = new QuestionPanel();
@@ -123,7 +190,6 @@ public class InGamePanel extends JPanel {
 
     private void checkDoors() {
         submitBtn.setEnabled(false);
-        //if (!myMaze.path())
         if (myRoom.getLocation().equals(myMaze.getEndingRoom().getLocation())) {
             JOptionPane.showMessageDialog(
                     null,
@@ -170,7 +236,7 @@ public class InGamePanel extends JPanel {
 
 
     /**
-     * Submit Button Action listner
+     * Submit Button Action listener
      */
     private final ActionListener SubmitAnswer = event -> {
         if (!myQuestionPanel.isCorrectAnswer().get().equalsIgnoreCase("Wrong")) {
@@ -194,29 +260,6 @@ public class InGamePanel extends JPanel {
         this.getRootPane().setJMenuBar(bar.getBar());
     };
 
-
-    public InGamePanel() {
-
-    }
-    public Game InGamePanelSave(){
-        return new Game(myMaze, myQuestionPanel, myRoom, myPlayer, myDirection, myGuesses);
-    }
-    public void InGamePanelLoad(Game load){
-        this.myMaze = load.getMyMaze();
-        this.myQuestionPanel = load.getMyQuestionPanel();
-        this.myRoom = load.getMyRoom();
-        this.myPlayer = load.getMyPlayer();
-        this.myDirection = load.getMyDirection();
-        this.myGuesses = load.getMyGuesses();
-
-        createPanel();
-        createMoveButtons();
-        checkDoors();
-        add(myMaze);
-        add(myQuestionPanel, BorderLayout.EAST);
-        add(moveButtonPanel, BorderLayout.SOUTH);
-
-    }
     private void checkGuessesRem() {
         switch (myRoom.getDoor(myDirection).get().getQuestion().getType()) {
             case TRUE_FALSE -> {

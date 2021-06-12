@@ -290,7 +290,6 @@ public class TriviaMaze extends JPanel implements Maze {
                theRooms[inRow].length
          );
       }
-      
       // now we have a null-buffer
       return result;
    }

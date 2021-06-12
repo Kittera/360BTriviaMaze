@@ -73,7 +73,7 @@ class QuestionFactory {
             /* theQuestion = */ resultRow[Questions.question],
             /* theCorrectAnswer = */ Answer(resultRow[Questions.correct_answer]),
             /* theIncorrectAnswers = */ resultRow[Questions.incorrect_answers]
-                .split(",")
+                .split("@@")
                 .map { Answer(it) }
         )
     }

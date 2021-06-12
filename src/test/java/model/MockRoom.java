@@ -33,7 +33,6 @@ public class MockRoom implements MazeRoom {
    
    }
    
-   
    @Override
    public Optional<MazeDoor> getDoor(Direction theDirection) {
       return Optional.empty();

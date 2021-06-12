@@ -1,6 +1,5 @@
 package controller
 
-import model.Category
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -12,7 +11,7 @@ const val SQLITE_DRIVER = "org.sqlite.JDBC"
 
 /**
  * Library class that provides an interface to the Trivia Maze Questions Database.
- * @author Kittera Ashliegh McCloud
+ * @author Kittera Ashleigh McCloud
  * @version 2021.05.24.18.35
  */
 class QuestionDB {
@@ -38,7 +37,16 @@ class QuestionDB {
     /**
      * Provide a QuestionPackage to this method to import it into the question database.
      */
-    fun importGson(qPackage: OpenTriviaDBSchema.QuestionPackage) =
+    fun importGson(qPackage: OpenTriviaDBSchema.QuestionPackage) {
+        // format incorrect answer list
+        var incorrectStrings = unHTML(qPackage.incorrect_answers[0])
+        if (qPackage.incorrect_answers.size > 1) {
+            val subList = qPackage.incorrect_answers.subList(1, qPackage.incorrect_answers.size)
+            for (text in subList) {
+                incorrectStrings += "@@${unHTML(text)}"
+            }
+        }
+
         transaction(Connection.TRANSACTION_SERIALIZABLE, 5) {
             Questions.insert {
                 it[category] = unHTML(qPackage.category)
@@ -46,22 +54,7 @@ class QuestionDB {
                 it[difficulty] = unHTML(qPackage.difficulty)
                 it[question] = unHTML(qPackage.question)
                 it[correct_answer] = unHTML(qPackage.correct_answer)
-                it[incorrect_answers] = unHTML(qPackage.incorrect_answers.toString())
-                    .replace("[", "")
-                    .replace("]", "")
-            }
-        }
-
-    /**
-     * Counts the number of questions stored in a category within the db.
-     */
-    fun categoryCount(theCategory: Category) = transaction {
-        when (theCategory) {
-            Category.ANY -> Questions.selectAll().count()
-            else -> transaction {
-                Questions.select {
-                    Questions.category.lowerCase() eq theCategory.name.lowercase()
-                }.count()
+                it[incorrect_answers] = incorrectStrings
             }
         }
     }

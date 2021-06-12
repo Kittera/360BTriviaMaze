@@ -10,9 +10,14 @@ public class MainMenu extends JPanel {
     @Serial
     private static final long serialVersionUID = 123215456L;
 
-
+    /**
+     * picture to be displayed in background.
+     */
     private Image myPic;
 
+    /**
+     * The Default constructor for the class.
+     */
     public MainMenu() {
         buildMyMenu();
     }
@@ -33,7 +38,7 @@ public class MainMenu extends JPanel {
         setVisible(true);
     }
 
-
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(myPic, 0, 0, null);

@@ -12,9 +12,15 @@ import java.awt.event.ActionListener;
  */
 public class OptionPanel extends JPanel {
 
+    /**
+     * Button groups for the option panel.
+     */
     private ButtonGroup catButtonGroup = new ButtonGroup();
     private ButtonGroup difButtonGroup = new ButtonGroup();
 
+    /**
+     * The default constructor for the class.
+     */
     public OptionPanel() {
         createPanel();
     }
